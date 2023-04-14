@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@700&display=swap');
+
+
+/* font-family: 'Rajdhani', sans-serif;  */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif !important;
+  /* outline: 2px solid red; */
+}
+
+p {
+  margin: 0 !important;
+}
+
+h1 {
+  font-family: 'Rajdhani', sans-serif;
+}
+
+
+.btn-primary {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
