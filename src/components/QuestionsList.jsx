@@ -2,17 +2,21 @@ import styled from '@emotion/styled'
 import { Typography } from '@mui/material'
 import React from 'react'
 import QuestionCard from './QuestionCard'
+import { useGlobal } from '../context/global'
+import { useEffect } from 'react'
 
 function QuestionsList() {
+    const { defaultQuestions } = useGlobal()
+    useEffect(() => {
+        console.log(defaultQuestions)
+    }, [])
     return (
         <QuestionsGrid>
-            <QuestionCard />
-            <QuestionCard />
-            <QuestionCard />
-            <QuestionCard />
-            <QuestionCard />
-            <QuestionCard />
-            <QuestionCard />
+            {
+                defaultQuestions.map((question, i) => {
+                    return <QuestionCard data={question} key={i} />
+                })
+            }
         </QuestionsGrid>
     )
 }

@@ -3,11 +3,11 @@ import { Button, Typography } from '@mui/material'
 import React from 'react'
 import { RedBtn } from '../utils/RedBtn'
 
-function QuestionCard() {
+function QuestionCard({ data }) {
     return (
         <div>
             <Card>
-                <h4> Q: What is the full form of DOM in JS?</h4>
+                <h4> Q: {data.heading}</h4>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum, quasi!...</p>
                 <AskedUser>
                     <img src="https://lh3.googleusercontent.com/a/AGNmyxarWgWl3myWAefLu2SsAEvK6h6KkhrcPTZbwuEW=s96-c" alt="me" width={40} />
