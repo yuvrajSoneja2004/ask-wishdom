@@ -1,15 +1,23 @@
 import { useAuth0 } from '@auth0/auth0-react'
 import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react'
+import { RedBtn } from '../utils/RedBtn'
+import { axiosInstance } from '../utils/axiosInstance';
 
 function AskPage() {
     let { user } = useAuth0();
 
-    const [allowSubmit, setAllowSubmit] = useState(true);
+    const [allowSubmit, setAllowSubmit] = useState(false);
+    const [allowSubmitDesc, setAllowSubmitDesc] = useState(false);
     const [questionValue, setQuestionValue] = useState("")
     const [descValue, setDescValue] = useState("")
+    const [userSmallDesc, setUserSmallDesc] = useState("");
 
-    const [errorTheme, setErrorTheme] = useState({
+    const [errorThemeQuestion, setErrorThemeQuestion] = useState({
+        color: '#000'
+    })
+
+    const [errorThemeDesc, setErrorThemeDesc] = useState({
         color: '#000'
     })
 
@@ -19,49 +27,104 @@ function AskPage() {
     const handleDesc = (e) => {
         setDescValue(e.target.value)
     }
+
+    const postQuestion = async () => {
+        try {
+            await axiosInstance.post("/getDefaultQuestions/upload", {
+                heading: questionValue,
+                userSmallDesc: userSmallDesc,
+                userDetails: {
+                    profileURL: user.picture,
+                    profileName: user.name,
+                    profileEmail: user.email
+                },
+                questionDesc: descValue
+            })
+
+            console.log("Successfully data posted from client");
+            setQuestionValue("")
+            setUserSmallDesc("")
+            setDescValue("")
+
+        } catch (error) {
+            console.log(`Error from client posting ${error}`)
+        }
+    }
     useEffect(() => {
         if (questionValue.length > 50) {
-            setErrorTheme({ color: '#b92b27' })
-            setAllowSubmit(false);
+            setErrorThemeQuestion({ color: '#b92b27' })
+            setAllowSubmit(true);
         }
         else {
-            setErrorTheme({ color: '#000' })
+            setErrorThemeQuestion({ color: '#000' })
+            setAllowSubmit(false);
+
         }
     }, [questionValue])
 
     useEffect(() => {
         if (descValue.length > 350) {
-            setErrorTheme({ color: '#b92b27' })
-            setAllowSubmit(false);
+            setErrorThemeDesc({ color: '#b92b27' })
+            setAllowSubmitDesc(true);
         }
         else {
-            setErrorTheme({ color: '#000' })
+            setErrorThemeDesc({ color: '#000' })
+            setAllowSubmitDesc(false);
+
         }
+        console.log(allowSubmit)
     }, [descValue])
 
 
 
     return (
         <Whole>
-            <QuestionTitle placeholder='Enter the Question.' onChange={handleQuestion} value={questionValue} style={errorTheme}></QuestionTitle>
-            <span style={errorTheme}>{questionValue.length}/50</span>
+            <QuestionTitle placeholder='Enter the Question.' onChange={handleQuestion} value={questionValue} style={errorThemeQuestion}></QuestionTitle>
+            <span style={errorThemeQuestion}>{questionValue.length}/50</span>
+            <h3>Question asked by:</h3>
             <AskedBy>
-                <h3>Question asked by:</h3>
-                <img src={user ? user.picture : ""} alt='userImg' />
 
-                <strong> {user ? user.name : "Please wait..."} (you)</strong>
+                <div>
+                    <img src={user ? user.picture : ""} alt='userImg' />
+                </div>
+
+                <div>
+                    <strong> {user ? user.name : "Please wait..."} (you)</strong>
+                    <div>
+                        <SmallUserDesc placeholder='small description about yourself.' value={userSmallDesc} onChange={(e) => {
+                            setUserSmallDesc(e.target.value)
+                        }} />
+                    </div>
+                </div>
             </AskedBy>
             <QuestionDesc placeholder='Write question description here.' onChange={handleDesc} value={descValue}></QuestionDesc>
-            <span style={errorTheme}>{descValue.length}/350</span>
+            <span style={errorThemeDesc}>{descValue.length}/350</span>
+            <SubmitBtn disabled={allowSubmit || allowSubmitDesc ? true : false} onClick={postQuestion}>Submit</SubmitBtn>
         </Whole>
     )
 }
 
 const Whole = styled.div`
 padding: 30px 100px;
+h3 {
+    font-weight: bolder;
+    margin-bottom: 18px;
+}
 span {
     float: right;
 }
+
+`
+const SmallUserDesc = styled.textarea`
+    border: none;
+    width: 100%;
+    margin-left: -10px;
+    &&:focus {
+        outline: none;
+    }
+`
+const SubmitBtn = styled(RedBtn)`
+    margin-top: 70px;
 `
 
 const QuestionTitle = styled.textarea`
@@ -75,16 +138,21 @@ width: 100%;
 }
 `
 const AskedBy = styled.div`
+display: flex;
+
+div {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+}
 
 margin-bottom: 100px;
-h3 {
-    font-weight: bolder;
-    margin-bottom: 10px;
-}
+
 img {
     width: 55px;
     border-radius: 50%;
 }
+
 `
 const QuestionDesc = styled.textarea`
 border: none;
