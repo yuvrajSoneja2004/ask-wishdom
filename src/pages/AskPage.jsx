@@ -35,11 +35,9 @@ function AskPage() {
             await axiosInstance.post("/getDefaultQuestions/upload", {
                 heading: questionValue,
                 userSmallDesc: userSmallDesc,
-                userDetails: {
-                    profileURL: user.picture,
-                    profileName: user.name,
-                    profileEmail: user.email
-                },
+                profileURL: user.picture,
+                profileName: user.name,
+                profileEmail: user.email,
                 questionDesc: descValue
             })
 

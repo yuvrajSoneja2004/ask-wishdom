@@ -45,12 +45,12 @@ function SingleQuestionPage() {
                 <Whole>
                     <QuestionHeading>{tempQuestionData.heading}</QuestionHeading>
                     <AskedUser>
-                        {/* <img src= alt="me" width={40} /> */}
-                        {/* <span><h5>{tempQuestionData.userDetails.profileName}</h5> asked this question</span> */}
+                        <img src={tempQuestionData.profileURL} alt="me" width={40} />
+                        <span><h5>{tempQuestionData.profileName}</h5> asked this question</span>
                     </AskedUser>
                     <QuestionDescription>
                         <h1>  <HelpIcon fontSize='80' style={{ color: '#b13634' }} /> Question description</h1>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus soluta dignissimos iste totam consectetur consequuntur mollitia officiis quos illo voluptas, voluptates asperiores, autem in, architecto laboriosam. Perferendis, autem libero provident dicta iste fugiat recusandae dolorum quasi! Cum voluptas cumque molestias! Aliquam praesentium labore obcaecati dignissimos odio quasi molestias ad voluptas.</p>
+                        <p>{tempQuestionData.questionDesc}</p>
                         <OutlinedBtn>Answer</OutlinedBtn>
                     </QuestionDescription>
                 </Whole>

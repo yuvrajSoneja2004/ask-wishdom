@@ -11,8 +11,8 @@ function QuestionCard({ data }) {
                 <h4> Q: {data.heading}</h4>
                 <p>{data.questionDesc.slice(0, 30)}...</p>
                 <AskedUser>
-                    <img src={data.userDetails.profileURL} alt="me" width={40} />
-                    <span><strong>{data.userDetails.profileName}</strong> asked this question</span>
+                    <img src={data.profileURL} alt="me" width={40} />
+                    <span><strong>{data.profileName}</strong> asked this question</span>
                 </AskedUser>
                 <Link to={`/readDefaultQuestion/${data._id}`}>  <RedBtn>View Answers</RedBtn></Link>
             </Card>
