@@ -5,11 +5,15 @@ import HelpIcon from '@mui/icons-material/Help';
 import axios from 'axios';
 import { axiosInstance } from '../utils/axiosInstance';
 import Loader from '../components/Loader';
+import { useAuth0 } from '@auth0/auth0-react';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { IconButton } from '@mui/material';
+import { useGlobal } from '../context/global';
 
 function SingleQuestionPage() {
 
     let { questionID } = useParams();
-
+    let { user, isAuthenticated } = useAuth0();
     const [tempQuestionData, setTempQuestionData] = useState({});
 
     useEffect(() => {
@@ -37,8 +41,22 @@ function SingleQuestionPage() {
 
 
         getSingleDefaultQuestion(questionID);
+
     }, [])
-    console.log(tempQuestionData)
+
+
+
+
+    console.log(user);
+
+    const deleteQuestion = async () => {
+        try {
+            await axiosInstance.delete(`/getSingleDefaultQuestion/delete/${tempQuestionData._id}`);
+            console.log("Successfully delete from client")
+        } catch (error) {
+
+        }
+    }
     return (
         tempQuestionData ?
             <>
@@ -51,7 +69,20 @@ function SingleQuestionPage() {
                     <QuestionDescription>
                         <h1>  <HelpIcon fontSize='80' style={{ color: '#b13634' }} /> Question description</h1>
                         <p>{tempQuestionData.questionDesc}</p>
-                        <OutlinedBtn>Answer</OutlinedBtn>
+
+
+
+                        {
+                            !isAuthenticated ? "loading..." : tempQuestionData.profileEmail === user.email ? (
+                                <Bubbly onClick={deleteQuestion}>
+                                    <IconDelete />
+                                </Bubbly>
+                            ) :
+                                (
+                                    <OutlinedBtn>Answer</OutlinedBtn>
+                                )
+                        }
+                        {/* <OutlinedBtn>Answer</OutlinedBtn> */}
                     </QuestionDescription>
                 </Whole>
             </>
@@ -66,6 +97,13 @@ padding: 60px;
 background: #f6f9f9;
 `
 
+const IconDelete = styled(DeleteIcon)`
+    
+`
+const Bubbly = styled(IconButton)`
+margin-top: 10px;
+    
+`
 const OutlinedBtn = styled.button`
     position: relative;
     margin-top: 30px;

@@ -3,12 +3,20 @@ import { createContext, useContext } from "react";
 import { reducer } from "./reducer";
 import { axiosInstance } from "../utils/axiosInstance";
 import { useEffect } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
+
+
 
 
 const GlobalContext = createContext();
 
 
+
+
 export const GlobalProvider = ({ children }) => {
+
+    let alo = useAuth0();
+    console.log(alo, "from global")
 
     let initialState = {
         defaultQuestions: [],
