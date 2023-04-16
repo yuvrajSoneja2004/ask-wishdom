@@ -18,7 +18,6 @@ export const GlobalProvider = ({ children }) => {
 
     const [state, dispatch] = useReducer(reducer, initialState)
 
-
     // calling API to get defaultQuestions
 
     const getDefaultQuestions = async () => {

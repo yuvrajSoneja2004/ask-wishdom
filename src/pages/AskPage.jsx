@@ -3,9 +3,11 @@ import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react'
 import { RedBtn } from '../utils/RedBtn'
 import { axiosInstance } from '../utils/axiosInstance';
+import { useNavigate } from 'react-router-dom';
 
 function AskPage() {
     let { user } = useAuth0();
+    const navigate = useNavigate();
 
     const [allowSubmit, setAllowSubmit] = useState(false);
     const [allowSubmitDesc, setAllowSubmitDesc] = useState(false);
@@ -45,6 +47,7 @@ function AskPage() {
             setQuestionValue("")
             setUserSmallDesc("")
             setDescValue("")
+            navigate("/")
 
         } catch (error) {
             console.log(`Error from client posting ${error}`)
@@ -79,7 +82,7 @@ function AskPage() {
 
     return (
         <Whole>
-            <QuestionTitle placeholder='Enter the Question.' onChange={handleQuestion} value={questionValue} style={errorThemeQuestion}></QuestionTitle>
+            <QuestionTitle placeholder='Enter the Question.' onChange={handleQuestion} value={questionValue} style={errorThemeQuestion} required></QuestionTitle>
             <span style={errorThemeQuestion}>{questionValue.length}/50</span>
             <h3>Question asked by:</h3>
             <AskedBy>
@@ -91,13 +94,13 @@ function AskPage() {
                 <div>
                     <strong> {user ? user.name : "Please wait..."} (you)</strong>
                     <div>
-                        <SmallUserDesc placeholder='small description about yourself.' value={userSmallDesc} onChange={(e) => {
+                        <SmallUserDesc placeholder='small description about yourself.' required value={userSmallDesc} onChange={(e) => {
                             setUserSmallDesc(e.target.value)
                         }} />
                     </div>
                 </div>
             </AskedBy>
-            <QuestionDesc placeholder='Write question description here.' onChange={handleDesc} value={descValue}></QuestionDesc>
+            <QuestionDesc placeholder='Write question description here.' required onChange={handleDesc} value={descValue}></QuestionDesc>
             <span style={errorThemeDesc}>{descValue.length}/350</span>
             <SubmitBtn disabled={allowSubmit || allowSubmitDesc ? true : false} onClick={postQuestion}>Submit</SubmitBtn>
         </Whole>

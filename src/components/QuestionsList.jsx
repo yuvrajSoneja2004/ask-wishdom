@@ -6,14 +6,17 @@ import { useGlobal } from '../context/global'
 import { useEffect } from 'react'
 
 function QuestionsList() {
-    const { defaultQuestions } = useGlobal()
+    const { defaultQuestions, getDefaultQuestions } = useGlobal()
+
     useEffect(() => {
-        console.log(defaultQuestions)
+        getDefaultQuestions();
     }, [])
+
+
     return (
         <QuestionsGrid>
             {
-                defaultQuestions.map((question, i) => {
+                defaultQuestions === undefined ? "" : defaultQuestions.map((question, i) => {
                     return <QuestionCard data={question} key={i} />
                 })
             }
