@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import HelpIcon from '@mui/icons-material/Help';
 import axios from 'axios';
 import { axiosInstance } from '../utils/axiosInstance';
@@ -15,6 +15,7 @@ function SingleQuestionPage() {
     let { questionID } = useParams();
     let { user, isAuthenticated } = useAuth0();
     const [tempQuestionData, setTempQuestionData] = useState({});
+    const navigate = useNavigate()
 
     useEffect(() => {
         const getSingleDefaultQuestion = async (QUESTION_ID) => {
@@ -53,8 +54,9 @@ function SingleQuestionPage() {
         try {
             await axiosInstance.delete(`/getSingleDefaultQuestion/delete/${tempQuestionData._id}`);
             console.log("Successfully delete from client")
+            navigate("/");
         } catch (error) {
-
+            console.log(`Error from the client side: Reason : ${error}`)
         }
     }
     return (
