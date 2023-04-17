@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import HelpIcon from '@mui/icons-material/Help';
 import axios from 'axios';
 import { axiosInstance } from '../utils/axiosInstance';
@@ -81,7 +81,7 @@ function SingleQuestionPage() {
                                 </Bubbly>
                             ) :
                                 (
-                                    <OutlinedBtn>Answer</OutlinedBtn>
+                                    <Link to={`/answerDefaultQuestion/${tempQuestionData._id}`}><OutlinedBtn>Answer</OutlinedBtn></Link>
                                 )
                         }
                         {/* <OutlinedBtn>Answer</OutlinedBtn> */}
