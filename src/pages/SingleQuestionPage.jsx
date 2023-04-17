@@ -9,6 +9,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton } from '@mui/material';
 import { useGlobal } from '../context/global';
+import AnswerCard from '../components/AnswerCard';
 
 function SingleQuestionPage() {
 
@@ -16,6 +17,8 @@ function SingleQuestionPage() {
     let { user, isAuthenticated } = useAuth0();
     const [tempQuestionData, setTempQuestionData] = useState({});
     const navigate = useNavigate()
+
+
 
     useEffect(() => {
         const getSingleDefaultQuestion = async (QUESTION_ID) => {
@@ -43,12 +46,13 @@ function SingleQuestionPage() {
 
         getSingleDefaultQuestion(questionID);
 
-    }, [])
+
+    }, [tempQuestionData])
 
 
 
 
-    console.log(user);
+
 
     const deleteQuestion = async () => {
         try {
@@ -59,6 +63,11 @@ function SingleQuestionPage() {
             console.log(`Error from the client side: Reason : ${error}`)
         }
     }
+
+    useEffect(() => {
+        console.log(tempQuestionData, "pls work")
+    }, [])
+
     return (
         tempQuestionData ?
             <>
@@ -84,8 +93,14 @@ function SingleQuestionPage() {
                                     <Link to={`/answerDefaultQuestion/${tempQuestionData._id}`}><OutlinedBtn>Answer</OutlinedBtn></Link>
                                 )
                         }
-                        {/* <OutlinedBtn>Answer</OutlinedBtn> */}
                     </QuestionDescription>
+
+                    {
+                        !isAuthenticated || !tempQuestionData ? "loading answers...." : tempQuestionData.answers?.map((ans, i) => {
+                            return <AnswerCard key={i} data={ans} />
+                        })
+                    }
+
                 </Whole>
             </>
             :
@@ -97,6 +112,8 @@ const Whole = styled.div`
 margin: 30px 100px;
 padding: 60px;
 background: #f6f9f9;
+box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+
 `
 
 const IconDelete = styled(DeleteIcon)`

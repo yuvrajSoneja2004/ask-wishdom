@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { RedBtn } from '../utils/RedBtn'
 import { axiosInstance } from '../utils/axiosInstance';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -12,6 +12,7 @@ function SingleAnswerDefaultQuestion() {
     const [answerValue, setAnswerValue] = useState("");
     const [tempAnswersData, setTempAnswersData] = useState({});
     let { user } = useAuth0()
+    const navigate = useNavigate();
 
 
 
@@ -41,6 +42,7 @@ function SingleAnswerDefaultQuestion() {
         getSingleDefaultQuestion(questionID);
 
     }, [])
+
     console.log(tempAnswersData, "From asking page man")
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -61,6 +63,7 @@ function SingleAnswerDefaultQuestion() {
 
             let res = await requ.data;
             console.log(res, "the response")
+            navigate(`/readDefaultQuestion/${questionID}`)
         } catch (error) {
 
         }
