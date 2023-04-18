@@ -3,7 +3,15 @@ import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react'
 import { RedBtn } from '../utils/RedBtn'
 import { axiosInstance } from '../utils/axiosInstance';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import SportsEsportsOutlinedIcon from '@mui/icons-material/SportsEsportsOutlined';
+import CheckroomOutlinedIcon from '@mui/icons-material/CheckroomOutlined';
+import CodeOutlinedIcon from '@mui/icons-material/CodeOutlined';
+import FitnessCenterOutlinedIcon from '@mui/icons-material/FitnessCenterOutlined';
+import PhoneAndroidOutlinedIcon from '@mui/icons-material/PhoneAndroidOutlined';
+import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
+import AddReactionOutlinedIcon from '@mui/icons-material/AddReactionOutlined';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 function AskPage() {
     let { user } = useAuth0();
@@ -14,6 +22,7 @@ function AskPage() {
     const [questionValue, setQuestionValue] = useState("")
     const [descValue, setDescValue] = useState("")
     const [userSmallDesc, setUserSmallDesc] = useState("");
+    const [tempCategory, setTempCategory] = useState("others");
 
     const [errorThemeQuestion, setErrorThemeQuestion] = useState({
         color: '#000'
@@ -38,7 +47,8 @@ function AskPage() {
                 profileURL: user.picture,
                 profileName: user.name,
                 profileEmail: user.email,
-                questionDesc: descValue
+                questionDesc: descValue,
+                category: tempCategory
             })
 
             console.log("Successfully data posted from client");
@@ -98,6 +108,18 @@ function AskPage() {
                     </div>
                 </div>
             </AskedBy>
+            <AskCategory> <h3>Category:</h3>
+                <div>
+                    <CategoryLink to={"/ask"} onClick={() => setTempCategory("gaming")}>  <SportsEsportsOutlinedIcon /> Gaming</CategoryLink>
+                    <CategoryLink to={"/ask"} onClick={() => setTempCategory("fashion")}>  <CheckroomOutlinedIcon /> Fashion</CategoryLink>
+                    <CategoryLink to={"/ask"} onClick={() => setTempCategory("computer-science")}>  <CodeOutlinedIcon /> Computer Science</CategoryLink>
+                    <CategoryLink to={"/ask"} onClick={() => setTempCategory("fitness")}>  <FitnessCenterOutlinedIcon /> Fitness</CategoryLink>
+                    <CategoryLink to={"/ask"} onClick={() => setTempCategory("tech")}>  <PhoneAndroidOutlinedIcon /> Tech</CategoryLink>
+                    <CategoryLink to={"/ask"} onClick={() => setTempCategory("doubts")}>  <HelpOutlineOutlinedIcon /> Doubts</CategoryLink>
+                    <CategoryLink to={"/ask"} onClick={() => setTempCategory("others")}>  <AddReactionOutlinedIcon /> Others</CategoryLink>
+                </div>
+
+            </AskCategory>
             <QuestionDesc placeholder='Write question description here.' required onChange={handleDesc} value={descValue}></QuestionDesc>
             <span style={errorThemeDesc}>{descValue.length}/350</span>
             <SubmitBtn disabled={allowSubmit || allowSubmitDesc ? true : false} onClick={postQuestion}>Submit</SubmitBtn>
@@ -116,6 +138,37 @@ span {
 }
 
 `
+const CategoryLink = styled(NavLink)`
+    color: #000;
+    text-decoration: none;
+    border: 2px solid black;
+    padding: 8px 15px;
+    font-size: 14px;
+    border-radius: 20px;
+    font-weight: bolder;
+
+    &&:active , &&:focus {
+        color: #b92b27 !important;
+        border: 2px solid #b92b27;
+    }
+`
+const AskCategory = styled.div`
+display: flex;
+align-items: center;
+
+div {
+    margin-left: 10px;
+    margin-top: -10px;
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 6px;
+}
+h3 {
+    display: inline;
+}
+`
+
+const CategoryDropdown = styled(Dropdown)
 const SmallUserDesc = styled.textarea`
     border: none;
     width: 100%;

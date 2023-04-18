@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { RedBtn } from '../utils/RedBtn'
 import { axiosInstance } from '../utils/axiosInstance';
 import { useAuth0 } from '@auth0/auth0-react';
+import Loader from '../components/Loader';
 
 function SingleAnswerDefaultQuestion() {
 
@@ -65,35 +66,38 @@ function SingleAnswerDefaultQuestion() {
             console.log(res, "the response")
             navigate(`/readDefaultQuestion/${questionID}`)
         } catch (error) {
-
+            console.log("LOL error " + error)
         }
     }
     console.log(tempAnswersData, "ayyyy")
     return (
-        <Whole onSubmit={handleSubmit}>
+        tempAnswersData ? (
+            <Whole onSubmit={handleSubmit}>
 
-            <h3>Answered by :</h3>
-            <AnsweredBy>
+                <h3>Answered by :</h3>
+                <AnsweredBy>
 
-                <div>
-                    <img src={'https://lh3.googleusercontent.com/a/AGNmyxarWgWl3myWAefLu2SsAEvK6h6KkhrcPTZbwuEW=s96-c'} alt='userImg' />
-                </div>
-
-                <div>
-                    <strong>Yuvraj (you)</strong>
                     <div>
-                        <SmallUserDesc placeholder='small description about yourself.' required value={userSmallDesc} onChange={(e) => {
-                            setUserSmallDesc(e.target.value)
-                        }} />
+                        <img src={user?.picture} alt='userImg' />
                     </div>
-                </div>
-            </AnsweredBy>
-            <AnswerInput placeholder='Write the answer here.' required value={answerValue} onChange={(e) => {
-                setAnswerValue(e.target.value)
-            }}></AnswerInput>
-            <SubmitBtn type='submit' >Sumbit</SubmitBtn>
 
-        </Whole>
+                    <div>
+                        <strong>{user?.name} (you)</strong>
+                        <div>
+                            <SmallUserDesc placeholder='small description about yourself.' required value={userSmallDesc} onChange={(e) => {
+                                setUserSmallDesc(e.target.value)
+                            }} />
+                        </div>
+                    </div>
+                </AnsweredBy>
+                <AnswerInput placeholder='Write the answer here.' required value={answerValue} onChange={(e) => {
+                    setAnswerValue(e.target.value)
+                }}></AnswerInput>
+                <SubmitBtn type='submit' >Sumbit</SubmitBtn>
+
+            </Whole>
+        ) :
+            <Loader />
     )
 }
 

@@ -10,12 +10,16 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton } from '@mui/material';
 import { useGlobal } from '../context/global';
 import AnswerCard from '../components/AnswerCard';
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+
 
 function SingleQuestionPage() {
 
     let { questionID } = useParams();
     let { user, isAuthenticated } = useAuth0();
     const [tempQuestionData, setTempQuestionData] = useState({});
+    const [upvoted, isUpvoted] = useState(false);
     const navigate = useNavigate()
 
 
@@ -31,7 +35,7 @@ function SingleQuestionPage() {
                     axiosInstance.get(`/getSingleDefaultQuestion/${QUESTION_ID}`).then(function (response) {
                         setTempQuestionData(response.data[0]);
                     }).catch(function (error) {
-                        console.error(error);
+                        console.error(error)
                     })
                 ])
 
@@ -65,9 +69,37 @@ function SingleQuestionPage() {
     }
 
     useEffect(() => {
-        console.log(tempQuestionData, "pls work")
-    }, [])
 
+        const checkUpvotes = async () => {
+            try {
+                let fetch = await axiosInstance.post(`/checkQuestionUpvotes/${tempQuestionData._id}/${user.email}`, {
+                    email: user.email
+                });
+                let res = await fetch.data;
+                isUpvoted(res?.alreadyUpvoted)
+                console.log(res, "upvote data man");
+            } catch (error) {
+
+            }
+        }
+        checkUpvotes()
+
+    }, [upvoted, isUpvoted])
+
+    const handleUpvote = async () => {
+        try {
+            console.log("THis thing works")
+            await axiosInstance.put(`/defaultUpvotes/${tempQuestionData._id}`, {
+                upvotes: [
+                    ...tempQuestionData.upvotes,
+                    user.email
+
+                ]
+            })
+        } catch (error) {
+
+        }
+    }
     return (
         tempQuestionData ?
             <>
@@ -93,6 +125,16 @@ function SingleQuestionPage() {
                                     <Link to={`/answerDefaultQuestion/${tempQuestionData._id}`}><OutlinedBtn>Answer</OutlinedBtn></Link>
                                 )
                         }
+                        <Upvote >
+                            <Bubbly >
+                                {
+                                    !upvoted ? <FavoriteBorderOutlinedIcon onClick={handleUpvote} /> : <FavoriteIcon />
+                                }
+                            </Bubbly>
+
+                            <span>{tempQuestionData.upvotes?.length}</span>
+
+                        </Upvote>
                     </QuestionDescription>
 
                     {
@@ -114,6 +156,11 @@ padding: 60px;
 background: #f6f9f9;
 box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
 
+`
+const Upvote = styled.div`
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
 `
 
 const IconDelete = styled(DeleteIcon)`
