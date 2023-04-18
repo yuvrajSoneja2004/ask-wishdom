@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 
 function QuestionCard({ data }) {
     return (
-        <div>
+        <div style={{ width: '100%' }}>
             <Card>
                 <h4> Q: {data.heading}</h4>
                 <p>{data.questionDesc.slice(0, 30)}...</p>
@@ -24,15 +24,18 @@ const Card = styled.div`
 border-radius: 4px;
 background-color: #F1F2F2;
 box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
-width: 400px;
+width: 100%;
 display: flex;
 flex-direction: column;
 gap: 20px;
-height: 310px;
+min-height: 100px;
 padding: 20px;
+@media screen and (max-width: 749px){
+    
+}
 
 h4 , p  {
-    width: 200px;
+    width: 100%;
 }
 
 @media screen and (max-width: 1049px){

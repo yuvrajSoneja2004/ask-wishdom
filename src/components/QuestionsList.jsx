@@ -16,7 +16,7 @@ function QuestionsList() {
     return (
         <QuestionsGrid>
             {
-                defaultQuestions === undefined ? "" : defaultQuestions.map((question, i) => {
+                defaultQuestions?.map((question, i) => {
                     return <QuestionCard data={question} key={i} />
                 })
             }
@@ -26,9 +26,10 @@ function QuestionsList() {
 
 const QuestionsGrid = styled.div`
 width: 100%;
-display: grid;
-grid-template-columns: 1fr 1fr   ;
-place-items: center;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
 padding: 50px;
 gap: 40px;
 

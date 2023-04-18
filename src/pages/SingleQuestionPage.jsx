@@ -10,16 +10,17 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton } from '@mui/material';
 import { useGlobal } from '../context/global';
 import AnswerCard from '../components/AnswerCard';
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import QuestionCard from '../components/QuestionCard';
 
 
 function SingleQuestionPage() {
 
     let { questionID } = useParams();
     let { user, isAuthenticated } = useAuth0();
+    const [categoryList, setCategoryList] = useState([]);
     const [tempQuestionData, setTempQuestionData] = useState({});
-    const [upvoted, isUpvoted] = useState(false);
     const navigate = useNavigate()
 
 
@@ -27,10 +28,6 @@ function SingleQuestionPage() {
     useEffect(() => {
         const getSingleDefaultQuestion = async (QUESTION_ID) => {
             try {
-                // let fetch = await axiosInstance.get(`/getSingleDefaultQuestion/${QUESTION_ID}`)
-                // let res = await fetch.data;
-                // setTempQuestionData(res)
-
                 const [res1, res2] = await Promise.all([
                     axiosInstance.get(`/getSingleDefaultQuestion/${QUESTION_ID}`).then(function (response) {
                         setTempQuestionData(response.data[0]);
@@ -51,9 +48,26 @@ function SingleQuestionPage() {
         getSingleDefaultQuestion(questionID);
 
 
+
     }, [tempQuestionData])
 
 
+    useEffect(() => {
+        const getRelatedQuestions = async (CATEGORY_NAME) => {
+            try {
+                let fetch = await axiosInstance.get(`/relatedDefaultQuestions/${CATEGORY_NAME}`);
+                let res = await fetch.data;
+                // console.log(res, "this is category one")
+                setCategoryList(res);
+
+            } catch (error) {
+
+            }
+        }
+        getRelatedQuestions(tempQuestionData?.category);
+    }, [categoryList])
+
+    // console.log(categoryList)
 
 
 
@@ -68,38 +82,8 @@ function SingleQuestionPage() {
         }
     }
 
-    useEffect(() => {
 
-        const checkUpvotes = async () => {
-            try {
-                let fetch = await axiosInstance.post(`/checkQuestionUpvotes/${tempQuestionData._id}/${user.email}`, {
-                    email: user.email
-                });
-                let res = await fetch.data;
-                isUpvoted(res?.alreadyUpvoted)
-                console.log(res, "upvote data man");
-            } catch (error) {
 
-            }
-        }
-        checkUpvotes()
-
-    }, [upvoted, isUpvoted])
-
-    const handleUpvote = async () => {
-        try {
-            console.log("THis thing works")
-            await axiosInstance.put(`/defaultUpvotes/${tempQuestionData._id}`, {
-                upvotes: [
-                    ...tempQuestionData.upvotes,
-                    user.email
-
-                ]
-            })
-        } catch (error) {
-
-        }
-    }
     return (
         tempQuestionData ?
             <>
@@ -125,16 +109,9 @@ function SingleQuestionPage() {
                                     <Link to={`/answerDefaultQuestion/${tempQuestionData._id}`}><OutlinedBtn>Answer</OutlinedBtn></Link>
                                 )
                         }
-                        <Upvote >
-                            <Bubbly >
-                                {
-                                    !upvoted ? <FavoriteBorderOutlinedIcon onClick={handleUpvote} /> : <FavoriteIcon />
-                                }
-                            </Bubbly>
 
-                            <span>{tempQuestionData.upvotes?.length}</span>
+                        <h2>  <QuestionAnswerIcon fontSize='80' style={{ color: '#b13634' }} /> Answers ({tempQuestionData.answers?.length})</h2>
 
-                        </Upvote>
                     </QuestionDescription>
 
                     {
@@ -144,6 +121,14 @@ function SingleQuestionPage() {
                     }
 
                 </Whole>
+                <RelatedQuestions>
+                    <h1>  <IconMore fontSize='80' style={{ color: '#b13634' }} /> Related Questions</h1>
+                    {
+                        categoryList.map((currentQ, i) => {
+                            return <div key={i} style={{ padding: '20px 0' }}><QuestionCard data={currentQ} /></div>
+                        })
+                    }
+                </RelatedQuestions>
             </>
             :
             <Loader />
@@ -156,13 +141,41 @@ padding: 60px;
 background: #f6f9f9;
 box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
 
-`
-const Upvote = styled.div`
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
+@media screen and (max-width: 749px){
+    padding: 30px;
+    margin: 15px ;
+}
+@media screen and (max-width: 417px){
+    padding: 15px;
+}
+
 `
 
+const IconMore = styled(ExpandMoreIcon)`
+    
+`
+
+const RelatedQuestions = styled.div`
+margin: 30px 100px;
+padding: 60px;
+@media screen and (max-width: 749px){
+    padding: 30px;
+    margin: 0px ;
+}
+@media screen and (max-width: 340px){
+    text-align: center;
+    h1{
+        font-size: 20px;
+    }
+}
+
+h1 {
+    font-weight: bolder;
+    color: #b13634;
+    margin-bottom: 30px;
+
+}
+`
 const IconDelete = styled(DeleteIcon)`
     
 `
@@ -215,9 +228,17 @@ const QuestionDescription = styled.div`
 margin-top: 50px;
 h1 {
     font-weight: bolder;
-    /* text-shadow: 0px .5px, .5px 0px, .5px 0px; */
     color: #b13634;
     margin-bottom: 30px;
+    @media screen and (max-width: 417px){
+    font-size: 25px;
+}
+
+}h2 {
+    font-weight: bolder;
+    color: #b13634;
+    margin-bottom: 30px;
+    margin-top: 30px;
 
 }
 `

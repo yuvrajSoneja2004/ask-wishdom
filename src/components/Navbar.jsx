@@ -7,18 +7,18 @@ import { useAuth0 } from '@auth0/auth0-react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { FiLogOut } from 'react-icons/fi'
 import { RedBtn } from '../utils/RedBtn';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 function NavigationBar() {
 
     let { loginWithRedirect, isAuthenticated, logout, user } = useAuth0();
-
+    const navigate = useNavigate();
 
     return (
         <WholeNav collapseOnSelect expand="lg" bg="dark" variant="dark">
             <Container>
-                <Logo src={SiteLogoLight} alt='siteLogo' />
+                <Logo src={SiteLogoLight} alt='siteLogo' onClick={() => { navigate("/") }} />
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">

@@ -1,9 +1,9 @@
 # list of categories
 
 - Gaming DONE
-- Doubts
+- Doubts DONE
 - Fashion DONE
 - Computer Science DONE
 - Fitness DONE
-- Tech
-- Others
+- Tech DONE
+- Others DONE
