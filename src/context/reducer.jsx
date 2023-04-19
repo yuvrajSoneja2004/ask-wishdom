@@ -18,5 +18,11 @@ export const reducer = (state, action) => {
                 isLoading: false,
                 communtiyValidationData: action.payload
             }
+        case "GET_COMMUNITIES":
+            return {
+                ...state,
+                isLoading: false,
+                allCommunities: action.payload
+            }
     }
 }

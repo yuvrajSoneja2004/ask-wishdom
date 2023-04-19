@@ -23,6 +23,7 @@ export const GlobalProvider = ({ children }) => {
         isError: false,
         isLoading: false,
         communtiyValidationData: {},
+        allCommunities: []
     }
 
     const [state, dispatch] = useReducer(reducer, initialState)
@@ -54,13 +55,24 @@ export const GlobalProvider = ({ children }) => {
         }
     }
 
+    // fetch communities
+    const getCommunities = async () => {
+        try {
+            let fetch = await axiosInstance.get("/getCommunities");
+            let res = await fetch.data;
+            console.log(res, "Communities fetch client")
+            dispatch({ type: "GET_COMMUNITIES", payload: res })
+        } catch (error) {
+            console.log("WHY", error)
+        }
+    }
 
     useEffect(() => {
         getDefaultQuestions();
     }, [])
 
 
-    return <GlobalContext.Provider value={{ ...state, getDefaultQuestions, communityValidation, dispatch }}>{children}</GlobalContext.Provider>
+    return <GlobalContext.Provider value={{ ...state, getDefaultQuestions, communityValidation, dispatch, getCommunities }}>{children}</GlobalContext.Provider>
 }
 
 

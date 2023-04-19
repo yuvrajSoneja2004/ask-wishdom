@@ -7,7 +7,7 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import DefaultProfile from '../assets/defaultUser.jpg';
 import DefaultBanner from '../assets/defaultBanner.jpg';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import SportsEsportsOutlinedIcon from '@mui/icons-material/SportsEsportsOutlined';
 import CheckroomOutlinedIcon from '@mui/icons-material/CheckroomOutlined';
 import CodeOutlinedIcon from '@mui/icons-material/CodeOutlined';
@@ -27,6 +27,7 @@ function CreateCommunity() {
     })
 
     let { user } = useAuth0();
+    const navigate = useNavigate();
 
 
     // Profile image states
@@ -75,18 +76,6 @@ function CreateCommunity() {
     }, [questionValue])
 
 
-    // const handleProfileUpload = () => {
-    //     // Send the base64Image to the server for saving in MongoDB
-    //     axios.post('/api/upload', { image: base64Image })
-    //       .then(response => {
-    //         // Handle response from the server
-    //         console.log(response.data);
-    //       })
-    //       .catch(error => {
-    //         // Handle error
-    //         console.error(error);
-    //       });
-    //   };
     const sumbitHandler = async (e) => {
         e.preventDefault();
         try {
@@ -104,7 +93,9 @@ function CreateCommunity() {
 
                 }
             })
-            console.log(theRes)
+            console.log(theRes);
+            // if success then navigate
+            navigate("/communities")
         } catch (error) {
             console.log("Error from client side while creating a community. cause :", error);
         }
