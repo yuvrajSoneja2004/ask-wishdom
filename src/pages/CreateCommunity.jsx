@@ -7,20 +7,34 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import DefaultProfile from '../assets/defaultUser.jpg';
 import DefaultBanner from '../assets/defaultBanner.jpg';
+import { NavLink } from 'react-router-dom';
+import SportsEsportsOutlinedIcon from '@mui/icons-material/SportsEsportsOutlined';
+import CheckroomOutlinedIcon from '@mui/icons-material/CheckroomOutlined';
+import CodeOutlinedIcon from '@mui/icons-material/CodeOutlined';
+import FitnessCenterOutlinedIcon from '@mui/icons-material/FitnessCenterOutlined';
+import PhoneAndroidOutlinedIcon from '@mui/icons-material/PhoneAndroidOutlined';
+import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
+import AddReactionOutlinedIcon from '@mui/icons-material/AddReactionOutlined';
+import { useAuth0 } from '@auth0/auth0-react';
 function CreateCommunity() {
 
 
     let { communityValidation, communtiyValidationData, isLoading } = useGlobal();
-
+    const [tempCategory, setTempCategory] = useState("others");
     const [questionValue, setQuestionValue] = useState("me")
     const [errorThemeQuestion, setErrorThemeQuestion] = useState({
         color: '#000'
     })
+
+    let { user } = useAuth0();
+
+
     // Profile image states
     const [inputProfileImage, setInputProfileImage] = useState(null);
     const [inputBannerImage, setInputBannerImage] = useState(null);
     const [base64ProfileImage, setBase64ProfileImage] = useState(DefaultProfile);
     const [base64BannerImage, setBase64BannerImage] = useState(DefaultBanner);
+    const [desc, setDesc] = useState("");
 
     const handleProfileChange = (e) => {
         const selectedImage = e.target.files[0];
@@ -32,7 +46,7 @@ function CreateCommunity() {
         };
         reader.readAsDataURL(selectedImage);
 
-        setImage(selectedImage);
+        setInputProfileImage(selectedImage);
     };
     const handleBannerChange = (e) => {
         const selectedImage = e.target.files[0];
@@ -44,10 +58,19 @@ function CreateCommunity() {
         };
         reader.readAsDataURL(selectedImage);
 
-        setImage(selectedImage);
+        setInputBannerImage(selectedImage);
     };
 
+    // const getAllCommunities = async (req, res) => {
+    //     try {
+    //         await axiosInstance.get("")
+    //     } catch (error) {
+
+    //     }
+    // }
+
     useEffect(() => {
+        // getAllCommunities();
         communityValidation(questionValue);
     }, [questionValue])
 
@@ -64,8 +87,27 @@ function CreateCommunity() {
     //         console.error(error);
     //       });
     //   };
-    const sumbitHandler = (e) => {
+    const sumbitHandler = async (e) => {
         e.preventDefault();
+        try {
+            let date = new Date();
+            let theRes = await axiosInstance.post(`/createCommunity`, {
+                name: questionValue,
+                profilePicture: base64ProfileImage,
+                bannerPicture: base64BannerImage,
+                desc: desc,
+                commCategory: tempCategory,
+                dateCreated: date.toDateString(),
+                communityCreator: {
+                    name: user.name,
+                    email: user.email,
+
+                }
+            })
+            console.log(theRes)
+        } catch (error) {
+            console.log("Error from client side while creating a community. cause :", error);
+        }
     }
 
     return (
@@ -105,11 +147,27 @@ function CreateCommunity() {
             </ProfileBanner>
             <CommunityDescription>
                 <h1>Write Community Description</h1>
-                <textarea required></textarea>
+                <textarea required value={desc} onChange={(e) => {
+                    setDesc(e.target.value)
+                }}></textarea>
             </CommunityDescription>
+            <AskCategory> <h3>Category:</h3>
+                <div>
+                    <CategoryLink to={"/createCommunity"} onClick={() => setTempCategory("gaming")}>  <SportsEsportsOutlinedIcon /> Gaming</CategoryLink>
+                    <CategoryLink to={"/createCommunity"} onClick={() => setTempCategory("fashion")}>  <CheckroomOutlinedIcon /> Fashion</CategoryLink>
+                    <CategoryLink to={"/createCommunity"} onClick={() => setTempCategory("computer-science")}>  <CodeOutlinedIcon /> Computer Science</CategoryLink>
+                    <CategoryLink to={"/createCommunity"} onClick={() => setTempCategory("fitness")}>  <FitnessCenterOutlinedIcon /> Fitness</CategoryLink>
+                    <CategoryLink to={"/createCommunity"} onClick={() => setTempCategory("tech")}>  <PhoneAndroidOutlinedIcon /> Tech</CategoryLink>
+                    <CategoryLink to={"/createCommunity"} onClick={() => setTempCategory("doubts")}>  <HelpOutlineOutlinedIcon /> Doubts</CategoryLink>
+                    <CategoryLink to={"/createCommunity"} onClick={() => setTempCategory("others")}>  <AddReactionOutlinedIcon /> Others</CategoryLink>
+                </div>
+
+            </AskCategory>
+            <button type='submit'>Submit</button>
         </Whole>
     )
 }
+
 
 
 const CommunityDescription = styled.div`
@@ -127,6 +185,35 @@ width: 100%;
     border: none;
     outline: none;
 }
+}
+`
+const CategoryLink = styled(NavLink)`
+    color: #000;
+    text-decoration: none;
+    border: 2px solid black;
+    padding: 8px 15px;
+    font-size: 14px;
+    border-radius: 20px;
+    font-weight: bolder;
+
+    &&:active , &&:focus {
+        color: #b92b27 !important;
+        border: 2px solid #b92b27;
+    }
+`
+const AskCategory = styled.div`
+display: flex;
+align-items: center;
+
+div {
+    margin-left: 10px;
+    margin-top: -10px;
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 6px;
+}
+h3 {
+    display: inline;
 }
 `
 
