@@ -2,13 +2,16 @@ import styled from '@emotion/styled'
 import React from 'react'
 import AddIcon from '@mui/icons-material/Add';
 import { IconButton, Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
 function CommunitiesSidebar() {
     return (
         <Whole>
-            <CreateCommunityBtn>
-                <IconAdd />
-                <p>Create Community</p>
-            </CreateCommunityBtn>
+            <Link to='/createCommunity'>
+                <CreateCommunityBtn>
+                    <IconAdd />
+                    <p>Create Community</p>
+                </CreateCommunityBtn>
+            </Link>
             <SingleCommunityRows>
                 {/* Will map the communities here  */}
                 <Typography variant='p'>Sample Static Community</Typography>

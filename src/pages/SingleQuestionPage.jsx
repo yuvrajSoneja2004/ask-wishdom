@@ -55,7 +55,7 @@ function SingleQuestionPage() {
     useEffect(() => {
         const getRelatedQuestions = async (CATEGORY_NAME) => {
             try {
-                let fetch = await axiosInstance.get(`/relatedDefaultQuestions/${CATEGORY_NAME}`);
+                let fetch = await axiosInstance.get(`/likes/${CATEGORY_NAME}`);
                 let res = await fetch.data;
                 // console.log(res, "this is category one")
                 setCategoryList(res);
@@ -68,6 +68,20 @@ function SingleQuestionPage() {
     }, [categoryList])
 
     // console.log(categoryList)
+    const handleUpvote = async () => {
+        try {
+            console.log("THis thing works")
+            await axiosInstance.put(`/defaultUpvotes/${tempQuestionData._id}`, {
+                likes: [
+                    ...tempQuestionData.likes,
+                    user.email
+
+                ]
+            })
+        } catch (error) {
+
+        }
+    }
 
 
 
@@ -82,6 +96,19 @@ function SingleQuestionPage() {
         }
     }
 
+    // console.log(tempQuestionData, "temp one")
+
+    // const likesHandler = async () => {
+    //     try {
+    //         await axiosInstance.put(`/defaultUpvotes/${questionID}`, [
+    //             ...tempQuestionData?.likes,
+    //             user.email
+
+    //         ]);
+    //     } catch (error) {
+
+    //     }
+    // }
 
 
     return (
@@ -97,7 +124,7 @@ function SingleQuestionPage() {
                         <h1>  <HelpIcon fontSize='80' style={{ color: '#b13634' }} /> Question description</h1>
                         <p>{tempQuestionData.questionDesc}</p>
 
-
+                        <button onClick={handleUpvote}>{tempQuestionData.likes?.length}likes</button>
 
                         {
                             !isAuthenticated ? "loading..." : tempQuestionData.profileEmail === user.email ? (
@@ -109,6 +136,8 @@ function SingleQuestionPage() {
                                     <Link to={`/answerDefaultQuestion/${tempQuestionData._id}`}><OutlinedBtn>Answer</OutlinedBtn></Link>
                                 )
                         }
+
+
 
                         <h2>  <QuestionAnswerIcon fontSize='80' style={{ color: '#b13634' }} /> Answers ({tempQuestionData.answers?.length})</h2>
 
@@ -124,7 +153,7 @@ function SingleQuestionPage() {
                 <RelatedQuestions>
                     <h1>  <IconMore fontSize='80' style={{ color: '#b13634' }} /> Related Questions</h1>
                     {
-                        categoryList.map((currentQ, i) => {
+                        categoryList.length === 0 ? "no related questions on this category" : categoryList.map((currentQ, i) => {
                             return <div key={i} style={{ padding: '20px 0' }}><QuestionCard data={currentQ} /></div>
                         })
                     }

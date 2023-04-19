@@ -8,6 +8,7 @@ import BottomNav from './components/BottomNav'
 import AskPage from './pages/AskPage'
 import SingleQuestionPage from './pages/SingleQuestionPage'
 import SingleAnswerDefaultQuestion from './pages/SingleAnswerDefaultQuestion'
+import CreateCommunity from './pages/CreateCommunity'
 function App() {
 
 
@@ -21,6 +22,7 @@ function App() {
         <Route path='/ask' element={!isAuthenticated && !isLoading ? <Register /> : <AskPage />} />
         <Route path='/readDefaultQuestion/:questionID' element={<SingleQuestionPage />} />
         <Route path='/answerDefaultQuestion/:questionID' element={<SingleAnswerDefaultQuestion />} />
+        <Route path='/createCommunity' element={<CreateCommunity />} />
       </Routes>
       <BottomNav />
     </div>

@@ -21,7 +21,8 @@ export const GlobalProvider = ({ children }) => {
     let initialState = {
         defaultQuestions: [],
         isError: false,
-        isLoading: false
+        isLoading: false,
+        communtiyValidationData: {},
     }
 
     const [state, dispatch] = useReducer(reducer, initialState)
@@ -41,13 +42,25 @@ export const GlobalProvider = ({ children }) => {
         }
     }
 
+    const communityValidation = async (input) => {
+        dispatch({ type: "API_LOADING" });
+        try {
+            let fetch = await axiosInstance.get(`/validateCommunityName/${input}`)
+            let res = fetch.data;
+            dispatch({ type: "SET_COMMUNITY_VALIDATION", payload: res })
+            console.log(res, "validation community")
+        } catch (error) {
+            console.log(`community name validation error from client side : cause `, error)
+        }
+    }
+
 
     useEffect(() => {
         getDefaultQuestions();
     }, [])
 
 
-    return <GlobalContext.Provider value={{ ...state, getDefaultQuestions }}>{children}</GlobalContext.Provider>
+    return <GlobalContext.Provider value={{ ...state, getDefaultQuestions, communityValidation, dispatch }}>{children}</GlobalContext.Provider>
 }
 
 

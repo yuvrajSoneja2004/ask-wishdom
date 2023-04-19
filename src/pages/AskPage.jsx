@@ -110,6 +110,7 @@ function AskPage() {
             </AskedBy>
             <AskCategory> <h3>Category:</h3>
                 <div>
+                    //** TODO: Follow the DRY rule and use map function to do this. */
                     <CategoryLink to={"/ask"} onClick={() => setTempCategory("gaming")}>  <SportsEsportsOutlinedIcon /> Gaming</CategoryLink>
                     <CategoryLink to={"/ask"} onClick={() => setTempCategory("fashion")}>  <CheckroomOutlinedIcon /> Fashion</CategoryLink>
                     <CategoryLink to={"/ask"} onClick={() => setTempCategory("computer-science")}>  <CodeOutlinedIcon /> Computer Science</CategoryLink>
