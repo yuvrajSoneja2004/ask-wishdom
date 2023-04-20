@@ -16,6 +16,7 @@ import PhoneAndroidOutlinedIcon from '@mui/icons-material/PhoneAndroidOutlined';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import AddReactionOutlinedIcon from '@mui/icons-material/AddReactionOutlined';
 import { useAuth0 } from '@auth0/auth0-react';
+import imageCompression from 'browser-image-compression';
 function CreateCommunity() {
 
 
@@ -37,38 +38,44 @@ function CreateCommunity() {
     const [base64BannerImage, setBase64BannerImage] = useState(DefaultBanner);
     const [desc, setDesc] = useState("");
 
-    const handleProfileChange = (e) => {
+    const handleProfileChange = async (e) => {
         const selectedImage = e.target.files[0];
+        const options = {
+            maxSizeMB: .1,
+            maxWidthOrHeight: 1920,
+            useWebWorker: true,
+        }
+        let compression = await imageCompression(selectedImage, options)
 
         // Read the contents of the selected image file
         const reader = new FileReader();
         reader.onload = (event) => {
             setBase64ProfileImage(event.target.result);
         };
-        reader.readAsDataURL(selectedImage);
+        reader.readAsDataURL(compression);
 
-        setInputProfileImage(selectedImage);
+        setInputProfileImage(compression);
     };
-    const handleBannerChange = (e) => {
+    const handleBannerChange = async (e) => {
         const selectedImage = e.target.files[0];
+        const options = {
+            maxSizeMB: .1,
+            maxWidthOrHeight: 1920,
+            useWebWorker: true,
+        }
+        let compression = await imageCompression(selectedImage, options)
 
         // Read the contents of the selected image file
         const reader = new FileReader();
         reader.onload = (event) => {
             setBase64BannerImage(event.target.result);
         };
-        reader.readAsDataURL(selectedImage);
+        reader.readAsDataURL(compression);
 
-        setInputBannerImage(selectedImage);
+        setInputBannerImage(compression);
     };
 
-    // const getAllCommunities = async (req, res) => {
-    //     try {
-    //         await axiosInstance.get("")
-    //     } catch (error) {
 
-    //     }
-    // }
 
     useEffect(() => {
         // getAllCommunities();
