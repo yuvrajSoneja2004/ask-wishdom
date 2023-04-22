@@ -22,7 +22,7 @@ function CreateCommunity() {
 
     let { communityValidation, communtiyValidationData, isLoading } = useGlobal();
     const [tempCategory, setTempCategory] = useState("others");
-    const [questionValue, setQuestionValue] = useState("me")
+    const [questionValue, setQuestionValue] = useState("")
     const [errorThemeQuestion, setErrorThemeQuestion] = useState({
         color: '#000'
     })

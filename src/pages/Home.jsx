@@ -4,6 +4,7 @@ import React, { useEffect } from 'react'
 import CommunitiesSidebar from '../components/CommunitiesSidebar';
 import QuestionsList from '../components/QuestionsList';
 import { useGlobal } from '../context/global';
+import Loader from '../components/Loader';
 
 function Home() {
 
@@ -15,7 +16,7 @@ function Home() {
     })
     return (
         isLoading ? <>
-            loaidng....
+            <Loader />
         </> : (
             <WholeApplication>
                 <CommunitiesSidebar />

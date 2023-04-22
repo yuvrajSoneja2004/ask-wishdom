@@ -26,7 +26,7 @@ function NavigationBar() {
                     <Nav>
                         <Nav.Link href="#deets">More deets</Nav.Link>
                         <Nav.Link eventKey={2} href="#memes">
-                            <Link to='/communities'>Communities</Link>
+                            <Link to='/communities' style={{ textDecoration: 'none', color: '#fff' }}>Communities</Link>
                         </Nav.Link>
 
 

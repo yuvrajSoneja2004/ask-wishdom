@@ -3,14 +3,20 @@ import { useGlobal } from '../context/global';
 import CommunityCard from '../components/CommunityCard';
 import styled from '@emotion/styled';
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
+import Loader from '../components/Loader';
 
 function Communities() {
 
-    let { getCommunities, allCommunities } = useGlobal();
+    let { getCommunities, allCommunities, allCommunitiesLoading } = useGlobal();
 
     useEffect(() => {
         getCommunities();
     }, [allCommunities])
+
+
+    if (allCommunitiesLoading) {
+        return <Loader />
+    }
 
     return (
         <Whole>
@@ -34,6 +40,8 @@ const Smily = styled(SentimentVerySatisfiedIcon)`
 const Grid = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    place-items: center;
+    gap: 100px;
 `
 const Whole = styled.div`
     padding: 80px;

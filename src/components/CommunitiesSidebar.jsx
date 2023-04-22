@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 function CommunitiesSidebar() {
     return (
         <Whole>
-            <Link to='/createCommunity'>
+            <Link to='/createCommunity' style={{ textDecoration: 'none' }}>
                 <CreateCommunityBtn>
                     <IconAdd />
                     <p>Create Community</p>

@@ -4,6 +4,7 @@ import { Button, Typography } from '@mui/material'
 import React from 'react';
 import SiteLogo from '../assets/sitelogo.png';
 import { useGlobal } from '../context/global';
+import Reg from '../assets/regMan.gif'
 
 
 
@@ -19,7 +20,8 @@ function Register() {
 
                 <Logo src={SiteLogo} alt='logo' width={130} />
                 <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '20px' }}>
-                    <Typography variant='p'>Lorem ipsum, dolor sit amet consectetur adipisicing elit.</Typography>
+                    <img src={Reg} alt="" width={300} />
+                    <strong>Ask anything , anytime you want!</strong>
 
                     <div>
                         <RegisterBtn variant='contained' onClick={() => { loginWithRedirect() }}>Register</RegisterBtn>

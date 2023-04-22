@@ -4,7 +4,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import HelpIcon from '@mui/icons-material/Help';
 import axios from 'axios';
 import { axiosInstance } from '../utils/axiosInstance';
-import Loader from '../components/Loader';
+import Loader from '../components/Loader'
 import { useAuth0 } from '@auth0/auth0-react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton } from '@mui/material';
@@ -21,6 +21,7 @@ function SingleQuestionPage() {
     let { user, isAuthenticated } = useAuth0();
     const [categoryList, setCategoryList] = useState([]);
     const [tempQuestionData, setTempQuestionData] = useState({});
+    const [isSingleLoading, setIsSingleLoading] = useState(true);
     const navigate = useNavigate()
 
 
@@ -31,13 +32,15 @@ function SingleQuestionPage() {
                 const [res1, res2] = await Promise.all([
                     axiosInstance.get(`/getSingleDefaultQuestion/${QUESTION_ID}`).then(function (response) {
                         setTempQuestionData(response.data[0]);
+                        setIsSingleLoading(false);
                     }).catch(function (error) {
                         console.error(error)
+                        setIsSingleLoading(false)
                     })
                 ])
 
             } catch (error) {
-
+                setIsSingleLoading(false);
             }
         }
 
@@ -55,9 +58,9 @@ function SingleQuestionPage() {
     useEffect(() => {
         const getRelatedQuestions = async (CATEGORY_NAME) => {
             try {
-                let fetch = await axiosInstance.get(`/likes/${CATEGORY_NAME}`);
+                let fetch = await axiosInstance.get(`/relatedDefaultQuestions/${CATEGORY_NAME}`);
                 let res = await fetch.data;
-                // console.log(res, "this is category one")
+                console.log(res, "this is category one")
                 setCategoryList(res);
 
             } catch (error) {
@@ -109,10 +112,13 @@ function SingleQuestionPage() {
 
     //     }
     // }
+    if (tempQuestionData.length === 0) {
+        return <Loader />
+    }
 
 
     return (
-        tempQuestionData ?
+        tempQuestionData && !isSingleLoading ?
             <>
                 <Whole>
                     <QuestionHeading>{tempQuestionData.heading}</QuestionHeading>

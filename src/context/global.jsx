@@ -23,7 +23,8 @@ export const GlobalProvider = ({ children }) => {
         isError: false,
         isLoading: false,
         communtiyValidationData: {},
-        allCommunities: []
+        allCommunities: [],
+        allCommunitiesLoading: true
     }
 
     const [state, dispatch] = useReducer(reducer, initialState)
