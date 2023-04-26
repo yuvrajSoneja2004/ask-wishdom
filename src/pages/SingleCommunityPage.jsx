@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import CategoryIcon from '@mui/icons-material/Category';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -8,6 +8,8 @@ import { axiosInstance } from '../utils/axiosInstance';
 import Loader from '../components/Loader'
 import { RedBtn } from '../utils/RedBtn'
 import { useAuth0 } from '@auth0/auth0-react';
+import QuestionCard from '../components/QuestionCard';
+
 function SingleCommunityPage() {
 
     let { communityID } = useParams();
@@ -15,6 +17,7 @@ function SingleCommunityPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [userAlreadyJoined, setUserAlreadyJoined] = useState(false);
     let { user } = useAuth0();
+    const navigate = useNavigate();
 
 
     const getSingleCommunity = async () => {
@@ -91,10 +94,57 @@ function SingleCommunityPage() {
                 </CommunityLogo>
 
             </Poster>
+            <Cen>
+                {userAlreadyJoined ? <PostBtn onClick={() => navigate(`/askCommunityPage/${singleCommunityData?._id}`)}>POST something</PostBtn> : ""}
+            </Cen>
+            <QuestionsGrid>
+                {
+                    singleCommunityData?.questions.map((question, i) => {
+                        return <QuestionCard data={question} key={i} />
+                    })
+                }
+            </QuestionsGrid>
         </Whole>
     )
 }
 
+
+
+const QuestionsGrid = styled.div`
+width: 100%;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 50px;
+margin-top: 400px;
+gap: 40px;
+
+
+ @media screen and (max-width: 1446px){
+    grid-template-columns: 1fr 1fr;
+ }
+  @media screen and (max-width: 1049px){
+    grid-template-columns: 1fr;
+
+ }
+ @media screen and (max-width:488px){
+    padding: 15px;
+    gap: 15px;
+ }
+
+`
+
+const Cen = styled.div`
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    position: relative;
+    margin: 30px 30px 0 0 ;
+`
+
+const PostBtn = styled(RedBtn)`
+`
 
 
 const DescIcon = styled(DescriptionIcon)`
@@ -146,7 +196,9 @@ const CommunityLogo = styled.main`
 const CategoryIndicator = styled.div`
 text-transform: capitalize;
 `
-const Whole = styled.div``;
+const Whole = styled.div`
+
+`;
 
 
 const Poster = styled.div`

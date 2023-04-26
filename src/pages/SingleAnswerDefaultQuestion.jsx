@@ -9,6 +9,7 @@ import Loader from '../components/Loader';
 function SingleAnswerDefaultQuestion() {
 
     const { questionID } = useParams();
+    const { communityID } = useParams();
     const [userSmallDesc, setUserSmallDesc] = useState("");
     const [answerValue, setAnswerValue] = useState("");
     const [tempAnswersData, setTempAnswersData] = useState({});
@@ -24,7 +25,7 @@ function SingleAnswerDefaultQuestion() {
             try {
 
                 const [res1, res2] = await Promise.all([
-                    axiosInstance.get(`/getSingleDefaultQuestion/${QUESTION_ID}`).then(function (response) {
+                    axiosInstance.get(`/getCommunityQuestion/${questionID ? questionID : communityID}`).then(function (response) {
                         setTempAnswersData(response.data[0].answers);
                     }).catch(function (error) {
                         console.error(error);
