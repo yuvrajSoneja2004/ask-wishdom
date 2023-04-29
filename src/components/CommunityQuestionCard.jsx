@@ -4,7 +4,7 @@ import React from 'react'
 import { RedBtn } from '../utils/RedBtn'
 import { Link } from 'react-router-dom'
 
-function QuestionCard({ data }) {
+function CommunityQuestionCard({ data, no, comID }) {
     return (
         <div style={{ width: '100%' }}>
             <Card>
@@ -15,7 +15,7 @@ function QuestionCard({ data }) {
                     <img src={data.profileURL} alt="me" width={40} />
                     <span><strong>{data.profileName}</strong> asked this question</span>
                 </AskedUser>
-                <Link to={`/readDefaultQuestion/${data._id}`}>  <RedBtn>View Answers</RedBtn></Link>
+                <Link to={`/readCommunityQuestion/${data.id}/${no}/${comID}`}>  <RedBtn>View Answers</RedBtn></Link>
             </Card>
         </div>
     )
@@ -71,4 +71,4 @@ margin: 7px 0;
 
 
 
-export default QuestionCard
+export default CommunityQuestionCard;

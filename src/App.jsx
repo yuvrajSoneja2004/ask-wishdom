@@ -12,6 +12,8 @@ import CreateCommunity from './pages/CreateCommunity'
 import Communities from './pages/Communities'
 import SingleCommunityPage from './pages/SingleCommunityPage'
 import CommunityAskPage from './pages/CommunityAskPage'
+import CommunityAnswerSinglePage from './pages/CommunityAnswerSinglePage'
+import SingleAnswerCommunityPage from './pages/SingleAnswerCommunity'
 function App() {
 
 
@@ -25,10 +27,12 @@ function App() {
         <Route path='/ask' element={!isAuthenticated && !isLoading ? <Register /> : <AskPage />} />
         <Route path='/readDefaultQuestion/:questionID' element={<SingleQuestionPage />} />
         <Route path='/answerDefaultQuestion/:questionID' element={<SingleAnswerDefaultQuestion />} />
+        <Route path='/answerCommQuestion/:questionID/:index' element={<SingleAnswerCommunityPage />} />
         <Route path='/createCommunity' element={<CreateCommunity />} />
         <Route path='/communities' element={<Communities />} />
         <Route path='/singleCommunityPage/:communityID' element={<SingleCommunityPage />} />
         <Route path='/askCommunityPage/:communityID' element={<CommunityAskPage />} />
+        <Route path='/readCommunityQuestion/:communityID/:index/:ed' element={<CommunityAnswerSinglePage />} />
       </Routes>
       <BottomNav />
     </div>

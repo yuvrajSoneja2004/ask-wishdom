@@ -57,6 +57,7 @@ function CommunityAskPage() {
                         profileEmail: user.email,
                         questionDesc: descValue,
                         category: tempCategory,
+                        id: tempQuestionData?._id,
                     }
                 ]
             })

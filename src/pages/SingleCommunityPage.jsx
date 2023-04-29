@@ -9,6 +9,7 @@ import Loader from '../components/Loader'
 import { RedBtn } from '../utils/RedBtn'
 import { useAuth0 } from '@auth0/auth0-react';
 import QuestionCard from '../components/QuestionCard';
+import CommunityQuestionCard from '../components/CommunityQuestionCard';
 
 function SingleCommunityPage() {
 
@@ -100,7 +101,7 @@ function SingleCommunityPage() {
             <QuestionsGrid>
                 {
                     singleCommunityData?.questions.map((question, i) => {
-                        return <QuestionCard data={question} key={i} />
+                        return <CommunityQuestionCard data={question} no={i} key={i} comID={singleCommunityData?._id} />
                     })
                 }
             </QuestionsGrid>

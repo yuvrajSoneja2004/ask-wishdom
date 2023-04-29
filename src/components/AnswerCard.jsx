@@ -11,6 +11,7 @@ function AnswerCard({ data }) {
                     <img src={data.profile} alt="me" width={40} />
                 </div>
                 <div>
+
                     <strong>{data.name}</strong>
                     <span>{data.smallDescData}</span>
                     <label>{data.datePosted}</label>

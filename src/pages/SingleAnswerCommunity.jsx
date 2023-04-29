@@ -6,9 +6,10 @@ import { axiosInstance } from '../utils/axiosInstance';
 import { useAuth0 } from '@auth0/auth0-react';
 import Loader from '../components/Loader';
 
-function SingleAnswerDefaultQuestion() {
+function SingleAnswerCommunityPage() {
 
     const { questionID } = useParams();
+    const { index } = useParams();
     const [userSmallDesc, setUserSmallDesc] = useState("");
     const [answerValue, setAnswerValue] = useState("");
     const [tempAnswersData, setTempAnswersData] = useState({});
@@ -24,8 +25,8 @@ function SingleAnswerDefaultQuestion() {
             try {
 
                 const [res1, res2] = await Promise.all([
-                    axiosInstance.get(`/getSingleDefaultQuestion/${QUESTION_ID}`).then(function (response) {
-                        setTempAnswersData(response.data[0].answers);
+                    axiosInstance.get(`/getCommunityQuestion/${QUESTION_ID}`).then(function (response) {
+                        setTempAnswersData(response.data[0]);
                     }).catch(function (error) {
                         console.error(error);
                     })
@@ -149,4 +150,4 @@ border: none;
     }
 `
 
-export default SingleAnswerDefaultQuestion
+export default SingleAnswerCommunityPage;
