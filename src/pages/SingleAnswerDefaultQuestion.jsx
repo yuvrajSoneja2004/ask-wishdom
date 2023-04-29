@@ -14,6 +14,7 @@ function SingleAnswerDefaultQuestion() {
     const [tempAnswersData, setTempAnswersData] = useState({});
     let { user } = useAuth0()
     const navigate = useNavigate();
+    let deez = null;
 
 
 
@@ -50,16 +51,17 @@ function SingleAnswerDefaultQuestion() {
         try {
             console.log("first")
             let date = new Date();
-            let requ = await axiosInstance.put(`/addquestion/${questionID}`, {
-                answers: [
-                    ...tempAnswersData,
-                    {
-                        name: user.name,
-                        profile: user.picture,
-                        smallDescData: userSmallDesc,
-                        msg: answerValue,
-                        datePosted: date.toDateString()
-                    }]
+            let requ = await axiosInstance.put(`/addCommQuestion/${questionID}`, {
+                // answers: [
+                //     ...tempAnswersData,
+                //     {
+                //         name: user.name,
+                //         profile: user.picture,
+                //         smallDescData: userSmallDesc,
+                //         msg: answerValue,
+                //         datePosted: date.toDateString()
+                //     }]
+                questions: []
             })
 
             let res = await requ.data;

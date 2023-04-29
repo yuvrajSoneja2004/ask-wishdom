@@ -152,8 +152,6 @@ function CommunityAnswerSinglePage() {
 
 
 
-                        <h2>  <QuestionAnswerIcon fontSize='80' style={{ color: '#b13634' }} /> Answers ({tempQuestionData.answers?.length})</h2>
-
                     </QuestionDescription>
 
                     {
