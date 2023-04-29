@@ -25,7 +25,7 @@ function SingleAnswerCommunityPage() {
             try {
 
                 const [res1, res2] = await Promise.all([
-                    axiosInstance.get(`/getCommunityQuestion/${QUESTION_ID}`).then(function (response) {
+                    axiosInstance.get(`/getCommunityQuestion/${questionID}`).then(function (response) {
                         setTempAnswersData(response.data[0]);
                     }).catch(function (error) {
                         console.error(error);
@@ -45,7 +45,7 @@ function SingleAnswerCommunityPage() {
 
     }, [])
 
-    console.log(tempAnswersData, "From asking page man")
+    console.log(tempAnswersData, "THIS IS THE COMMUNITY QUESTION PAGE MAN MAN MAN ")
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {

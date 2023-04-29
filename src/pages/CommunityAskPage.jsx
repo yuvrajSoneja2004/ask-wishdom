@@ -66,7 +66,7 @@ function CommunityAskPage() {
             setQuestionValue("")
             setUserSmallDesc("")
             setDescValue("")
-            navigate("/")
+            navigate(`/singleCommunityPage/${communityID}`)
 
         } catch (error) {
             console.log(`Error from client posting community question ${error}`)

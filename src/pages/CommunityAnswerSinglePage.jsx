@@ -146,7 +146,7 @@ function CommunityAnswerSinglePage() {
                                 </Bubbly>
                             ) :
                                 (
-                                    <Link to={`/answerCommQuestion/${question?.id}`}><OutlinedBtn>Answer</OutlinedBtn></Link>
+                                    <Link to={`/answerCommQuestion/${tempQuestionData?._id}/${index}`}><OutlinedBtn>Answer</OutlinedBtn></Link>
                                 )
                         }
 
