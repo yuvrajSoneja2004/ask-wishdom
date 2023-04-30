@@ -15,6 +15,7 @@ function SingleAnswerCommunityPage() {
     const [tempAnswersData, setTempAnswersData] = useState({});
     let { user } = useAuth0()
     const navigate = useNavigate();
+    let question = null;
 
 
 
@@ -51,26 +52,33 @@ function SingleAnswerCommunityPage() {
         try {
             console.log("first")
             let date = new Date();
-            let requ = await axiosInstance.put(`/addquestion/${questionID}`, {
-                answers: [
-                    ...tempAnswersData,
-                    {
-                        name: user.name,
-                        profile: user.picture,
-                        smallDescData: userSmallDesc,
-                        msg: answerValue,
-                        datePosted: date.toDateString()
-                    }]
+            let requ = await axiosInstance.put(`/addCommQuestion/${questionID}`, {
+                // answers: [
+                //     ...tempAnswersData,
+                //     {
+                //         name: user.name,
+                //         profile: user.picture,
+                //         smallDescData: userSmallDesc,
+                //         msg: answerValue,
+                //         datePosted: date.toDateString()
+                //     }]
+                questions: [
+                    ...tempAnswersData.questions
+                ]
             })
 
             let res = await requ.data;
-            console.log(res, "the response")
-            navigate(`/readDefaultQuestion/${questionID}`)
+            console.log(res, "the submission")
+            // navigate(`/readDefaultQuestion/${questionID}`)
         } catch (error) {
             console.log("LOL error " + error)
         }
     }
-    console.log(tempAnswersData, "ayyyy")
+    if (tempAnswersData && tempAnswersData.questions && tempAnswersData.questions[index]) {
+        // Access the property safely
+        question = tempAnswersData.questions[index];
+    }
+    console.log(question, "THis is the specific one") // i am here
     return (
         tempAnswersData ? (
             <Whole onSubmit={handleSubmit}>

@@ -22,11 +22,47 @@ function SingleQuestionPage() {
     const [categoryList, setCategoryList] = useState([]);
     const [tempQuestionData, setTempQuestionData] = useState({});
     const [isSingleLoading, setIsSingleLoading] = useState(true);
+    const [userAlreadyLiked, setUserAlreadyLiked] = useState(false);
     const navigate = useNavigate()
+
+    // const checkIfLiked = () => {
+    //     console.log("BAD NAME GAME CHANGER :(");
+
+    //     const email = user?.email;
+    //     const isJoined = tempQuestionData?.likes?.some((member) => member.email === email);
+    //     if (isJoined) {
+    //         setUserAlreadyLiked(true);
+    //         console.log(userAlreadyLiked, "BAD NMAE")
+    //     }
+    //     else {
+    //         console.log("no")
+    //     }
+    // };
+
 
 
 
     useEffect(() => {
+        const checkIfLiked = () => {
+            console.log("checkIfLiked called");
+
+            const email = user?.email; // Make sure that user object has an email property
+            const likes = tempQuestionData?.likes; // Make sure that tempQuestionData object has a likes property
+
+            if (likes) { // Check if likes array exists
+                console.log("likes array exists");
+                const isJoined = likes.some((member) => member.email === email);
+                console.log("isJoined:", isJoined);
+                if (isJoined) {
+                    setUserAlreadyLiked(true);
+                    console.log("userAlreadyLiked:", userAlreadyLiked);
+                } else {
+                    console.log("user has not liked the question");
+                }
+            } else {
+                console.log("likes array does not exist");
+            }
+        };
         const getSingleDefaultQuestion = async (QUESTION_ID) => {
             try {
                 const [res1, res2] = await Promise.all([
@@ -46,13 +82,16 @@ function SingleQuestionPage() {
 
 
 
-
+        checkIfLiked();
 
         getSingleDefaultQuestion(questionID);
 
 
 
+
     }, [tempQuestionData])
+
+
 
 
     useEffect(() => {
@@ -74,10 +113,14 @@ function SingleQuestionPage() {
     const handleUpvote = async () => {
         try {
             console.log("THis thing works")
-            await axiosInstance.put(`/defaultUpvotes/${tempQuestionData._id}`, {
+            await axiosInstance.put(`/likes/${tempQuestionData._id}`, {
                 likes: [
                     ...tempQuestionData.likes,
-                    user.email
+                    {
+                        name: user?.name,
+                        email: user?.email,
+                        profilePic: user?.picture
+                    }
 
                 ]
             })
@@ -121,6 +164,7 @@ function SingleQuestionPage() {
         tempQuestionData && !isSingleLoading ?
             <>
                 <Whole>
+
                     <QuestionHeading>{tempQuestionData.heading}</QuestionHeading>
                     <AskedUser>
                         <img src={tempQuestionData.profileURL} alt="me" width={40} />
@@ -130,7 +174,9 @@ function SingleQuestionPage() {
                         <h1>  <HelpIcon fontSize='80' style={{ color: '#b13634' }} /> Question description</h1>
                         <p>{tempQuestionData.questionDesc}</p>
 
-                        <button onClick={handleUpvote}>{tempQuestionData.likes?.length}likes</button>
+                        {
+                            !userAlreadyLiked ? <button onClick={handleUpvote}>{tempQuestionData.likes?.length}likes</button> : "LIKED"
+                        }
 
                         {
                             !isAuthenticated ? "loading..." : tempQuestionData.profileEmail === user.email ? (
