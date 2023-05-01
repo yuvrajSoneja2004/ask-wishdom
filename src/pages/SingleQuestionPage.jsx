@@ -25,19 +25,7 @@ function SingleQuestionPage() {
     const [userAlreadyLiked, setUserAlreadyLiked] = useState(false);
     const navigate = useNavigate()
 
-    // const checkIfLiked = () => {
-    //     console.log("BAD NAME GAME CHANGER :(");
 
-    //     const email = user?.email;
-    //     const isJoined = tempQuestionData?.likes?.some((member) => member.email === email);
-    //     if (isJoined) {
-    //         setUserAlreadyLiked(true);
-    //         console.log(userAlreadyLiked, "BAD NMAE")
-    //     }
-    //     else {
-    //         console.log("no")
-    //     }
-    // };
 
 
 
@@ -129,9 +117,6 @@ function SingleQuestionPage() {
         }
     }
 
-
-
-
     const deleteQuestion = async () => {
         try {
             await axiosInstance.delete(`/getSingleDefaultQuestion/delete/${tempQuestionData._id}`);
@@ -142,19 +127,10 @@ function SingleQuestionPage() {
         }
     }
 
-    // console.log(tempQuestionData, "temp one")
 
-    // const likesHandler = async () => {
-    //     try {
-    //         await axiosInstance.put(`/defaultUpvotes/${questionID}`, [
-    //             ...tempQuestionData?.likes,
-    //             user.email
 
-    //         ]);
-    //     } catch (error) {
 
-    //     }
-    // }
+
     if (tempQuestionData.length === 0) {
         return <Loader />
     }
@@ -188,6 +164,7 @@ function SingleQuestionPage() {
                                     <Link to={`/answerDefaultQuestion/${tempQuestionData._id}`}><OutlinedBtn>Answer</OutlinedBtn></Link>
                                 )
                         }
+                        <p>loerm12</p>
 
 
 
