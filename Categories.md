@@ -16,4 +16,4 @@
 - Add icons on navitems [DONE]
 - Make the app responsive
 - Customize the sidebar
-- Design and add like functionality to single community answer card
+- Design and add like functionality to single community answer card`

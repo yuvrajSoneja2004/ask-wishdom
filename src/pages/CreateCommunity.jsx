@@ -94,11 +94,7 @@ function CreateCommunity() {
                 desc: desc,
                 commCategory: tempCategory,
                 dateCreated: date.toDateString(),
-                communityCreator: {
-                    name: user.name,
-                    email: user.email,
-
-                }
+                communityCreator: user.email
             })
             console.log(theRes);
             // if success then navigate
