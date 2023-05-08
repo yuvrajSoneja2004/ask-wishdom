@@ -17,3 +17,5 @@
 - Make the app responsive
 - Customize the sidebar [DONE]
 - Design and add like functionality to single community answer card
+- Add delete community option
+- Change in theme

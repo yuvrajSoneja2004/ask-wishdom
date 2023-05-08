@@ -10,16 +10,6 @@ import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 function QuestionCard({ data }) {
     return (
         <Whole>
-            {/* <Card>
-                <h4> Q:llll {data.heading}</h4>
-
-                <p>{data.questionDesc.slice(0, 30)}...</p>
-                <AskedUser>
-                    <img src={data.profileURL} alt="me" width={40} />
-                    <span><strong>{data.profileName}</strong> asked this question</span>
-                </AskedUser>
-                <Link to={`/readDefaultQuestion/${data._id}`}>  <RedBtn>View Answers</RedBtn></Link>
-            </Card> */}
             <Card>
                 <Left>
                     <AskedUser>
@@ -40,10 +30,18 @@ function QuestionCard({ data }) {
                     <WhiteBtn disabled> <ViewsIcon /> {data.views.length} Views</WhiteBtn>
 
                 </div>
-                <Link to={`/readDefaultQuestion/${data._id}`} style={{ marginRight: '30px' , }}>  <RedBtn style={{display: 'flex' , alignItems: 'center', gap: '6px'}}> <QuestionAnswerIcon />  View Answers</RedBtn></Link>            </BelowContent>
+                <TheLink to={`/readDefaultQuestion/${data._id}`} style={{ marginRight: '30px' , }}>  <RedBtn style={{display: 'flex' , alignItems: 'center', gap: '6px'}}> <QuestionAnswerIcon />  View Answers</RedBtn></TheLink>            </BelowContent>
         </Whole>
     )
 }
+
+
+const TheLink = styled(Link)`
+    @media screen and (max-width: 428px) {
+        margin: 0 !important;
+
+    }
+`
 
 
 const ChatIcon = styled(ChatBubbleIcon)`
@@ -73,14 +71,31 @@ const BelowContent = styled.div`
     padding: 0 0  0 92px;
     display: flex;
     justify-content: space-between;
+    @media screen and (max-width: 631px){
+        padding: 0 0 0 20px;
+    }
+    @media screen and (max-width: 428px) {
+            flex-direction: column;
+            padding: 0 20px 0 20px;
+            justify-content: center;
+        }
     div {
         display: flex;
         gap: 15px;
+        @media screen and (max-width: 428px) {
+            
+        }
     }
     button {
         margin: 20px 0;
         outline: 1px solid grey;
         outline :1px solid  #8080806d;
+        @media screen and (max-width: 631px){
+        font-size: 10px;
+    }
+    @media screen and (max-width: 428px) {
+            width: 100%;
+        }
     }
 
 `
