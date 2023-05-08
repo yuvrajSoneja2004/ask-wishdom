@@ -10,10 +10,10 @@
 
 
 # TODO
-- Feature to see views in question
+- Feature to see views in question [DONE]
 - Feature to see post date [DONE]
-- Redesign single question page
-- Add icons on navitems
+- Redesign single question page [DONE]
+- Add icons on navitems [DONE]
 - Make the app responsive
 - Customize the sidebar
 - Design and add like functionality to single community answer card

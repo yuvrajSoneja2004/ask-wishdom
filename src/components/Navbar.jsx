@@ -8,7 +8,8 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { FiLogOut } from 'react-icons/fi'
 import { RedBtn } from '../utils/RedBtn';
 import { Link, useNavigate } from 'react-router-dom';
-
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 
 function NavigationBar() {
 
@@ -26,7 +27,7 @@ function NavigationBar() {
                     <Nav>
                         <Nav.Link href="#deets">More deets</Nav.Link>
                         <Nav.Link eventKey={2} href="#memes">
-                            <Link to='/communities' style={{ textDecoration: 'none', color: '#fff' }}>Communities</Link>
+                            <Link to='/communities' style={{ textDecoration: 'none', color: '#fff', display: 'flex' , alignItems: 'center' , gap: '5px' }}> <AccountBalanceIcon />  Communities</Link>
                         </Nav.Link>
 
 
@@ -43,7 +44,7 @@ function NavigationBar() {
                             </UserDropDown>
                         }
                         {
-                            isAuthenticated ? <RouterLink to='/ask'> <RedBtn variant='contained' >Ask Something</RedBtn></RouterLink> : ""
+                            isAuthenticated ? <RouterLink to='/ask'> <RedBtn variant='contained' style={{display: 'flex' , alignItems: 'center' , gap: '4px'}} >   <QuestionMarkIcon fontSize='500'/>  Ask Something</RedBtn></RouterLink> : ""
                         }
 
                         {/* <LogoutBtn variant='contained' onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}>Log out</LogoutBtn> */}

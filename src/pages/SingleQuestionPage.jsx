@@ -23,14 +23,60 @@ function SingleQuestionPage() {
     const [tempQuestionData, setTempQuestionData] = useState({});
     const [isSingleLoading, setIsSingleLoading] = useState(true);
     const [userAlreadyLiked, setUserAlreadyLiked] = useState(false);
+    const [isViewed , setisAlreadyViewed] = useState(false);
     const navigate = useNavigate()
 
 
 
+    useEffect(() => {
+        const getViews = async () => {
 
+           
+
+            try {
+                console.log("Called man wht")
+                const email = user?.email; // Make sure that user object has an email property
+                const likes = tempQuestionData?.views; // Make sure that tempQuestionData object has a likes property
+    
+                if (likes) { // Check if likes array exists
+                    console.log("likes array exists");
+                    const isJoined = likes.some((member) => member.email === email);
+                    console.log("isJoined:", isJoined);
+                    if (isJoined) {
+                        setisAlreadyViewed(true);
+                        console.log("userAlreadyLiked:", userAlreadyLiked);
+                    } else {
+                        console.log("user has not liked the question");
+                    }
+                } else {
+                    console.log("likes array does not exist");
+                }
+               if(!isViewed){
+                await axiosInstance.put(`/updateViews/${tempQuestionData._id}`, {
+                    views: [
+                        ...tempQuestionData.views,
+                        {
+                            name: user?.name,
+                            email: user?.email,
+                            profilePic: user?.picture
+                        }
+    
+                    ]
+                })
+               }
+            } catch 
+                
+             {
+                
+            }
+        }
+
+        getViews();
+    } , [tempQuestionData])
 
 
     useEffect(() => {
+       
         const checkIfLiked = () => {
             console.log("checkIfLiked called");
 
@@ -128,6 +174,8 @@ function SingleQuestionPage() {
     }
 
 
+   
+        
 
 
 

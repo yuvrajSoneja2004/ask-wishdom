@@ -5,6 +5,7 @@ import { RedBtn } from '../utils/RedBtn'
 import { Link } from 'react-router-dom'
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 
 function QuestionCard({ data }) {
     return (
@@ -26,7 +27,7 @@ function QuestionCard({ data }) {
                     </AskedUser>
                 </Left>
                 <Right>
-                    <span>{data.datePosted}</span>
+                    <span>Asked: {data.datePosted}</span>
                     <h4>{data.heading}</h4>
                     <p>{data.questionDesc.slice(0, 30)}...</p>
 
@@ -36,10 +37,10 @@ function QuestionCard({ data }) {
             <BelowContent>
                 <div>
                     <WhiteBtn disabled> <ChatIcon />{data.answers.length} Answers</WhiteBtn>
-                    <WhiteBtn disabled> <ViewsIcon /> 69 VIews</WhiteBtn>
+                    <WhiteBtn disabled> <ViewsIcon /> {data.views.length} Views</WhiteBtn>
 
                 </div>
-                <Link to={`/readDefaultQuestion/${data._id}`} style={{ marginRight: '30px' }}>  <RedBtn>View Answers</RedBtn></Link>            </BelowContent>
+                <Link to={`/readDefaultQuestion/${data._id}`} style={{ marginRight: '30px' , }}>  <RedBtn style={{display: 'flex' , alignItems: 'center', gap: '6px'}}> <QuestionAnswerIcon />  View Answers</RedBtn></Link>            </BelowContent>
         </Whole>
     )
 }
