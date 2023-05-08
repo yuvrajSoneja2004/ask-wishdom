@@ -26,7 +26,7 @@ function QuestionCard({ data }) {
                     </AskedUser>
                 </Left>
                 <Right>
-                    <span>Asked 3 December 2023</span>
+                    <span>{data.datePosted}</span>
                     <h4>{data.heading}</h4>
                     <p>{data.questionDesc.slice(0, 30)}...</p>
 
@@ -64,8 +64,7 @@ const WhiteBtn = styled.button`
 
 const Whole = styled.div`
     width: 100%;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
-
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
 `
 
 const BelowContent = styled.div`

@@ -41,6 +41,7 @@ function AskPage() {
 
     const postQuestion = async () => {
         try {
+            let date = new Date();
             await axiosInstance.post("/getDefaultQuestions/upload", {
                 heading: questionValue,
                 userSmallDesc: userSmallDesc,
@@ -48,7 +49,8 @@ function AskPage() {
                 profileName: user.name,
                 profileEmail: user.email,
                 questionDesc: descValue,
-                category: tempCategory
+                category: tempCategory,
+                datePosted: date.toDateString()
             })
 
             console.log("Successfully data posted from client");
