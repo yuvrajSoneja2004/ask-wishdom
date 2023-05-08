@@ -5,11 +5,14 @@ import { IconButton, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { axiosInstance } from '../utils/axiosInstance';
 import { useAuth0 } from '@auth0/auth0-react';
+import Loader from './Loader';
+import AssuredWorkloadIcon from '@mui/icons-material/AssuredWorkload';
 function CommunitiesSidebar() {
 
     let {user} = useAuth0();
 
     const [userCommunities , setUserCommunities] = useState([]);
+    const [isLoading , setIsLoading] = useState(true);
 
 useEffect(() => {
     const getUserCommunities = async () => {
@@ -18,6 +21,7 @@ useEffect(() => {
             let fetchRes = await fetch.data;
             console.log(fetchRes , "AHAHAHAHAHAHA LAPTOP NEQW");
             setUserCommunities(fetchRes);
+            setIsLoading(false);
         } catch (error) {
             console.log("DA cause" + error);
         }
@@ -34,15 +38,17 @@ useEffect(() => {
                     <p>Create Community</p>
                 </CreateCommunityBtn>
             </Link>
-            <SingleCommunityRows>
-                <strong>Your Communities</strong> <br />
+           {
+            isLoading ? <Loader /> : (
+                <SingleCommunityRows>
+                <strong> <AssuredWorkloadIcon />  Your Communities</strong> <br />
                 {/* Will map the communities here  */}
                 <UserCommunities>
                 {
                     userCommunities.map((com) => {
                         return   <div>
-                            <img src={com?.profilePicture} alt="lol"  width={50}/>
-                             <Typography variant='p'>{com?.name}</Typography>
+                            <img src={com?.profilePicture} alt="lol"  width={45}/>
+                             <ComLink to={`/singleCommunityPage/${com?._id}`}>{com?.name}</ComLink>
                             </div>
                        
                     })
@@ -50,15 +56,35 @@ useEffect(() => {
                  </UserCommunities>
                 
             </SingleCommunityRows>
+            )
+           }
 
         </Whole>
     )
 }
 
+
+const ComLink = styled(Link)`
+    color: #000;
+    text-decoration: none;
+`
+
 const UserCommunities = styled.div`
 display: flex;
 flex-direction: column;
 gap: 30px;
+margin-top: 30px;
+
+
+
+div img {
+    border-radius: 50%;
+    height: 45px;
+    margin-right: 7px;
+    border: 3px solid #b92b27;
+    padding: 2px;
+}
+
 `
 
 const Whole = styled.div`
@@ -84,6 +110,10 @@ const IconAdd = styled(AddIcon)`
 `
 const SingleCommunityRows = styled.div`
 margin-top: 30px;
+
+strong {
+    margin-bottom: 20px;
+}
 `
 const CreateCommunityBtn = styled.button`
 

@@ -234,6 +234,7 @@ function SingleQuestionPage() {
                             return <div key={i} style={{ padding: '20px 0' }}><QuestionCard data={currentQ} /></div>
                         })
                     }
+                    
                 </RelatedQuestions>
             </>
             :
