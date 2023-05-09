@@ -35,7 +35,6 @@ function CommunityAnswerSinglePage() {
             try {
                 const [res1, res2] = await Promise.all([
                     axiosInstance.get(`/getCommunityQuestion/${ed}`).then(function (response) {
-                        console.log("the ducking response", response)
                         setTempQuestionData(response.data[0]);
                         setIsSingleLoading(false);
                     }).catch(function (error) {
@@ -65,7 +64,6 @@ function CommunityAnswerSinglePage() {
             try {
                 let fetch = await axiosInstance.get(`/relatedDefaultQuestions/${CATEGORY_NAME}`);
                 let res = await fetch.data;
-                console.log(res, "this is category one")
                 setCategoryList(res);
 
             } catch (error) {
@@ -75,10 +73,8 @@ function CommunityAnswerSinglePage() {
         getRelatedQuestions(tempQuestionData?.category);
     }, [categoryList])
 
-    // console.log(categoryList)
     const handleUpvote = async () => {
         try {
-            console.log("THis thing works")
             await axiosInstance.put(`/defaultUpvotes/${tempQuestionData._id}`, {
                 likes: [
                     ...tempQuestionData.likes,
@@ -97,33 +93,19 @@ function CommunityAnswerSinglePage() {
     const deleteQuestion = async () => {
         try {
             await axiosInstance.delete(`/getSingleDefaultQuestion/delete/${tempQuestionData._id}`);
-            console.log("Successfully delete from client")
             navigate("/");
         } catch (error) {
             console.log(`Error from the client side: Reason : ${error}`)
         }
     }
 
-    // console.log(tempQuestionData, "temp one")
 
-    // const likesHandler = async () => {
-    //     try {
-    //         await axiosInstance.put(`/defaultUpvotes/${communityID}`, [
-    //             ...tempQuestionData?.likes,
-    //             user.email
-
-    //         ]);
-    //     } catch (error) {
-
-    //     }
-    // }
 
     if (tempQuestionData && tempQuestionData.questions && tempQuestionData.questions[index]) {
         // Access the property safely
         question = tempQuestionData.questions[index];
     }
 
-    console.log(":>>>>>", question)
     return (
         tempQuestionData && !isSingleLoading ?
             <>

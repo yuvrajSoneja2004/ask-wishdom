@@ -13,7 +13,8 @@ import AnswerCard from '../components/AnswerCard';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import QuestionCard from '../components/QuestionCard';
-
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 function SingleQuestionPage() {
 
@@ -34,22 +35,16 @@ function SingleQuestionPage() {
            
 
             try {
-                console.log("Called man wht")
                 const email = user?.email; // Make sure that user object has an email property
                 const likes = tempQuestionData?.views; // Make sure that tempQuestionData object has a likes property
     
                 if (likes) { // Check if likes array exists
-                    console.log("likes array exists");
                     const isJoined = likes.some((member) => member.email === email);
-                    console.log("isJoined:", isJoined);
                     if (isJoined) {
                         setisAlreadyViewed(true);
-                        console.log("userAlreadyLiked:", userAlreadyLiked);
                     } else {
-                        console.log("user has not liked the question");
                     }
                 } else {
-                    console.log("likes array does not exist");
                 }
                if(!isViewed){
                 await axiosInstance.put(`/updateViews/${tempQuestionData._id}`, {
@@ -78,23 +73,17 @@ function SingleQuestionPage() {
     useEffect(() => {
        
         const checkIfLiked = () => {
-            console.log("checkIfLiked called");
 
             const email = user?.email; // Make sure that user object has an email property
             const likes = tempQuestionData?.likes; // Make sure that tempQuestionData object has a likes property
 
             if (likes) { // Check if likes array exists
-                console.log("likes array exists");
                 const isJoined = likes.some((member) => member.email === email);
-                console.log("isJoined:", isJoined);
                 if (isJoined) {
                     setUserAlreadyLiked(true);
-                    console.log("userAlreadyLiked:", userAlreadyLiked);
                 } else {
-                    console.log("user has not liked the question");
                 }
             } else {
-                console.log("likes array does not exist");
             }
         };
         const getSingleDefaultQuestion = async (QUESTION_ID) => {
@@ -133,7 +122,6 @@ function SingleQuestionPage() {
             try {
                 let fetch = await axiosInstance.get(`/relatedDefaultQuestions/${CATEGORY_NAME}`);
                 let res = await fetch.data;
-                console.log(res, "this is category one")
                 setCategoryList(res);
 
             } catch (error) {
@@ -143,10 +131,8 @@ function SingleQuestionPage() {
         getRelatedQuestions(tempQuestionData?.category);
     }, [categoryList])
 
-    // console.log(categoryList)
     const handleUpvote = async () => {
         try {
-            console.log("THis thing works")
             await axiosInstance.put(`/likes/${tempQuestionData._id}`, {
                 likes: [
                     ...tempQuestionData.likes,
@@ -166,7 +152,6 @@ function SingleQuestionPage() {
     const deleteQuestion = async () => {
         try {
             await axiosInstance.delete(`/getSingleDefaultQuestion/delete/${tempQuestionData._id}`);
-            console.log("Successfully delete from client")
             navigate("/");
         } catch (error) {
             console.log(`Error from the client side: Reason : ${error}`)
@@ -199,8 +184,23 @@ function SingleQuestionPage() {
                         <p>{tempQuestionData.questionDesc}</p>
 
                         {
-                            !userAlreadyLiked ? <button onClick={handleUpvote}>{tempQuestionData.likes?.length}likes</button> : "LIKED"
+                            !userAlreadyLiked ? (
+                                <HandleLikes>
+                                         <Bubbly onClick={handleUpvote}>
+                         <LikeBtn />
+                         <span>{tempQuestionData.likes?.length}</span>
+                                </Bubbly>
+                                
+                                </HandleLikes>
+                            ) :   <HandleLikes>
+                            <Bubbly>
+                           <FavoriteIcon /> 
+                           <span>{tempQuestionData.likes?.length}</span>
+                   </Bubbly>
+                  
+                   </HandleLikes>
                         }
+                        
 
                         {
                             !isAuthenticated ? "loading..." : tempQuestionData.profileEmail === user.email ? (
@@ -212,7 +212,7 @@ function SingleQuestionPage() {
                                     <Link to={`/answerDefaultQuestion/${tempQuestionData._id}`}><OutlinedBtn>Answer</OutlinedBtn></Link>
                                 )
                         }
-                        <p>loerm12</p>
+                     
 
 
 
@@ -242,6 +242,15 @@ function SingleQuestionPage() {
     )
 }
 
+
+const HandleLikes = styled.div`
+    display: flex;
+    align-items: center;
+`
+
+const LikeBtn = styled(FavoriteBorderIcon)`
+    
+`
 const Whole = styled.div`
 margin: 30px 100px;
 padding: 60px;
@@ -288,6 +297,12 @@ const IconDelete = styled(DeleteIcon)`
 `
 const Bubbly = styled(IconButton)`
 margin-top: 10px;
+display: flex;
+align-items: center;
+gap: 10px;
+span {
+    font-size: 16px;
+}
     
 `
 const OutlinedBtn = styled.button`

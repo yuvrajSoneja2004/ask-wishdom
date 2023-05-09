@@ -16,8 +16,10 @@ import PhoneAndroidOutlinedIcon from '@mui/icons-material/PhoneAndroidOutlined';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import AddReactionOutlinedIcon from '@mui/icons-material/AddReactionOutlined';
 import { useAuth0 } from '@auth0/auth0-react';
+import {RedBtn} from '../utils/RedBtn';
 import imageCompression from 'browser-image-compression';
 function CreateCommunity() {
+
 
 
     let { communityValidation, communtiyValidationData, isLoading } = useGlobal();
@@ -96,7 +98,6 @@ function CreateCommunity() {
                 dateCreated: date.toDateString(),
                 communityCreator: user.email
             })
-            console.log(theRes);
             // if success then navigate
             navigate("/communities")
         } catch (error) {
@@ -157,20 +158,26 @@ function CreateCommunity() {
                 </div>
 
             </AskCategory>
-            <button type='submit'>Submit</button>
+            <SubmitBtn type="submit">submit</SubmitBtn>
         </Whole>
     )
 }
 
 
-
+const SubmitBtn = styled(RedBtn)`
+    margin-bottom: 100px;
+`
 const CommunityDescription = styled.div`
-margin-top: 80px;
+margin: 80px 0;
+
 h1 {
     text-shadow: 0px 1px, 1px 0px, 1px 0px;
 
 }
 textarea {
+    @media screen and (max-width: 563px){
+    font-size: 26px;
+}
 border: none;
 font-size: 50px;
 width: 100%;
@@ -189,6 +196,11 @@ const CategoryLink = styled(NavLink)`
     font-size: 14px;
     border-radius: 20px;
     font-weight: bolder;
+    @media screen and (max-width: 414px){
+      
+        font-size: 13px;
+      
+    }
 
     &&:active , &&:focus {
         color: #b92b27 !important;
@@ -198,6 +210,20 @@ const CategoryLink = styled(NavLink)`
 const AskCategory = styled.div`
 display: flex;
 align-items: center;
+@media screen and (max-width: 879px){
+    flex-direction: column;
+    h1 {
+        padding-bottom: 10px;
+    }
+    div {
+
+        justify-content: center;
+        gap: 10px;
+        
+    }
+
+    
+}
 
 div {
     margin-left: 10px;
@@ -256,6 +282,10 @@ border: none;
 font-size: 50px;
 width: 100%;
 
+@media screen and (max-width: 563px){
+    font-size: 26px;
+}
+
 &&:focus {
     border: none;
     outline: none;
@@ -283,6 +313,9 @@ const CommunityProfile = styled.div`
 display: flex;
 align-items: center;
 margin-top: 80px;
+@media screen and (max-width: 563px){
+    flex-direction: column;
+}
 h1 {
     text-shadow: 0px 1px, 1px 0px, 1px 0px;
 

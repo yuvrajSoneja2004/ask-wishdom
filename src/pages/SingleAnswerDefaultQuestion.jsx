@@ -45,11 +45,9 @@ function SingleAnswerDefaultQuestion() {
 
     }, [])
 
-    console.log(tempAnswersData, "From asking page man")
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            console.log("first")
             let date = new Date();
             let requ = await axiosInstance.put(`/addquestion/${questionID}`, {
                 answers: [
@@ -71,7 +69,6 @@ function SingleAnswerDefaultQuestion() {
             console.log("LOL error " + error)
         }
     }
-    console.log(tempAnswersData, "ayyyy")
     return (
         tempAnswersData ? (
             <Whole onSubmit={handleSubmit}>
@@ -108,6 +105,13 @@ const Whole = styled.form`
 margin: 30px 100px;
 padding: 60px;
 background: #f6f9f9;
+
+@media screen and (max-width: 576px){
+    margin: 30px 50px;
+}
+@media screen and (max-width: 409px){
+    margin: 30px 10px;
+}
 `
 
 const SubmitBtn = styled(RedBtn)`

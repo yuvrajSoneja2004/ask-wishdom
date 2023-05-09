@@ -21,7 +21,6 @@ useEffect(() => {
         try {
             let fetch = await axiosInstance.get(`/getusercommunities/${user.email}`);
             let fetchRes = await fetch.data;
-            console.log(fetchRes , "MOBILE VIEW MAM NMAMAM");
             setUserCommunities(fetchRes);
             setIsLoading(false);
         } catch (error) {
@@ -47,13 +46,13 @@ useEffect(() => {
             <Grid>
                 <UserCommunities>
             {
-                    userCommunities.map((com) => {
-                        return   <Dyn>
-                            <img src={com?.profilePicture} alt="lol"  width={105}/>
-                             <ComLink to={`/singleCommunityPage/${com?._id}`}>{com?.name}</ComLink>
-                            </Dyn>
-                       
-                    })
+                   userCommunities.length === 0 ? <h1> No Created Communities</h1> :  userCommunities.map((com) => {
+                    return   <Dyn>
+                        <img src={com?.profilePicture} alt="lol"  width={105}/>
+                         <ComLink to={`/singleCommunityPage/${com?._id}`}>{com?.name}</ComLink>
+                        </Dyn>
+                   
+                })
                 }
                 </UserCommunities>
             </Grid>
@@ -64,6 +63,7 @@ const UserCommunities = styled.div`
 display: flex;
 flex-direction: column;
 justify-content: center;
+align-items: center;
 gap: 30px;
 margin-top: 30px;`
 

@@ -53,7 +53,6 @@ function AskPage() {
                 datePosted: date.toDateString()
             })
 
-            console.log("Successfully data posted from client");
             setQuestionValue("")
             setUserSmallDesc("")
             setDescValue("")
@@ -85,13 +84,15 @@ function AskPage() {
             setAllowSubmitDesc(false);
 
         }
-        console.log(allowSubmit)
     }, [descValue])
 
 
 
     return (
-        <Whole>
+        <Whole onSubmit={(e) => {
+            e.preventDefault();
+            postQuestion();
+        }}>
             <QuestionTitle placeholder='Enter the Question.' onChange={handleQuestion} value={questionValue} style={errorThemeQuestion} required></QuestionTitle>
             <span style={errorThemeQuestion}>{questionValue.length}/50</span>
             <h3>Question asked by:</h3>
@@ -124,12 +125,12 @@ function AskPage() {
             </AskCategory>
             <QuestionDesc placeholder='Write question description here.' required onChange={handleDesc} value={descValue}></QuestionDesc>
             <span style={errorThemeDesc}>{descValue.length}/350</span>
-            <SubmitBtn disabled={allowSubmit || allowSubmitDesc ? true : false} onClick={postQuestion}>Submit</SubmitBtn>
+            <SubmitBtn disabled={allowSubmit || allowSubmitDesc ? true : false} type='submit'>Submit</SubmitBtn>
         </Whole>
     )
 }
 
-const Whole = styled.div`
+const Whole = styled.form`
 padding: 30px 100px;
 @media screen and (max-width: 674px){
     padding: 30px 50px;

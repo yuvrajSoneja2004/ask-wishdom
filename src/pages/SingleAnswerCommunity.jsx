@@ -46,30 +46,18 @@ function SingleAnswerCommunityPage() {
 
     }, [])
 
-    console.log(tempAnswersData, "THIS IS THE COMMUNITY QUESTION PAGE MAN MAN MAN ")
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            console.log("first")
             let date = new Date();
             let requ = await axiosInstance.put(`/addCommQuestion/${questionID}`, {
-                // answers: [
-                //     ...tempAnswersData,
-                //     {
-                //         name: user.name,
-                //         profile: user.picture,
-                //         smallDescData: userSmallDesc,
-                //         msg: answerValue,
-                //         datePosted: date.toDateString()
-                //     }]
+              
                 questions: [
                     ...tempAnswersData.questions
                 ]
             })
 
             let res = await requ.data;
-            console.log(res, "the submission")
-            // navigate(`/readDefaultQuestion/${questionID}`)
         } catch (error) {
             console.log("LOL error " + error)
         }
@@ -78,7 +66,6 @@ function SingleAnswerCommunityPage() {
         // Access the property safely
         question = tempAnswersData.questions[index];
     }
-    console.log(question, "THis is the specific one") // i am here
     return (
         tempAnswersData ? (
             <Whole onSubmit={handleSubmit}>

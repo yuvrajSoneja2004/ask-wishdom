@@ -2,5 +2,5 @@ import axios from "axios";
 
 // The axios Instance
 export const axiosInstance = axios.create({
-    baseURL: 'http://localhost:6969/',
+    baseURL: 'https://ask-wishdom-server.onrender.com/',
 });

@@ -25,7 +25,6 @@ function NavigationBar() {
                     <Nav className="me-auto">
                     </Nav>
                     <Nav>
-                        <Nav.Link href="#deets">More deets</Nav.Link>
                         <Nav.Link eventKey={2} href="#memes">
                             <Link to='/communities' style={{ textDecoration: 'none', color: '#fff', display: 'flex' , alignItems: 'center' , gap: '5px' }}> <AccountBalanceIcon />  Communities</Link>
                         </Nav.Link>

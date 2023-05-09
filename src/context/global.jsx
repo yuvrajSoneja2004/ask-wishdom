@@ -16,7 +16,6 @@ const GlobalContext = createContext();
 export const GlobalProvider = ({ children }) => {
 
     let alo = useAuth0();
-    console.log(alo, "from global")
 
     let initialState = {
         defaultQuestions: [],
@@ -36,7 +35,6 @@ export const GlobalProvider = ({ children }) => {
         try {
             let fetch = await axiosInstance.get("/getDefaultQuestions");
             let res = await fetch.data;
-            console.log(res)
             dispatch({ type: "SET_DEFAULT_QUESTIONS", payload: res })
 
         } catch (error) {
@@ -50,7 +48,6 @@ export const GlobalProvider = ({ children }) => {
             let fetch = await axiosInstance.get(`/validateCommunityName/${input}`)
             let res = fetch.data;
             dispatch({ type: "SET_COMMUNITY_VALIDATION", payload: res })
-            console.log(res, "validation community")
         } catch (error) {
             console.log(`community name validation error from client side : cause `, error)
         }
@@ -61,7 +58,6 @@ export const GlobalProvider = ({ children }) => {
         try {
             let fetch = await axiosInstance.get("/getCommunities");
             let res = await fetch.data;
-            console.log(res, "Communities fetch client")
             dispatch({ type: "GET_COMMUNITIES", payload: res })
         } catch (error) {
             console.log("WHY", error)

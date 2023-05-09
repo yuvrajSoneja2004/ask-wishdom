@@ -25,7 +25,6 @@ function SingleCommunityPage() {
         try {
             let fetch = await axiosInstance.get(`/getSingleCommunity/${communityID}`);
             let res = await fetch.data;
-            console.log(res[0], 'single community data man');
             setIsLoading(true)
             setSingleCommunityData(res[0]);
         } catch (error) {
@@ -48,7 +47,6 @@ function SingleCommunityPage() {
             })
 
             let res = await fetch.data;
-            console.log(res, "BRO THUS US ")
         } catch (error) {
             console.log("Error man joinComm", error)
         }
@@ -69,7 +67,6 @@ function SingleCommunityPage() {
     useEffect(() => {
         getSingleCommunity();
         checkIfJoined();
-        console.log(":(", userAlreadyJoined)
     }, [singleCommunityData])
     if (!isLoading) {
         return <Loader />
@@ -82,7 +79,7 @@ function SingleCommunityPage() {
                     <h1>{singleCommunityData?.name}</h1>
                     <span><strong>{singleCommunityData.joined?.length}</strong> Memebers</span>
                     {
-                        userAlreadyJoined ? <RedBtn style={{ margin: '10px 0' }}>Leave</RedBtn> : <RedBtn style={{ margin: '10px 0' }} onClick={joinComm}>Join</RedBtn>
+                        userAlreadyJoined ? <RedBtn style={{ margin: '10px 0' }} disabled>Joined</RedBtn> : <RedBtn style={{ margin: '10px 0' }} onClick={joinComm}>Join</RedBtn>
                     }
                     <div>
                         <CategoryIndicator><CategoryIcon />{singleCommunityData?.commCategory}</CategoryIndicator>
@@ -219,7 +216,7 @@ const CategoryIndicator = styled.div`
 text-transform: capitalize;
 `
 const Whole = styled.div`
-
+    padding: 0 0 80px 0;
 `;
 
 

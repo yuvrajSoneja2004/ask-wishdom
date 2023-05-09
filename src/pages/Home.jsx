@@ -11,9 +11,6 @@ function Home() {
     let { isLoading } = useAuth0();
     let { defaultQuestions } = useGlobal();
 
-    useEffect(() => {
-        console.log("W")
-    })
     return (
         isLoading ? <>
             <Loader />

@@ -37,6 +37,7 @@ function QuestionCard({ data }) {
 
 
 const TheLink = styled(Link)`
+text-decoration: none;
     @media screen and (max-width: 428px) {
         margin: 0 !important;
 

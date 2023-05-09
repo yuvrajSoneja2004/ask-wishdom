@@ -4,6 +4,7 @@ import React from 'react'
 import QuestionCard from './QuestionCard'
 import { useGlobal } from '../context/global'
 import { useEffect } from 'react'
+import NoDefaultQuestions from './NoDefaultQuestions'
 
 function QuestionsList() {
     const { defaultQuestions, getDefaultQuestions } = useGlobal()
@@ -16,9 +17,11 @@ function QuestionsList() {
     return (
         <QuestionsGrid>
             {
-                defaultQuestions?.map((question, i) => {
-                    return <QuestionCard data={question} key={i} />
-                })
+                defaultQuestions?.length === 0 ? <NoDefaultQuestions />:(
+                    defaultQuestions?.map((question, i) => {
+                        return <QuestionCard data={question} key={i} />
+                    })
+                )
             }
         </QuestionsGrid>
     )
@@ -32,6 +35,7 @@ justify-content: center;
 align-items: center;
 padding: 50px;
 gap: 40px;
+margin-bottom: 30px;
 
 
  @media screen and (max-width: 1446px){

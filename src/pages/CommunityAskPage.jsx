@@ -62,7 +62,6 @@ function CommunityAskPage() {
                 ]
             })
 
-            console.log("Successfully data posted to community  from client");
             setQuestionValue("")
             setUserSmallDesc("")
             setDescValue("")
@@ -107,7 +106,6 @@ function CommunityAskPage() {
             setAllowSubmitDesc(false);
 
         }
-        console.log(allowSubmit)
     }, [descValue])
 
 
@@ -116,7 +114,6 @@ function CommunityAskPage() {
 
     }, [])
 
-    console.log(tempQuestionData, "list of community questions")
 
 
     return (
@@ -160,6 +157,11 @@ function CommunityAskPage() {
 
 const Whole = styled.div`
 padding: 30px 100px;
+
+@media screen and (max-width: 675px){
+    padding: 30px 50px;
+}
+
 h3 {
     font-weight: bolder;
     margin-bottom: 18px;
@@ -177,6 +179,9 @@ const CategoryLink = styled(NavLink)`
     font-size: 14px;
     border-radius: 20px;
     font-weight: bolder;
+    @media screen and (max-width: 349px){
+    font-size: 10px;
+}
 
     &&:active , &&:focus {
         color: #b92b27 !important;
@@ -186,6 +191,13 @@ const CategoryLink = styled(NavLink)`
 const AskCategory = styled.div`
 display: flex;
 align-items: center;
+
+@media screen and (max-width: 571px){
+    flex-direction: column;
+    div {
+        gap: 10px;
+    }
+}
 
 div {
     margin-left: 10px;
@@ -209,13 +221,16 @@ const SmallUserDesc = styled.textarea`
     }
 `
 const SubmitBtn = styled(RedBtn)`
-    margin-top: 70px;
+    margin: 70px 0;
 `
 
 const QuestionTitle = styled.textarea`
 border: none;
 font-size: 50px;
 width: 100%;
+@media screen and (max-width: 571px){
+    font-size: 20px;
+}
 
 &&:focus {
     border: none;
@@ -243,6 +258,9 @@ const QuestionDesc = styled.textarea`
 border: none;
 font-size: 20px;
 width: 100%;
+@media screen and (max-width: 571px){
+    margin-top: 20px;
+}
 
 &&:focus {
     border: none;

@@ -19,7 +19,6 @@ useEffect(() => {
         try {
             let fetch = await axiosInstance.get(`/getusercommunities/${user.email}`);
             let fetchRes = await fetch.data;
-            console.log(fetchRes , "AHAHAHAHAHAHA LAPTOP NEQW");
             setUserCommunities(fetchRes);
             setIsLoading(false);
         } catch (error) {
@@ -44,7 +43,7 @@ useEffect(() => {
                 <strong> <AssuredWorkloadIcon />  Your Communities</strong> <br />
                 {/* Will map the communities here  */}
                 <UserCommunities>
-                {
+                {/* {
                     userCommunities.map((com) => {
                         return   <div>
                             <img src={com?.profilePicture} alt="lol"  width={45}/>
@@ -52,7 +51,19 @@ useEffect(() => {
                             </div>
                        
                     })
-                }
+                } */}
+                
+                   {
+                    userCommunities.length === 0 ? "No Created Communities" : userCommunities.map((com) => {
+                        return <div>
+                        <img src={com?.profilePicture} alt="lol"  width={45}/>
+                         <ComLink to={`/singleCommunityPage/${com?._id}`}>{com?.name}</ComLink>
+                        </div>
+                    })
+                   }
+                    
+                
+            
                  </UserCommunities>
                 
             </SingleCommunityRows>
