@@ -142,6 +142,17 @@ const Cen = styled.div`
     align-items: center;
     position: relative;
     margin: 30px 30px 0 0 ;
+
+    @media screen and (max-width: 560px){
+        justify-content: center;
+        margin: 0;
+        position: fixed;
+        top: 500px;
+        left: 0;
+        bottom: 100px;
+        right: 0;
+    }
+    
 `
 
 const PostBtn = styled(RedBtn)`
@@ -161,6 +172,10 @@ const CommunityLogo = styled.main`
     justify-content: center;
     align-items: center;
     transform: translateY(75%);
+
+    @media screen and (max-width: 600px){
+        width: 100%;
+    }
     img {
         width: 200px;
         height: 200px;
@@ -180,6 +195,9 @@ const CommunityLogo = styled.main`
     }
     main {
         text-align: center;
+        @media screen and (max-width: 600px){
+        width: 100%;
+    }
     }
     main h4 {
         font-weight: bolder;
@@ -191,6 +209,9 @@ const CommunityLogo = styled.main`
     }
     main p {
         width: 500px;
+        @media screen and (max-width: 600px){
+        width: 100%;
+    }
     }
 `
 
@@ -211,6 +232,7 @@ background-size: cover;
 display: flex;
 justify-content: center;
 align-items: center;
+
 
 
 `

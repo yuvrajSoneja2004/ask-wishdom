@@ -14,6 +14,7 @@ import SingleCommunityPage from './pages/SingleCommunityPage'
 import CommunityAskPage from './pages/CommunityAskPage'
 import CommunityAnswerSinglePage from './pages/CommunityAnswerSinglePage'
 import SingleAnswerCommunityPage from './pages/SingleAnswerCommunity'
+import MyCommunities from './pages/MyCommunities'
 function App() {
 
 
@@ -33,6 +34,8 @@ function App() {
         <Route path='/singleCommunityPage/:communityID' element={<SingleCommunityPage />} />
         <Route path='/askCommunityPage/:communityID' element={<CommunityAskPage />} />
         <Route path='/readCommunityQuestion/:communityID/:index/:ed' element={<CommunityAnswerSinglePage />} />
+        <Route path='/userCommunities' element={<MyCommunities />} />
+
       </Routes>
       <BottomNav />
     </div>

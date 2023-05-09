@@ -42,15 +42,29 @@ const Grid = styled.div`
     grid-template-columns: 1fr 1fr 1fr;
     place-items: center;
     gap: 100px;
+    @media screen and (max-width: 1217px){
+        grid-template-columns: 1fr 1fr;
+    }
+    @media screen and (max-width: 850px){
+        grid-template-columns: 1fr;
+    }
 `
 const Whole = styled.div`
     padding: 80px;
+    @media screen and (max-width: 421px){
+            padding: 30px;
+        }
     h1 {
         margin-bottom: 90px;
         font-weight: bolder;
         text-shadow: 0px 1px, 1px 0px, 1px 0px;
         text-transform: capitalize;
         color: #b92b27;
+
+        @media screen and (max-width: 441px){
+            font-size: 20px;
+        }
+        
 
     }
 `

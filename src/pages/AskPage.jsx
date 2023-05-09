@@ -131,6 +131,9 @@ function AskPage() {
 
 const Whole = styled.div`
 padding: 30px 100px;
+@media screen and (max-width: 674px){
+    padding: 30px 50px;
+}
 h3 {
     font-weight: bolder;
     margin-bottom: 18px;
@@ -148,6 +151,11 @@ const CategoryLink = styled(NavLink)`
     font-size: 14px;
     border-radius: 20px;
     font-weight: bolder;
+    @media screen and (max-width: 500px){
+        
+            font-size: 10px;
+        
+}
 
     &&:active , &&:focus {
         color: #b92b27 !important;
@@ -157,6 +165,16 @@ const CategoryLink = styled(NavLink)`
 const AskCategory = styled.div`
 display: flex;
 align-items: center;
+@media screen and (max-width: 874px){
+    flex-direction: column;
+    justify-content: center;
+    div {
+        justify-content: center;
+        gap: 20px;
+    }
+
+    
+}
 
 div {
     margin-left: 10px;
@@ -181,6 +199,9 @@ const SmallUserDesc = styled.textarea`
 `
 const SubmitBtn = styled(RedBtn)`
     margin-top: 70px;
+    @media screen and (max-width: 696px){
+        margin-bottom: 70px;
+}
 `
 
 const QuestionTitle = styled.textarea`
@@ -188,6 +209,12 @@ border: none;
 font-size: 50px;
 width: 100%;
 
+@media screen and (max-width: 674px){
+    font-size: 40px;
+}
+@media screen and (max-width: 474px){
+    font-size: 20px;
+}
 &&:focus {
     border: none;
     outline: none;

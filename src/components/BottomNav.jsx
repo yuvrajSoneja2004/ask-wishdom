@@ -4,26 +4,27 @@ import HomeIcon from '@mui/icons-material/Home';
 import PeopleIcon from '@mui/icons-material/People';
 import { IconButton } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { Link } from 'react-router-dom';
 function BottomNav() {
     return (
         <Whole>
-            <Bx>
+            <Bx to={"/"}>
                 <Bubble>
                     <IconHome />
                     <p>Home</p>
                 </Bubble>
             </Bx>
-            <Bx>
+            <Bx to={"/userCommunities"}>
                 <Bubble>
                     <CommunityIcon />
-                    <p>Communities</p>
+                    <p>My Communities</p>
 
                 </Bubble>
             </Bx>
-            <Bx>
+            <Bx to={"/ask"}>
                 <Bubble>
                     <UserIcon />
-                    <p>Account</p>
+                    <p>Ask</p>
                 </Bubble>
             </Bx>
         </Whole>
@@ -49,7 +50,9 @@ bottom: 0;
   }
 `
 
-const Bx = styled.div`
+const Bx = styled(Link)`
+
+text-decoration: none;
 p {
     font-size: 16px;
 }

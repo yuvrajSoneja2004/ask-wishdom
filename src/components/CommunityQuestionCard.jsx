@@ -3,33 +3,102 @@ import { Button, Typography } from '@mui/material'
 import React from 'react'
 import { RedBtn } from '../utils/RedBtn'
 import { Link } from 'react-router-dom'
+import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 
-function CommunityQuestionCard({ data, no, comID }) {
+function CommunityQuestionCard({ data }) {
     return (
-        <div style={{ width: '100%' }}>
+        <Whole>
             <Card>
-                <h4> Q: {data.heading}</h4>
+                <Left>
+                    <AskedUser>
+                        <img src={data.profileURL} alt="me" width={45} />
+                    </AskedUser>
+                </Left>
+                <Right>
+                    <h4>{data.heading}</h4>
+                    <p>{data.questionDesc.slice(0, 30)}...</p>
 
-                <p>{data.questionDesc.slice(0, 30)}...</p>
-                <AskedUser>
-                    <img src={data.profileURL} alt="me" width={40} />
-                    <span><strong>{data.profileName}</strong> asked this question</span>
-                </AskedUser>
-                <Link to={`/readCommunityQuestion/${data.id}/${no}/${comID}`}>  <RedBtn>View Answers</RedBtn></Link>
+                </Right>
+
             </Card>
-        </div>
+           
+                
+        </Whole>
     )
 }
 
+
+const TheLink = styled(Link)`
+    @media screen and (max-width: 428px) {
+        margin: 0 !important;
+
+    }
+`
+
+
+const ChatIcon = styled(ChatBubbleIcon)`
+    padding: 3px;
+`
+const ViewsIcon = styled(VisibilityIcon)`
+    padding: 2px;
+`
+
+
+const WhiteBtn = styled.button`
+    border: none;
+    background: #fff;
+    padding: 7px 15px;
+    font-size: 14px;
+    color: grey;
+`
+
+
+const Whole = styled.div`
+    width: 100%;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
+`
+
+const BelowContent = styled.div`
+    background-color: #F1F2F2;
+    padding: 0 0  0 92px;
+    display: flex;
+    justify-content: space-between;
+    @media screen and (max-width: 631px){
+        padding: 0 0 0 20px;
+    }
+    @media screen and (max-width: 428px) {
+            flex-direction: column;
+            padding: 0 20px 0 20px;
+            justify-content: center;
+        }
+    div {
+        display: flex;
+        gap: 15px;
+        @media screen and (max-width: 428px) {
+            
+        }
+    }
+    button {
+        margin: 20px 0;
+        outline: 1px solid grey;
+        outline :1px solid  #8080806d;
+        @media screen and (max-width: 631px){
+        font-size: 10px;
+    }
+    @media screen and (max-width: 428px) {
+            width: 100%;
+        }
+    }
+
+`
 const Card = styled.div`
-border-radius: 4px;
-background-color: #F1F2F2;
-box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+background-color: #fff;
 width: 100%;
 display: flex;
-flex-direction: column;
-gap: 20px;
 min-height: 100px;
+column-gap: 20px;
 padding: 20px;
 @media screen and (max-width: 749px){
     
@@ -57,18 +126,36 @@ h4 {
 }
 `
 
+const Left = styled.div``
+const Right = styled.div`
+display: flex;
+flex-direction: column;
+gap: 10px;
+span {
+    font-size: 13px;
+    color: grey;
+}
+p {
+    color: grey;
+}
+`
+
 const AskedUser = styled.div`
 margin: 7px 0;
     img {
         border-radius: 50%;
         margin-right:8px;
+        padding: 2px;
+        border: 3px solid #b92b27;
+
     }
     span {
         width: 10px;
     }
+    
 `
 
 
 
 
-export default CommunityQuestionCard;
+export default CommunityQuestionCard
