@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react'
 import { RedBtn } from '../utils/RedBtn'
 import { axiosInstance } from '../utils/axiosInstance';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import SportsEsportsOutlinedIcon from '@mui/icons-material/SportsEsportsOutlined';
 import CheckroomOutlinedIcon from '@mui/icons-material/CheckroomOutlined';
 import CodeOutlinedIcon from '@mui/icons-material/CodeOutlined';
@@ -12,6 +12,8 @@ import PhoneAndroidOutlinedIcon from '@mui/icons-material/PhoneAndroidOutlined';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import AddReactionOutlinedIcon from '@mui/icons-material/AddReactionOutlined';
 import Dropdown from 'react-bootstrap/Dropdown';
+import PrivateIcon from '../assets/private_icon.png';
+
 
 function AskPage() {
     let { user } = useAuth0();
@@ -23,6 +25,7 @@ function AskPage() {
     const [descValue, setDescValue] = useState("")
     const [userSmallDesc, setUserSmallDesc] = useState("");
     const [tempCategory, setTempCategory] = useState("others");
+    const [isPrivate, setIsPrivate] = useState(false);
 
     const [errorThemeQuestion, setErrorThemeQuestion] = useState({
         color: '#000'
@@ -45,8 +48,8 @@ function AskPage() {
             await axiosInstance.post("/getDefaultQuestions/upload", {
                 heading: questionValue,
                 userSmallDesc: userSmallDesc,
-                profileURL: user.picture,
-                profileName: user.name,
+                profileURL:  isPrivate ? PrivateIcon : user.picture,
+                profileName:  isPrivate ? "Anonymous" : user.name,
                 profileEmail: user.email,
                 questionDesc: descValue,
                 category: tempCategory,
@@ -98,19 +101,41 @@ function AskPage() {
             <h3>Question asked by:</h3>
             <AskedBy>
 
-                <div>
-                    <img src={user ? user.picture : ""} alt='userImg' />
-                </div>
+           
 
-                <div>
-                    <strong> {user ? user.name : "Please wait..."} (you)</strong>
+               {
+                !user ? "Loading..." : (
+                    <>
+                     <div>
+                    <img src={ !isPrivate && user ? user.picture : PrivateIcon} alt='userImg' />
+                </div>
+                    <div>
+                    <strong> {  !isPrivate && user ? user.name : "Anonymous"} (you)</strong>
                     <div>
                         <SmallUserDesc placeholder='small description about yourself.' required value={userSmallDesc} onChange={(e) => {
                             setUserSmallDesc(e.target.value)
                         }} />
                     </div>
                 </div>
+                </>
+                ) 
+               }
+               
             </AskedBy>
+            <AskAnonymously style={{marginBottom: '30px'}}>
+               
+                    <input type="checkbox" name="" id="anon-checkbox" onClick={() => {
+                        if(!isPrivate){
+                            setIsPrivate(true);
+
+                        }
+                        else {
+                            setIsPrivate(false)
+                        }
+                    }} />
+                     <label htmlFor="anon-checkbox" style={{marginLeft: '10px'}}>Ask Anonymously</label>
+                     {isPrivate ? <p>When you enable "Ask Anonymously", then your name and profile picture will not be shown in question page. <Link to={"/meme"}>Learn more</Link></p> : ""}
+                </AskAnonymously>
             <AskCategory> <h3>Category:</h3>
                 <div>
                     <CategoryLink to={"/ask"} onClick={() => setTempCategory("gaming")}>  <SportsEsportsOutlinedIcon /> Gaming</CategoryLink>
@@ -130,6 +155,16 @@ function AskPage() {
     )
 }
 
+
+const AskAnonymously = styled.div`
+p {
+    font-size: 13px;
+    margin-top: 6px;
+    font-style: italic;
+    color: #808080ad;
+}
+
+`
 const Whole = styled.form`
 padding: 30px 100px;
 @media screen and (max-width: 674px){

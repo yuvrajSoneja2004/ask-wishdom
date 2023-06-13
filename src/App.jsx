@@ -15,6 +15,7 @@ import CommunityAskPage from './pages/CommunityAskPage'
 import CommunityAnswerSinglePage from './pages/CommunityAnswerSinglePage'
 import SingleAnswerCommunityPage from './pages/SingleAnswerCommunity'
 import MyCommunities from './pages/MyCommunities'
+import Meme from './pages/Meme'
 function App() {
 
 
@@ -35,6 +36,7 @@ function App() {
         <Route path='/askCommunityPage/:communityID' element={<CommunityAskPage />} />
         <Route path='/readCommunityQuestion/:communityID/:index/:ed' element={<CommunityAnswerSinglePage />} />
         <Route path='/userCommunities' element={<MyCommunities />} />
+        <Route path='/meme' element={<Meme />} />
 
       </Routes>
       <BottomNav />
