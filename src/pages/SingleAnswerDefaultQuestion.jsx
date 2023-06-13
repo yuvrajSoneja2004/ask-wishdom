@@ -21,6 +21,9 @@ function SingleAnswerDefaultQuestion() {
 
 
     useEffect(() => {
+        if(!setTempAnswersData == undefined){
+                console.log("Workscmn")
+        }
         const getSingleDefaultQuestion = async (QUESTION_ID) => {
             try {
 
