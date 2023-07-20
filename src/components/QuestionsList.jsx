@@ -18,14 +18,16 @@ function QuestionsList() {
     const checkUserExistance = async () => {
         let date = new Date();
        try {
-        let fetch = await  axiosInstance.post(`/myProfile/${user.email}` , {
+        let fetch = user ? await  axiosInstance.post(`/myProfile/${user.email}` , {
                 dateCreated: date.toDateString(),
                 followers: [],
                 following: [],
-                userEmail: user.email
+                userEmail: user.email,
+                userProfilePic: user.picture,
+                userProfileName: user.name
 
 
-        })
+        }) : ""
        let res = await fetch.data;
        setuserCheckData(res);
        console.log(res)
