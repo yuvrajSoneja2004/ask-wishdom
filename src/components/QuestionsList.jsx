@@ -1,16 +1,43 @@
 import styled from '@emotion/styled'
 import { Typography } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 import QuestionCard from './QuestionCard'
 import { useGlobal } from '../context/global'
 import { useEffect } from 'react'
 import NoDefaultQuestions from './NoDefaultQuestions'
+import { axiosInstance } from '../utils/axiosInstance'
+import axios from 'axios'
+import { useAuth0 } from '@auth0/auth0-react'
 
 function QuestionsList() {
     const { defaultQuestions, getDefaultQuestions } = useGlobal()
+    const [userCheckData, setuserCheckData] = useState([]);
+
+    const {user} = useAuth0();
+
+    const checkUserExistance = async () => {
+        let date = new Date();
+       try {
+        let fetch = await  axiosInstance.post(`/myProfile/${user.email}` , {
+                dateCreated: date.toDateString(),
+                followers: [],
+                following: [],
+                userEmail: user.email
+
+
+        })
+       let res = await fetch.data;
+       setuserCheckData(res);
+       console.log(res)
+       } catch (error) {
+        console.log(" error man man" , error);
+       }
+    }
 
     useEffect(() => {
         getDefaultQuestions();
+        checkUserExistance()
+        console.log(userCheckData);
     }, [])
 
 

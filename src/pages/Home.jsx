@@ -12,6 +12,7 @@ function Home() {
     let { defaultQuestions } = useGlobal();
 
     return (
+        
         isLoading ? <>
             <Loader />
         </> : (

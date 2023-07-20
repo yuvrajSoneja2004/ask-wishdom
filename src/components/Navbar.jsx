@@ -5,6 +5,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import SiteLogoLight from '../assets/sitelogolight.png';
 import { useAuth0 } from '@auth0/auth0-react';
 import Dropdown from 'react-bootstrap/Dropdown';
+import {AiOutlineUser} from 'react-icons/ai';
 import { FiLogOut } from 'react-icons/fi'
 import { RedBtn } from '../utils/RedBtn';
 import { Link, useNavigate } from 'react-router-dom';
@@ -15,6 +16,7 @@ function NavigationBar() {
 
     let { loginWithRedirect, isAuthenticated, logout, user } = useAuth0();
     const navigate = useNavigate();
+
 
     return (
         <WholeNav collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -27,6 +29,9 @@ function NavigationBar() {
                     <Nav>
                         <Nav.Link eventKey={2} href="#memes">
                             <Link to='/communities' style={{ textDecoration: 'none', color: '#fff', display: 'flex' , alignItems: 'center' , gap: '5px' }}> <AccountBalanceIcon />  Communities</Link>
+                        </Nav.Link>
+                        <Nav.Link eventKey={2} href="#memes">
+                            <Link to='/myProfile/:userEmail' style={{ textDecoration: 'none', color: '#fff', display: 'flex' , alignItems: 'center' , gap: '5px' }}> <AiOutlineUser size={30} />My Profile</Link>
                         </Nav.Link>
 
 

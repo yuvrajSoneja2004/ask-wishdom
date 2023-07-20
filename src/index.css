@@ -25,3 +25,8 @@ h1 {
   box-shadow: none !important;
   border: none !important;
 }
+
+.navbar-expand-lg  .navbar-nav .nav-link{
+  padding: 0 I !important;
+  display: flex !important;
+}

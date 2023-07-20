@@ -21,6 +21,7 @@ useEffect(() => {
             let fetchRes = await fetch.data;
             setUserCommunities(fetchRes);
             setIsLoading(false);
+            console.log(user)
         } catch (error) {
             console.log("DA cause" + error);
         }
