@@ -17,6 +17,8 @@ import SingleAnswerCommunityPage from './pages/SingleAnswerCommunity'
 import MyCommunities from './pages/MyCommunities'
 import Meme from './pages/Meme'
 import MyProfilePage from './pages/MyProfilePage'
+import AllProfiles from './components/AllProfiles'
+import SingleProfilePage from './pages/SingleProfilePage'
 function App() {
 
 
@@ -39,6 +41,8 @@ function App() {
         <Route path='/userCommunities' element={<MyCommunities />} />
         <Route path='/meme' element={<Meme />} />
         <Route path='/myProfile/:userEmail' element={<MyProfilePage />} />
+        <Route path='/allProfiles' element={<AllProfiles />} />
+        <Route path='/getProfile/:userID/' element={<SingleProfilePage />} />
 
       </Routes>
       <BottomNav />

@@ -8,6 +8,7 @@ import NoDefaultQuestions from './NoDefaultQuestions'
 import { axiosInstance } from '../utils/axiosInstance'
 import axios from 'axios'
 import { useAuth0 } from '@auth0/auth0-react'
+import { v4 } from 'uuid'
 
 function QuestionsList() {
     const { defaultQuestions, getDefaultQuestions } = useGlobal()
@@ -24,7 +25,8 @@ function QuestionsList() {
                 following: [],
                 userEmail: user.email,
                 userProfilePic: user.picture,
-                userProfileName: user.name
+                userProfileName: user.name,
+                userID : v4()
 
 
         }) : ""

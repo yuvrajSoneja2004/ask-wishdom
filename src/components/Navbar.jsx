@@ -33,6 +33,9 @@ function NavigationBar() {
                         <Nav.Link eventKey={2} href="#memes">
                             <Link to='/myProfile/:userEmail' style={{ textDecoration: 'none', color: '#fff', display: 'flex' , alignItems: 'center' , gap: '5px' }}> <AiOutlineUser size={30} />My Profile</Link>
                         </Nav.Link>
+                        <Nav.Link eventKey={2} href="#memes">
+                            <Link to='/allProfiles' style={{ textDecoration: 'none', color: '#fff', display: 'flex' , alignItems: 'center' , gap: '5px' }}> <AiOutlineUser size={30} />All Profiles</Link>
+                        </Nav.Link>
 
 
                         {
