@@ -7,14 +7,19 @@ import { Button } from "@mui/material";
 import {AiOutlinePicture , AiOutlineCamera} from 'react-icons/ai'
 import {MdPictureInPicture , MdOutlineCampaign} from 'react-icons/md'
 import imageCompression from 'browser-image-compression'
+import Putin from '../assets/putin.gif';
 
 
 function MyProfilePage() {
 
 
   const [profileData, setprofileData] = useState([]);
+  // Profile Pic States
   const [profilePic, setprofilePic] = useState("")
   const [finalProfileImg , setFinalProfileImg] = useState("");
+  // Background Pic States
+  const [bgPic, setbgPic] = useState("")
+  const [finalBgPic, setFinalBGpic] = useState("")
   const {user} = useAuth0();
 
   const getProfileData = async () => {
@@ -47,12 +52,51 @@ function MyProfilePage() {
   setFinalProfileImg(compression);
   };
 
+//   // 2. Profile Background Pic
+//   const handleBGPic = async (e) => {
+//     const file = e.target.files[0];
+// console.log("THis works but why")
+//     const options = {
+//       maxSizeMB: .1,
+//       maxWidthOrHeight: 1920,
+//       useWebWorker: true,
+//   }
+//   let compression = await imageCompression(file, options)
+//   const reader = new FileReader();
+//   reader.onload = (event) => {
+//       setbgPic(event.target.result);
+//   };
+//   reader.readAsDataURL(compression);
+
+//   setFinalBGpic(compression)
+
+//   };
+
+
+// 2. Profile Background Pic
+const handleBGPic = async (e) => {
+  const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setbgPic(reader.result);
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+
+};
+
   useEffect(() => {
       getProfileData();
+      console.log(finalProfileImg)
   } , [profileData])
   return (
-    <MAX>
+    <MAX style={{backgroundImage: `url(${bgPic})`}}>
       <Banner></Banner>
+    
+      <h1>Here</h1>
 <Whole>
   
     <ProfileIMG style={{background: `url(${profileData[0]?.userProfilePic})`, backgroundRepeat: 'no-repeat', backgroundPosition: 'center', backgroundSize: 'contain'}}></ProfileIMG>
@@ -80,21 +124,26 @@ function MyProfilePage() {
     <Btns>
       <div>
       <Btn onClick={async () => {
-        axiosInstance.put("/changeProfilePic", {
-            // Continue
+        axiosInstance.put(`/changeProfilePic/${user?.email}`, {
+          userProfilePic : profilePic
         })
       }}>  <AiOutlinePicture style={{marginRight: '5px'}} size={20} />  Change Profile Pic </Btn>
       <input type="file" name="" id=""  accept="image/*" onChange={handleProfilePic}/>
-      <img src={profilePic} alt="" />
       </div>
       
       <div>
-      <Btn>  <MdPictureInPicture style={{marginRight: '5px'}} size={20} />  Change Banner Pic</Btn>
-      <input type="file" name="" id="" />
+      <Btn onClick={async () => {
+        console.log(finalBgPic)
+        axiosInstance.put(`/changeBGPhoto/${user?.email}`, {
+          userProfilePic : profilePic
+        })
+        
+      }}> <MdPictureInPicture style={{marginRight: '5px'}} size={20} />  Change Banner Pic</Btn>
+      <input type="file" name="" id="" accept='image/*' />
       </div>
       <div>
       <Btn>  <AiOutlineCamera style={{marginRight: '5px'}} size={20} />  Choose Backhround Pic</Btn>
-      <input type="file" name="" id="" />
+      <input type="file" name="" id="" onChange={handleBGPic} />
       </div>
      <div>
      <Btn>  <MdOutlineCampaign style={{marginRight: '5px'}} size={20} />  Choose Background Music</Btn>
@@ -131,7 +180,6 @@ const Banner = styled.div`
 `
 const MAX = styled.div`
   min-height: 100vh;
-  background-color: blue;
   padding: 0 100px;
 `
 
