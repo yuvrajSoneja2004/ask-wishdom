@@ -8,6 +8,7 @@ import {AiOutlinePicture , AiOutlineCamera} from 'react-icons/ai'
 import {MdPictureInPicture , MdOutlineCampaign} from 'react-icons/md'
 import imageCompression from 'browser-image-compression'
 import Putin from '../assets/putin.gif';
+import Audio from '../components/Audio';
 
 
 function MyProfilePage() {
@@ -20,6 +21,7 @@ function MyProfilePage() {
   // Background Pic States
   const [bgPic, setbgPic] = useState("")
   const [finalBgPic, setFinalBGpic] = useState("")
+  const [bgMusic, setBgMusic] = useState("")
   const {user} = useAuth0();
 
   const getProfileData = async () => {
@@ -87,17 +89,32 @@ const handleBGPic = async (e) => {
     }
 
 };
+// 3. Profile Background Music
+const handleBGMusic = async (e) => {
+  const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setBgMusic(reader.result);
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+
+};
 
   useEffect(() => {
       getProfileData();
-      console.log(finalProfileImg)
+      console.log(finalProfileImg);
   } , [profileData])
   return (
-    <MAX style={{backgroundImage: `url(${bgPic})`}}>
+    <MAX style={{backgroundImage: `url(${profileData[0]?.userProfileBG})` , backgroundPosition: 'center',backgroundSize:'cover', backgroundRepeat: 'no-repeat'}}>
       <Banner></Banner>
     
       <h1>Here</h1>
 <Whole>
+  <Audio path={profileData[0]?.userProfileBGMusic}/>  
   
     <ProfileIMG style={{background: `url(${profileData[0]?.userProfilePic})`, backgroundRepeat: 'no-repeat', backgroundPosition: 'center', backgroundSize: 'contain'}}></ProfileIMG>
     <h1>{profileData[0]?.userProfileName}</h1>
@@ -142,15 +159,29 @@ const handleBGPic = async (e) => {
       <input type="file" name="" id="" accept='image/*' />
       </div>
       <div>
-      <Btn>  <AiOutlineCamera style={{marginRight: '5px'}} size={20} />  Choose Backhround Pic</Btn>
+      <Btn onClick={async () => {
+        axiosInstance.put(`/changeBGPhoto/${user?.email}`, {
+          userProfileBG : bgPic
+        })
+      }}>  <AiOutlineCamera style={{marginRight: '5px'}} size={20} />  Choose Background Pic</Btn>
       <input type="file" name="" id="" onChange={handleBGPic} />
       </div>
      <div>
-     <Btn>  <MdOutlineCampaign style={{marginRight: '5px'}} size={20} />  Choose Background Music</Btn>
-     <input type="file" name="" id="" />
+     <Btn onClick={async () => {
+      axiosInstance.put(`/changeBgMusic/${user?.email}`, {
+        userProfileBGMusic : bgMusic
+      })
+     }}>  <MdOutlineCampaign style={{marginRight: '5px'}} size={20} />  Choose Background Music</Btn>
+     <input type="file" name="" id="" onChange={handleBGMusic} />
      </div>
     </Btns>
+    
 </Whole>
+<audio controls>
+        {/* Use the 'src' attribute with the base64 data */}
+        <source src={`data:audio/mp3;base64,${profileData[0]?.userProfileBGMusic}`} type="audio/mp3" />
+        Your browser does not support the audio element.
+      </audio>
     </MAX>
   )
 }
