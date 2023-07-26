@@ -7,14 +7,15 @@ import { Button } from "@mui/material";
 import {AiOutlinePicture , AiOutlineCamera} from 'react-icons/ai'
 import {MdPictureInPicture , MdOutlineCampaign} from 'react-icons/md'
 import imageCompression from 'browser-image-compression'
-import Putin from '../assets/putin.gif';
 import Audio from '../components/Audio';
+import OffCanvasToggle from '../components/OffCanvas';
 
 
 function MyProfilePage() {
 
 
   const [profileData, setprofileData] = useState([]);
+  const [isLoading , setIsLoading] = useState(true);
   // Profile Pic States
   const [profilePic, setprofilePic] = useState("")
   const [finalProfileImg , setFinalProfileImg] = useState("");
@@ -30,6 +31,7 @@ function MyProfilePage() {
         let res = await fetch.data;
         console.log(res)
         setprofileData(res);
+        setIsLoading(false)
     } catch (error) {
       console.log(error , "On profile page")
     }
@@ -109,7 +111,8 @@ const handleBGMusic = async (e) => {
       console.log(finalProfileImg);
   } , [profileData])
   return (
-    <MAX style={{backgroundImage: `url(${profileData[0]?.userProfileBG})` , backgroundPosition: 'center',backgroundSize:'cover', backgroundRepeat: 'no-repeat'}}>
+    !isLoading ? (
+      <MAX style={{backgroundImage: `url(${profileData[0]?.userProfileBG})` , backgroundPosition: 'center',backgroundSize:'cover', backgroundRepeat: 'no-repeat'}}>
       <Banner></Banner>
     
       <h1>Here</h1>
@@ -136,6 +139,12 @@ const handleBGMusic = async (e) => {
     <CustomizeHeading>
       <div></div>
       <h2>Customize Profile</h2>
+      {/* Toggle here  */}
+      {
+        !isLoading ? (
+          <OffCanvasToggle data={profileData[0]}/>
+        ) : "Not Loaded Yet"
+      }
       <div></div>
     </CustomizeHeading>
     <Btns>
@@ -183,6 +192,7 @@ const handleBGMusic = async (e) => {
         Your browser does not support the audio element.
       </audio>
     </MAX>
+    ) : "Loading..."
   )
 }
 

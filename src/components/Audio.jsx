@@ -11,7 +11,7 @@ function Audio({path}) {
     }, []);
   
     return (
-      <audio ref={audioRef} muted>
+      <audio ref={audioRef} loop={true}>
         <source src={path} type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio>
