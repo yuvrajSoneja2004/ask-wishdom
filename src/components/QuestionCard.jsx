@@ -55,7 +55,7 @@ const ViewsIcon = styled(VisibilityIcon)`
 
 const WhiteBtn = styled.button`
     border: none;
-    background: #fff;
+    background: #ffffff;
     padding: 7px 15px;
     font-size: 14px;
     color: grey;

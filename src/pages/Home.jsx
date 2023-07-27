@@ -17,7 +17,7 @@ function Home() {
             <Loader />
         </> : (
             <WholeApplication>
-                <CommunitiesSidebar />
+                {/* <CommunitiesSidebar /> */}
                 <QuestionsList />
             </WholeApplication>
         )

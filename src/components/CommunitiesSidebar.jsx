@@ -108,6 +108,7 @@ justify-content: start;
 align-items: center;
 flex-direction: column;
 padding: 20px;
+border: 2px solid green;
 @media screen and (max-width:696px){
     display: none;
   }

@@ -19,6 +19,8 @@ import Meme from './pages/Meme'
 import MyProfilePage from './pages/MyProfilePage'
 import AllProfiles from './components/AllProfiles'
 import SingleProfilePage from './pages/SingleProfilePage'
+import CommunitiesSidebar from './components/CommunitiesSidebar'
+import styled from '@emotion/styled'
 function App() {
 
 
@@ -27,6 +29,9 @@ function App() {
   return (
     <div>
       <NavigationBar />
+      <Balance>
+      <CommunitiesSidebar />
+
       <Routes>
         <Route path='/' element={!isAuthenticated && !isLoading ? <Register /> : <Home />} />
         <Route path='/ask' element={!isAuthenticated && !isLoading ? <Register /> : <AskPage />} />
@@ -45,9 +50,16 @@ function App() {
         <Route path='/getProfile/:userID/' element={<SingleProfilePage />} />
 
       </Routes>
+      </Balance>
       <BottomNav />
     </div>
   )
 }
+
+
+const Balance = styled.div`
+  display: grid;
+  grid-template-columns: 300px auto;
+`
 
 export default App
