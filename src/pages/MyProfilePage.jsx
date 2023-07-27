@@ -36,75 +36,7 @@ function MyProfilePage() {
       console.log(error , "On profile page")
     }
   }
-  // ?* Handle Image Compression inputs
-
-  // 1. Profile Pic
-  const handleProfilePic = async (e) => {
-    const file = e.target.files[0];
-    const options = {
-      maxSizeMB: .1,
-      maxWidthOrHeight: 1920,
-      useWebWorker: true,
-  }
-  let compression = await imageCompression(file, options)
-  const reader = new FileReader();
-  reader.onload = (event) => {
-      setprofilePic(event.target.result);
-  };
-  reader.readAsDataURL(compression);
-
-  setFinalProfileImg(compression);
-  };
-
-//   // 2. Profile Background Pic
-//   const handleBGPic = async (e) => {
-//     const file = e.target.files[0];
-// console.log("THis works but why")
-//     const options = {
-//       maxSizeMB: .1,
-//       maxWidthOrHeight: 1920,
-//       useWebWorker: true,
-//   }
-//   let compression = await imageCompression(file, options)
-//   const reader = new FileReader();
-//   reader.onload = (event) => {
-//       setbgPic(event.target.result);
-//   };
-//   reader.readAsDataURL(compression);
-
-//   setFinalBGpic(compression)
-
-//   };
-
-
-// 2. Profile Background Pic
-const handleBGPic = async (e) => {
-  const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setbgPic(reader.result);
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
-    }
-
-};
-// 3. Profile Background Music
-const handleBGMusic = async (e) => {
-  const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setBgMusic(reader.result);
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
-    }
-
-};
+  
 
   useEffect(() => {
       getProfileData();
@@ -137,60 +69,23 @@ const handleBGMusic = async (e) => {
       </div>
     </ProfileStats>
     <CustomizeHeading>
-      <div></div>
-      <h2>Customize Profile</h2>
+      
       {/* Toggle here  */}
       {
         !isLoading ? (
           <OffCanvasToggle data={profileData[0]}/>
         ) : "Not Loaded Yet"
       }
-      <div></div>
+ 
     </CustomizeHeading>
-    <Btns>
-      <div>
-      <Btn onClick={async () => {
-        axiosInstance.put(`/changeProfilePic/${user?.email}`, {
-          userProfilePic : profilePic
-        })
-      }}>  <AiOutlinePicture style={{marginRight: '5px'}} size={20} />  Change Profile Pic </Btn>
-      <input type="file" name="" id=""  accept="image/*" onChange={handleProfilePic}/>
-      </div>
-      
-      <div>
-      <Btn onClick={async () => {
-        console.log(finalBgPic)
-        axiosInstance.put(`/changeBGPhoto/${user?.email}`, {
-          userProfilePic : profilePic
-        })
-        
-      }}> <MdPictureInPicture style={{marginRight: '5px'}} size={20} />  Change Banner Pic</Btn>
-      <input type="file" name="" id="" accept='image/*' />
-      </div>
-      <div>
-      <Btn onClick={async () => {
-        axiosInstance.put(`/changeBGPhoto/${user?.email}`, {
-          userProfileBG : bgPic
-        })
-      }}>  <AiOutlineCamera style={{marginRight: '5px'}} size={20} />  Choose Background Pic</Btn>
-      <input type="file" name="" id="" onChange={handleBGPic} />
-      </div>
-     <div>
-     <Btn onClick={async () => {
-      axiosInstance.put(`/changeBgMusic/${user?.email}`, {
-        userProfileBGMusic : bgMusic
-      })
-     }}>  <MdOutlineCampaign style={{marginRight: '5px'}} size={20} />  Choose Background Music</Btn>
-     <input type="file" name="" id="" onChange={handleBGMusic} />
-     </div>
-    </Btns>
     
-</Whole>
-<audio controls>
-        {/* Use the 'src' attribute with the base64 data */}
-        <source src={`data:audio/mp3;base64,${profileData[0]?.userProfileBGMusic}`} type="audio/mp3" />
+    <audio controls>
+        {/* Using the 'src' attribute with the base64 data */}
+        <source src={`${profileData[0]?.userProfileBGMusic}`} type="audio/mp3" />
         Your browser does not support the audio element.
       </audio>
+</Whole>
+
     </MAX>
     ) : "Loading..."
   )

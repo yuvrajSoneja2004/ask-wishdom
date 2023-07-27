@@ -3,92 +3,60 @@ import React, { useEffect, useState } from 'react';
 import { RedBtn } from '../utils/RedBtn';
 import { axiosInstance } from '../utils/axiosInstance';
 import { useAuth0 } from '@auth0/auth0-react';
+import { Button } from "@mui/material";
+import {AiOutlinePicture , AiOutlineCamera} from 'react-icons/ai'
+import {MdPictureInPicture , MdOutlineCampaign} from 'react-icons/md'
+import imageCompression from 'browser-image-compression'
+import Audio from '../components/Audio';
+import OffCanvasToggle from '../components/OffCanvas';
 import { useParams } from 'react-router-dom';
+
 
 function SingleProfilePage() {
 
-    const {userID } = useParams();
-    const {user} = useAuth0();
-
-
-    const handleFollow = async () => {
-        try {
-            
-            const fetch = await axiosInstance.post(`/follow`, {
-                currentUserE: user?.email,
-                userToFollowE: profileData[0].userEmail
-            });
-            let res = await fetch.data;
-            console.log("FOllow " , res)
-            
-        } catch (error) {
-          // MEANS already following
-            console.log(error )
-
-            if(error.response.data.isAlreadyFollowing){
-             
-            }
-            
-        }
-    }
+  const {userID} = useParams();
 
 
   const [profileData, setprofileData] = useState([]);
-  const [isFollowed, setIsFollowed] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading , setIsLoading] = useState(true);
+  // Profile Pic States
+  const [profilePic, setprofilePic] = useState("")
+  const [finalProfileImg , setFinalProfileImg] = useState("");
+  // Background Pic States
+  const [bgPic, setbgPic] = useState("")
+  const [finalBgPic, setFinalBGpic] = useState("")
+  const [bgMusic, setBgMusic] = useState("")
+  const {user} = useAuth0();
 
   const getProfileData = async () => {
     try {
-        console.log(`what defik ${userID}`)
         const fetch = await axiosInstance.get(`/getProfileData/${userID}`);
         let res = await fetch.data;
+        console.log(res)
         setprofileData(res);
+        setIsLoading(false)
     } catch (error) {
       console.log(error , "On profile page")
     }
   }
-
-
-  const checkIfFollowed = async () => {
-    try {
-      let fetch = await axiosInstance.get(`/isAlreadyFollowed/${profileData[0].userEmail}/${user?.email}`);
-      let res = fetch.data;
-      console.log(res , "LES GO")
-      setIsLoading(false)
-      
-    } catch (error) {
-      console.log(error , "wj")
-      if(error.response.data.isAlreadyFollowing){
-             setIsFollowed(true);
-             setIsLoading(false);
-      }
-      else {
-        setIsFollowed(false);
-             setIsLoading(false);
-      }
-    }
-  }
+  
 
   useEffect(() => {
       getProfileData();
-      console.log(profileData , "DHHjk")
-  } , [])
-
-  useEffect(() => {
-    checkIfFollowed()
-  } , )
-  useEffect(() => {
-      setIsFollowed(isFollowed)
-  } , [isFollowed])
-
-if(isLoading){
-    return <h1>LOadng...</h1>
-}
+      console.log(finalProfileImg);
+  } , [profileData])
   return (
-    <>
+    !isLoading ? (
+      <MAX style={{backgroundImage: `url(${profileData[0]?.userProfileBG})` , backgroundPosition: 'center',backgroundSize:'cover', backgroundRepeat: 'no-repeat'}}>
+      <Banner></Banner>
+    
+      <h1>Here</h1>
 <Whole>
+  <Audio path={profileData[0]?.userProfileBGMusic}/>  
+  
     <ProfileIMG style={{background: `url(${profileData[0]?.userProfilePic})`, backgroundRepeat: 'no-repeat', backgroundPosition: 'center', backgroundSize: 'contain'}}></ProfileIMG>
     <h1>{profileData[0]?.userProfileName}</h1>
+    
     <ProfileStats>
       <div>
         <h4>{profileData[0]?.following.length}</h4>
@@ -103,19 +71,58 @@ if(isLoading){
         <h4>All Posts</h4>
       </div>
     </ProfileStats>
-   {
-    !isFollowed ?  <FollowBtn onClick={handleFollow}>FOLLOW</FollowBtn> : <FollowBtn>UNFOLLOW</FollowBtn>
-   }
+    <CustomizeHeading>
+      
+      {/* Toggle here  */}
+ 
+    </CustomizeHeading>
+    
+    <audio controls>
+        {/* Using the 'src' attribute with the base64 data */}
+        <source src={`${profileData[0]?.userProfileBGMusic}`} type="audio/mp3" />
+        Your browser does not support the audio element.
+      </audio>
 </Whole>
-    </>
+
+    </MAX>
+    ) : "Loading..."
   )
 }
+
+
+
+const CustomizeHeading = styled.div`
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin-top: 20px;
+  width: 50%;
+  div {
+    width: 50%;
+    height: 3px;
+    border-bottom: 4px double black;
+  }
+  h2 {
+    font-family: 'Lumanosimo', cursive !important;
+  }
+`
+const Banner = styled.div`
+  
+  width: 100%;
+  height: 40vh;
+  background-color: pink;
+`
+const MAX = styled.div`
+  min-height: 100vh;
+  padding: 0 100px;
+`
 
 const Whole = styled.div`
 display: flex;
 justify-content: center;
 align-items: center;
 flex-direction: column;
+
 
 `
 
@@ -137,8 +144,26 @@ const ProfileStats = styled.div`
   justify-content: center;
   gap: 40px;
 `
+const Btn = styled(Button)`
+  background-color: #b92b27;
+color: #fff;
+&&:hover {
+    background-color: #b13634;
+}
+`
 
-const FollowBtn = styled(RedBtn)`
+const Btns = styled.div`
   margin-top: 10px;
+  display: flex;
+  gap: 13px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
 `
 export default SingleProfilePage
