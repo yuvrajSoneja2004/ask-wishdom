@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 import Button  from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
-import {AiOutlinePicture , AiFillCamera} from 'react-icons/ai'
+import {AiOutlinePicture , AiFillCamera , AiFillEdit} from 'react-icons/ai'
 import {BsFileMusicFill} from 'react-icons/bs'
 import { axiosInstance } from '../utils/axiosInstance';
 import { Button as MUIBTN } from "@mui/material";
@@ -120,9 +120,10 @@ useEffect(() => {
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow} className="me-2">
-        {name}
-      </Button>
+      <CustomizeBtn variant="primary" onClick={handleShow} className="me-2">
+        <AiFillEdit  size={20}/>
+        <span>{name}</span>
+      </CustomizeBtn>
       <Offcanvas show={show} onHide={handleClose} {...props} placement='end'>
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>Edit Profile</Offcanvas.Title>
@@ -310,7 +311,7 @@ theme="light"
 function OffCanvasToggle({data}) {
   return (
     <>
-      {['jj'].map((placement, idx) => (
+      {['CUSTOMIZE'].map((placement, idx) => (
         <OffCanvasExample key={idx} placement={placement} name={placement} data={data}/>
        
       ))}
@@ -319,6 +320,29 @@ function OffCanvasToggle({data}) {
   );
 }
 
+
+const CustomizeBtn = styled.button`
+      background-color: #B13634;
+      border: none;
+      outline: none;
+      padding: 10px 20px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      transition: all.4s;
+
+      &&:hover {
+        background-color: #882625;
+      }
+
+      span {
+        margin-left: 6px;
+      }
+
+  
+`
 
 
 const UploadHeading = styled.h3`

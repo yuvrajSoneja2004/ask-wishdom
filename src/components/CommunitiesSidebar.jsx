@@ -13,8 +13,6 @@ function CommunitiesSidebar() {
 
     const [userCommunities , setUserCommunities] = useState([]);
     const [isLoading , setIsLoading] = useState(true);
-
-useEffect(() => {
     const getUserCommunities = async () => {
         try {
             let fetch = await axiosInstance.get(`/getusercommunities/${user.email}`);
@@ -26,6 +24,9 @@ useEffect(() => {
             console.log("DA cause" + error);
         }
     }
+
+useEffect(() => {
+  
 
     getUserCommunities();
 } , [])
@@ -108,7 +109,6 @@ justify-content: start;
 align-items: center;
 flex-direction: column;
 padding: 20px;
-border: 2px solid green;
 @media screen and (max-width:696px){
     display: none;
   }
