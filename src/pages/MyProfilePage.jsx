@@ -14,6 +14,7 @@ import imageCompression from 'browser-image-compression'
 import Audio from '../components/Audio';
 import OffCanvasToggle from '../components/OffCanvas';
 import QuestionsAsked from '../components/Typeofposts/QuestionsAsked';
+import JoinedCommunities from '../components/Typeofposts/JoinedCommunities';
 
 // Type of posts components imports
 
@@ -97,13 +98,12 @@ function MyProfilePage() {
     <UserPostsSet>
       <div onClick={() => setTypeOfPosts(0)}> <MdGridView size={20}/> <span>POSTS</span></div>
       <div onClick={() => setTypeOfPosts(1)}> <BsQuestionCircle size={20}/> <span>QUESTIONS ASKED</span></div>
-      <div onClick={() => setTypeOfPosts(2)}> <BiGroup size={20}/> <span>JOINED COMMUNITIES</span></div>
-      <div onClick={() => setTypeOfPosts(3)}> <FiUserCheck size={20}/> <span>CREATED COMMUNITIES</span></div>
+      <div onClick={() => setTypeOfPosts(2)}> <FiUserCheck size={20}/> <span>CREATED COMMUNITIES</span></div>
     </UserPostsSet>
     <PostsContectArea>
       {/* Change type of content data here */}
         {
-         typeOfPosts === 0 ? <QuestionsAsked /> : ""
+         typeOfPosts === 0 ? <h1>Posts component</h1> : typeOfPosts === 1 ? <QuestionsAsked userEmailData={profileData[0]?.userEmail}/> : typeOfPosts === 2 ? <JoinedCommunities /> : "nope" 
         }
     </PostsContectArea>
 </Whole>
@@ -117,7 +117,7 @@ function MyProfilePage() {
 
 
 const PostsContectArea = styled.div`
-  
+  width: 100%;
 `
 
 
@@ -132,6 +132,7 @@ const UserPostsSet = styled.div`
     display: flex;
     align-items: center;
     font-weight: 500;
+    cursor: pointer;
 
     span {
       margin-left: 4px;
