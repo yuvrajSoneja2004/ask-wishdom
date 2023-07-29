@@ -108,7 +108,7 @@ function CreateCommunity() {
     return (
         <Whole onSubmit={sumbitHandler}>
             <h1>Community name</h1>
-            <QuestionTitle placeholder='Enter the Question.' onChange={(e) => {
+            <QuestionTitle placeholder='Enter the Name.' onChange={(e) => {
                 setQuestionValue(e.target.value)
             }} value={questionValue} style={errorThemeQuestion} required></QuestionTitle>
             <ValidationMsg>

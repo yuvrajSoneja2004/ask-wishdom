@@ -6,6 +6,8 @@ import { Auth0Provider } from '@auth0/auth0-react'
 import { BrowserRouter } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { GlobalProvider } from './context/global'
+import 'react-image-crop/dist/ReactCrop.css'
+
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

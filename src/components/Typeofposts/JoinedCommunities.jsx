@@ -5,7 +5,7 @@ import Loader from '../Loader';
 import CommunityCard from '../CommunityCard';
 import styled from '@emotion/styled';
 
-function JoinedCommunities() {
+function JoinedCommunities({userEmailData}) {
     let {user} = useAuth0();
 
     const [userCommunities , setUserCommunities] = useState([]);
@@ -14,7 +14,7 @@ function JoinedCommunities() {
 useEffect(() => {
     const getUserCommunities = async () => {
         try {
-            let fetch = await axiosInstance.get(`/getusercommunities/${user.email}`);
+            let fetch = await axiosInstance.get(`/getusercommunities/${userEmailData}`);
             let fetchRes = await fetch.data;
             console.log(fetchRes , "Tu kaate mujhe :(")
             setUserCommunities(fetchRes);

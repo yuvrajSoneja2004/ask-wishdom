@@ -4,6 +4,8 @@ import Button  from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import {AiOutlinePicture , AiFillCamera , AiFillEdit} from 'react-icons/ai'
 import {BsFileMusicFill} from 'react-icons/bs'
+import {FaEdit} from 'react-icons/fa'
+import {BiEditAlt} from 'react-icons/bi'
 import { axiosInstance } from '../utils/axiosInstance';
 import { Button as MUIBTN } from "@mui/material";
 import { useAuth0 } from '@auth0/auth0-react';
@@ -28,12 +30,20 @@ function OffCanvasExample({ data , name, ...props }) {
     backgroundAudioSelected: 0
   });
 
+  const [showRenameUsername , setShowRenameUsername] = useState(false)
+  const [showRenameDesc , setShowRenameDesc] = useState(false)
+  const [userNameInput , setUserNameInput] = useState("");
+  const [userDescInput , setUserDescInput] = useState("");
+  const [tookUserInput , setTookUserInput] = useState(false);
+  const [tookDescInput , setTookDescInput] = useState(false);
   const [profilePic, setprofilePic] = useState("")
   const [finalProfileImg , setFinalProfileImg] = useState("");
   // Background Pic States
   const [bgPic, setbgPic] = useState("")
   const [finalBgPic, setFinalBGpic] = useState("")
   const [bgMusic, setBgMusic] = useState("")
+  const [checkRes,setCheckRes] = useState({});
+  const [isLoading , setIsLoading] = useState(false);
   const {user} = useAuth0()
 
  // ?* Handle Image Compression inputs
@@ -114,9 +124,36 @@ const handleBGMusic = async (e) => {
 
 };
 
+const checkUserName = async () => {
+  setIsLoading(true);
+  try {
+    let fetch = await axiosInstance.get(`/validateUsername/${userNameInput}`)
+            let res = await fetch.data;
+            setCheckRes(res);
+            setIsLoading(false)
+            console.log(res , 'username check')
+            
+
+           
+  } catch (error) {
+    console.log(error , "😃");
+  }
+}
+
 useEffect(() => {
-  console.log("THis is the user email" , user?.email)
-})
+  if(userNameInput.length != 0){
+    setTookUserInput(true)
+  }
+  else {
+    setTookUserInput(false)
+  }
+} , [userNameInput])
+
+
+useEffect(() => {
+  checkUserName();
+  
+} , [userNameInput])
 
   return (
     <>
@@ -288,6 +325,156 @@ useEffect(() => {
         
        
     }
+     {/* For updating userName  */}
+    
+      <label htmlFor="username-up">
+      <UploadHeading>Username</UploadHeading>
+        <UploadFilesBtn style={{fontSize : '13px'}} onClick={() => setShowRenameUsername(true)}>
+          <BiEditAlt size={30}  style={{margin: '10px 0 '}}/>
+          Update Username
+        </UploadFilesBtn>
+      </label>
+    <Cen>
+    {
+        showRenameUsername ? <input  type='text' onChange={ async (e) => {
+          try {
+            setUserNameInput(e.target.value);
+            
+          } catch (error) {
+            
+          }
+          
+         
+        }} value={userNameInput}/> : null
+      }
+      {
+        isLoading && tookUserInput.length != 0 ? <span>Loading...</span> : null
+      }
+     
+      {
+        tookUserInput && checkRes?.isAllowedToUpdateName ? <>
+         <span>{checkRes?.msg}</span>
+        <button onClick={async () => {
+          try {
+           
+            const fetch = await axiosInstance.put(`/updateUsername/${data?.userID}` , {
+             userProfileName : userNameInput
+            })
+            let res = await fetch.data;
+            if(res?.isUsernameChanged){
+              toast.success('Successfully Updated Username 😁', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                });
+            }
+            else {
+              toast.error('Failed to change Background Pic `(*>﹏<*)′', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                });
+            }
+          } catch (error) {
+            console.log("Error updating the username")
+          }
+        }} >Update</button>
+
+        
+        </> : null
+      }
+      {
+        tookUserInput && checkRes?.isAllowedToUpdateName === false ? <>
+         <span>{checkRes?.msg}</span>
+
+        
+        </> : null
+      }
+      {/* For desc */}
+      <label htmlFor="userdesc-up">
+      <UploadHeading>Profile Description</UploadHeading>
+        <UploadFilesBtn style={{fontSize : '13px'}} onClick={() => setShowRenameDesc(true)}>
+          <FaEdit size={30}  style={{margin: '10px 0 '}}/>
+          Update Description
+        </UploadFilesBtn>
+      </label>
+    
+    {
+        showRenameDesc ? <input  type='text' onChange={ async (e) => {
+          try {
+            setUserDescInput(e.target.value);
+            
+          } catch (error) {
+            
+          }
+          
+         
+        }} value={userDescInput}/> : null
+      }
+     
+      {
+        userDescInput.length > 0 ? <>
+        <button onClick={async () => {
+          try {
+           
+            const fetch = await axiosInstance.put(`/updateUserDesc/${data?.userID}` , {
+              userDesc : userDescInput
+            })
+            let res = await fetch.data;
+            if(res?.isDescChanged){
+              toast.success('Successfully Updated Description 😁', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                });
+                setUserDescInput("")
+            }
+            else {
+              toast.error('Failed to change Description `(*>﹏<*)′', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                });
+            }
+          } catch (error) {
+            console.log("Error updating the username")
+          }
+        }} >Update</button>
+
+        
+        </> : null
+      }
+      {
+        tookUserInput && checkRes?.isAllowedToUpdateName === false ? <>
+         <span>{checkRes?.msg}</span>
+
+        
+        </> : null
+      }
+      {/* For desc */}
+      
+    
+    </Cen>
       </div>
           </Whole>
           <ToastContainer
@@ -320,6 +507,20 @@ function OffCanvasToggle({data}) {
   );
 }
 
+
+
+const Cen = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  input {
+    margin-top: 20px;
+  }
+
+  span {
+    padding: 10px 0;
+  }
+`
 
 const CustomizeBtn = styled.button`
       background-color: #B13634;

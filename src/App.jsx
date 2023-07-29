@@ -21,6 +21,7 @@ import AllProfiles from './components/AllProfiles'
 import SingleProfilePage from './pages/SingleProfilePage'
 import CommunitiesSidebar from './components/CommunitiesSidebar'
 import styled from '@emotion/styled'
+import Feed from './pages/Feed'
 function App() {
 
 
@@ -34,6 +35,7 @@ function App() {
 
       <Routes>
         <Route path='/' element={!isAuthenticated && !isLoading ? <Register /> : <Home />} />
+        <Route path='/feed' element={  <Feed />} />
         <Route path='/ask' element={!isAuthenticated && !isLoading ? <Register /> : <AskPage />} />
         <Route path='/readDefaultQuestion/:questionID' element={<SingleQuestionPage />} />
         <Route path='/answerDefaultQuestion/:questionID' element={<SingleAnswerDefaultQuestion />} />
@@ -60,6 +62,9 @@ function App() {
 const Balance = styled.div`
   display: grid;
   grid-template-columns: 300px auto;
+  @media screen and (max-width:1018px){
+    grid-template-columns: auto ;
+  }
 `
 
 export default App

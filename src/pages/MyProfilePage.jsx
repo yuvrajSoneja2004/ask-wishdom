@@ -43,18 +43,15 @@ function MyProfilePage() {
     try {
         const fetch = await axiosInstance.get(`/getMyProfile/${user?.email}`);
         let res = await fetch.data;
-        console.log(res)
         setprofileData(res);
         setIsLoading(false)
     } catch (error) {
-      console.log(error , "On profile page")
     }
   }
   
 
   useEffect(() => {
       getProfileData();
-      console.log(finalProfileImg);
   } , [profileData])
   return (
     !isLoading ? (
@@ -80,7 +77,7 @@ function MyProfilePage() {
         <h4>All Posts</h4>
       </div>
     </ProfileStats>
-    <Desc>I Like Preeti that’s all. BTW  Dard thumara badan meh mere zahar k tarah pigal raha hai preeti.</Desc>
+    <Desc>{profileData[0]?.userDesc}</Desc>
     <CustomizeHeading>
       
       {/* Toggle here  */}
@@ -103,7 +100,7 @@ function MyProfilePage() {
     <PostsContectArea>
       {/* Change type of content data here */}
         {
-         typeOfPosts === 0 ? <h1>Posts component</h1> : typeOfPosts === 1 ? <QuestionsAsked userEmailData={profileData[0]?.userEmail}/> : typeOfPosts === 2 ? <JoinedCommunities /> : "nope" 
+         typeOfPosts === 0 ? <h1>Posts component</h1> : typeOfPosts === 1 ? <QuestionsAsked userEmailData={profileData[0]?.userEmail}/> : typeOfPosts === 2 ? <JoinedCommunities  userEmailData={profileData[0]?.userEmail}/> : "nope" 
         }
     </PostsContectArea>
 </Whole>
