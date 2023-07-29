@@ -5,12 +5,14 @@ import Navbar from 'react-bootstrap/Navbar';
 import SiteLogoLight from '../assets/sitelogolight.png';
 import { useAuth0 } from '@auth0/auth0-react';
 import Dropdown from 'react-bootstrap/Dropdown';
-import {AiOutlineUser} from 'react-icons/ai';
+import {AiOutlineUser ,AiOutlineUpload} from 'react-icons/ai';
+import {FiUsers} from 'react-icons/fi';
 import { FiLogOut } from 'react-icons/fi'
 import { RedBtn } from '../utils/RedBtn';
 import { Link, useNavigate } from 'react-router-dom';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
+import AlertDialogSlide from './PostFeedDialogue';
 
 function NavigationBar() {
 
@@ -34,8 +36,12 @@ function NavigationBar() {
                             <Link to='/myProfile/:userEmail' style={{ textDecoration: 'none', color: '#fff', display: 'flex' , alignItems: 'center' , gap: '5px' }}> <AiOutlineUser size={30} />My Profile</Link>
                         </Nav.Link>
                         <Nav.Link eventKey={2} href="#memes">
-                            <Link to='/allProfiles' style={{ textDecoration: 'none', color: '#fff', display: 'flex' , alignItems: 'center' , gap: '5px' }}> <AiOutlineUser size={30} />All Profiles</Link>
+                            <Link to='/allProfiles' style={{ textDecoration: 'none', color: '#fff', display: 'flex' , alignItems: 'center' , gap: '5px' }}> <FiUsers size={30} />All Profiles</Link>
                         </Nav.Link>
+                        <Nav.Link eventKey={2} href="#memes">
+                            <Link to='/postFeed' style={{ textDecoration: 'none', color: '#fff', display: 'flex' , alignItems: 'center' , gap: '5px' }}> <AiOutlineUpload size={30} />Post</Link>
+                        </Nav.Link>
+                        <AlertDialogSlide />
 
 
                         {

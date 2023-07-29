@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import React from 'react';
 
 // Icon Imports 
-import {AiOutlineLike , AiOutlineDislike , AiFillLike , AiFillDislike} from 'react-icons/ai';
+import {AiFillHeart , AiOutlineHeart ,} from 'react-icons/ai';
 import {BiBookmark} from 'react-icons/bi'
 
 function FeedCard() {
@@ -23,15 +23,10 @@ function FeedCard() {
        <LowerRow>
         <div>
            <section>
-           <AiOutlineLike size={30}/>
+           <AiOutlineHeart size={30}/>
            <br />
            <span>60</span>
            </section>
-          <section>
-          <AiOutlineDislike size={30}/>
-          <br />
-          <span>7</span>
-          </section>
         </div>
     <BiBookmark size={30} />
        </LowerRow>
@@ -68,7 +63,7 @@ const LowerRow = styled.div`
     div {
         display: flex;
         align-items: center;
-        gap: 20px;
+        
 
         section {
             text-align: center;
