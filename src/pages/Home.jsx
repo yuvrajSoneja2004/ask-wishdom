@@ -8,8 +8,16 @@ import Loader from '../components/Loader';
 
 function Home() {
 
-    let { isLoading } = useAuth0();
-    let { defaultQuestions } = useGlobal();
+    let { isLoading  , user} = useAuth0();
+    let { defaultQuestions , getUserProfileData , getCurrentUserProfileData } = useGlobal();
+    
+
+
+   useEffect(() => {
+    getUserProfileData(user?.email);
+   } , [user?.email]);
+console.log(getCurrentUserProfileData)
+    
 
     return (
         

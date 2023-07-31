@@ -1,31 +1,60 @@
 import styled from '@emotion/styled'
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 // Icon Imports 
 import {AiFillHeart , AiOutlineHeart ,} from 'react-icons/ai';
 import {BiBookmark} from 'react-icons/bi'
+import { axiosInstance } from '../utils/axiosInstance';
+import { Link } from 'react-router-dom';
 
-function FeedCard() {
+
+
+function FeedCard({feedData}) {
+
+
+    const [feedPostedData , setFeedPostedData]  = useState([]);
+    const [isLoading , setIsLoading]  = useState(false);
+
+
+
+    const getFeedPostedData = async () => {
+        setIsLoading(true)
+        try {
+            const fetchData = await axiosInstance.get(`/feedPostedData/${feedData?.feedID}`);
+            const res = await fetchData.data;
+            console.log(res , "khariat dekho man :(")
+            setFeedPostedData(res);
+            setIsLoading(false)
+        } catch (error) {
+            console.log("Error at the time of fetching the list of feeds. Error from client side" , error)
+        }
+    }
+    useEffect(() => {
+        getFeedPostedData();
+    } ,[]) 
+
+    console.log(feedPostedData[0] , 'kaisi jrh')
+
   return (
     <Card>
         {/* upper row details */}
        <div>
-       <ProfilePic><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/John_Doe%2C_born_John_Nommensen_Duchac.jpg/220px-John_Doe%2C_born_John_Nommensen_Duchac.jpg" alt="" />
+       <ProfilePic to={`/getProfile/${feedData?.feedAuthorProfileID}`}><img src={feedData?.feedAuthorProfilePic} alt="lol" />
         
         
         </ProfilePic>
-        <span>john_doe_69</span>
+        <span>{feedData?.feedAuthorName}</span>
         <label>• 2h</label>
        </div>
        {/* the uploaded media details */}
-       <UploadedMedia></UploadedMedia>
+       <UploadedMedia><img src={feedPostedData[0]?.feedIMG} alt="haha" /></UploadedMedia>
        {/* Lower row details */}
        <LowerRow>
         <div>
            <section>
            <AiOutlineHeart size={30}/>
            <br />
-           <span>60</span>
+           <span>{feedData?.feedLikesArray}</span>
            </section>
         </div>
     <BiBookmark size={30} />
@@ -33,7 +62,7 @@ function FeedCard() {
         <div>
         <Desc>
        
-        <p> <span style={{marginRight: '4px'}}>john_doe_69</span>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consectetur, reiciendis?</p>
+        <p> <span style={{marginRight: '4px'}}>{feedData?.feedAuthorName}</span>{feedData?.feedCaption}</p>
         </Desc>
         </div>
     </Card>
@@ -76,7 +105,13 @@ const UploadedMedia = styled.div`
     width: 100%;
     border-radius: 5px;
     margin-top: 10px;
-    background-color: grey;
+    background-color: black;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
 
 `
 
@@ -101,7 +136,7 @@ div {
 }
 
 `
-const ProfilePic = styled.div`
+const ProfilePic = styled(Link)`
 display: flex;
 align-items: center;
 img {

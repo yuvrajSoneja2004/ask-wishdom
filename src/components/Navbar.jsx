@@ -13,11 +13,19 @@ import { Link, useNavigate } from 'react-router-dom';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import AlertDialogSlide from './PostFeedDialogue';
+import { useGlobal } from '../context/global';
+import { useEffect } from 'react';
 
 function NavigationBar() {
 
     let { loginWithRedirect, isAuthenticated, logout, user } = useAuth0();
+    const {getCurrentUserProfileData , getUserProfileData} = useGlobal()
     const navigate = useNavigate();
+
+
+    useEffect(() => {
+        getUserProfileData(user?.email);
+       } , [user?.email]);
 
 
     return (
@@ -47,7 +55,7 @@ function NavigationBar() {
                         {
                             !isAuthenticated ? <RedBtn variant='contained' onClick={() => { loginWithRedirect() }}>Register</RedBtn> : <UserDropDown >
                                 <Dropdown.Toggle id="dropdown-basic" >
-                                    <UserProfile src={user.picture} alt='userProfile' />
+                                    <UserProfile src={getCurrentUserProfileData[0]?.userProfilePic} alt='userProfile' />
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu style={{ background: 'transperent !important' }} className='myDrop' >

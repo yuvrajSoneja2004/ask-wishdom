@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 import { createContext, useContext } from "react";
 import { reducer } from "./reducer";
 import { axiosInstance } from "../utils/axiosInstance";
@@ -15,7 +15,7 @@ const GlobalContext = createContext();
 
 export const GlobalProvider = ({ children }) => {
 
-    let alo = useAuth0();
+    let {user} = useAuth0();
 
     let initialState = {
         defaultQuestions: [],
@@ -26,7 +26,9 @@ export const GlobalProvider = ({ children }) => {
         allCommunitiesLoading: true
     }
 
+
     const [state, dispatch] = useReducer(reducer, initialState)
+    const [getCurrentUserProfileData , setCurrentUserProfileData] = useState(null);
 
     // calling API to get defaultQuestions
 
@@ -63,13 +65,25 @@ export const GlobalProvider = ({ children }) => {
             console.log("WHY", error)
         }
     }
+    // UserProfile Data
+   const getUserProfileData = async (CURRENT_USER_EMAIL) => {
+    try {
+        let fetch = await axiosInstance.get(`getSpecificProfileData/${CURRENT_USER_EMAIL}`);
+        let res = await fetch.data;
+        setCurrentUserProfileData(res);
+    } catch (error) {
+        console.log("userProfileCLientError", error);
+    }
+   }
+   
 
     useEffect(() => {
         getDefaultQuestions();
+      
     }, [])
 
 
-    return <GlobalContext.Provider value={{ ...state, getDefaultQuestions, communityValidation, dispatch, getCommunities }}>{children}</GlobalContext.Provider>
+    return <GlobalContext.Provider value={{ ...state, getDefaultQuestions, communityValidation, dispatch, getCommunities , getCurrentUserProfileData  , getUserProfileData}}>{children}</GlobalContext.Provider>
 }
 
 

@@ -12,6 +12,11 @@ import {AiOutlineEye , AiOutlineEdit} from 'react-icons/ai'
 import imageCompression from 'browser-image-compression'
 import { axiosInstance } from '../utils/axiosInstance';
 import { v4 } from 'uuid';
+import { useGlobal } from '../context/global';
+import { useAuth0 } from '@auth0/auth0-react';
+
+
+
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -23,6 +28,14 @@ export default function AlertDialogSlide() {
   const [isFileSelected, setIsFileSelected] = React.useState(false);
   const [feed , setFeed] = React.useState(null);
   const [caption , setCaption] = React.useState("");
+  let {  user} = useAuth0();
+let {  getUserProfileData , getCurrentUserProfileData } = useGlobal();
+
+
+
+React.useEffect(() => {
+getUserProfileData(user?.email);
+} , [user?.email]);
 
 
   // Handling seleted file 
@@ -64,11 +77,15 @@ export default function AlertDialogSlide() {
     try {
         const fetch  = await axiosInstance.post("/postFeed" , {
             feedID : v4(),
-            feedIMG:feed,
-            // Continue
-            // feedAuthorName : 
+            feedIMG: feed,
+            feedAuthorName: getCurrentUserProfileData[0]?.userProfileName,
+            feedAuthorProfilePic: getCurrentUserProfileData[0]?.userProfilePic,
+            feedCaption: caption ,
+            feedAuthorProfileID: getCurrentUserProfileData[0]?.userID
+        });
 
-        })
+        let res = await fetch.data;
+        console.log(res , "TUjhe bhula diya ooo")
     } catch (error) {
         
     }
