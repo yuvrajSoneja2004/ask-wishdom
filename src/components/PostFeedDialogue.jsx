@@ -14,6 +14,8 @@ import { axiosInstance } from '../utils/axiosInstance';
 import { v4 } from 'uuid';
 import { useGlobal } from '../context/global';
 import { useAuth0 } from '@auth0/auth0-react';
+import { ToastContainer, toast } from 'react-toastify';
+
 
 
 
@@ -56,8 +58,6 @@ getUserProfileData(user?.email);
       reader.readAsDataURL(compression);
     
     
-    
-    
       };
     
   
@@ -86,11 +86,34 @@ getUserProfileData(user?.email);
         });
 
         let res = await fetch.data;
-        console.log(res , "TUjhe bhula diya ooo")
+        if(res){
+          toast.success('Posted Sucessfully 🤩', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            });
+            setOpen(false);
+        }
     } catch (error) {
-        
+      toast.error('Failed to Post 😣', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
+        setOpen(true);
     }
-  }
+    }
+  
 
 
   React.useEffect(() => {
@@ -137,9 +160,21 @@ console.log(feed , "this is feed")
         </DialogContent>
         
       </Dialog>
+      <ToastContainer
+position="top-right"
+autoClose={5000}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+theme="light"
+/>
     </div>
   );
-}
+        }
 
 
 const Cen = styled.div`

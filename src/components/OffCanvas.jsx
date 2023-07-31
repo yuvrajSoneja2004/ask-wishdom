@@ -57,7 +57,7 @@ function OffCanvasExample({ data , name, ...props }) {
     console.log("Insdie the picky")
     const file = e.target.files[0];
     const options = {
-      maxSizeMB: .1,
+      maxSizeMB: 0.1,
       maxWidthOrHeight: 1920,
       useWebWorker: true,
   }
@@ -73,7 +73,7 @@ if(compression){
   };
   reader.readAsDataURL(compression);
 
-  setFinalProfileImg(compression);
+  setprofilePic(compression);
   setIsFilesSelected(profilePicUpdatedObj)
 
 

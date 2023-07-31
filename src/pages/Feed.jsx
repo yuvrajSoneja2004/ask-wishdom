@@ -6,6 +6,7 @@ import 'react-image-crop/dist/ReactCrop.css';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useGlobal } from '../context/global';
 import { axiosInstance } from '../utils/axiosInstance';
+import FeedLoading from '../components/FeedLoading';
 
 
 
@@ -52,7 +53,7 @@ function Feed() {
          return  <FeedCard  key={i} feedData={feed}/>
      })
     }
- </FeedSection> : "Loading..."
+ </FeedSection> : <FeedLoading />
    }
     <AlsoFollowBar>
         <h1>You may also follow</h1>
@@ -63,34 +64,27 @@ function Feed() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 const Divider = styled.div`
     display: grid;
     grid-template-columns: 73% auto;
+    @media screen and (max-width: 747px){
+    grid-template-columns: auto;
+}
 `
 
 
 const FeedSection = styled.div`
 border: 2px solid green;
 padding: 0 70px;
+@media screen and (max-width: 516px){
+    padding: 0 20px;
+}
 `
 const AlsoFollowBar = styled.div`
 border: 2px solid red;
+@media screen and (max-width: 747px){
+    display: none;
+}
+
 `
 export default Feed

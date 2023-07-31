@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react';
+import "./Loader.css";
 
 // Icon Imports 
 import {AiFillHeart , AiOutlineHeart ,} from 'react-icons/ai';
@@ -27,9 +28,12 @@ function FeedCard({feedData}) {
             const res = await fetchData.data;
             console.log(res , "khariat dekho man :(")
             setFeedPostedData(res);
-            setIsLoading(false)
+           
         } catch (error) {
             console.log("Error at the time of fetching the list of feeds. Error from client side" , error)
+        }
+        finally {
+            setIsLoading(false)
         }
 
     }
@@ -113,7 +117,7 @@ useEffect(() => {
         <label>• 2h</label>
        </div>
        {/* the uploaded media details */}
-       <UploadedMedia><img src={feedPostedData[0]?.feedIMG} alt="haha" /></UploadedMedia>
+       <UploadedMedia>{isLoading ? <span className="feed-loader"></span> : <img src={feedPostedData[0]?.feedIMG} alt="haha" />}</UploadedMedia>
        {/* Lower row details */}
        <LowerRow>
         <div>
@@ -123,7 +127,15 @@ useEffect(() => {
            <span>{feedData?.feedLikesArray}</span>
            </section>
         </div>
-    <BiBookmark size={30} />
+        <div>
+           <section>
+           <BiBookmark size={30} />
+           <br />
+           <span>{feedData?.feedLikesArray}</span>
+           </section>
+        </div>
+        
+    
        </LowerRow>
         <div>
         <Desc>
@@ -172,6 +184,9 @@ const UploadedMedia = styled.div`
     border-radius: 5px;
     margin-top: 10px;
     background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     img {
         width: 100%;
