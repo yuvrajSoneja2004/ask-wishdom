@@ -6,6 +6,7 @@ import {AiFillHeart , AiOutlineHeart ,} from 'react-icons/ai';
 import {BiBookmark} from 'react-icons/bi'
 import { axiosInstance } from '../utils/axiosInstance';
 import { Link } from 'react-router-dom';
+import { useAuth0 } from '@auth0/auth0-react';
 
 
 
@@ -14,6 +15,8 @@ function FeedCard({feedData}) {
 
     const [feedPostedData , setFeedPostedData]  = useState([]);
     const [isLoading , setIsLoading]  = useState(false);
+
+    const {user} = useAuth0()
 
 
 
@@ -28,12 +31,75 @@ function FeedCard({feedData}) {
         } catch (error) {
             console.log("Error at the time of fetching the list of feeds. Error from client side" , error)
         }
+
     }
+
+
+
+    // Handling Like and Dislike
+// Handle Like Btn
+const handleLike = async () => {
+    try {
+
+        const fetch = await axiosInstance.post(`/likeFeed`, {
+            currentUserE: user?.email,
+            userToLike: feedData?.feedAuthorEmail
+        });
+        let res = await fetch.data;
+
+    } catch (error) {
+      // MEANS already following
+        console.log(`whwhwhwhwhwhwhwhwhwwh` , error)
+        if(error?.response?.data?.isAlreadyFollowing){
+
+        }
+
+    }
+}
+
+// Handle Unlike Btn
+const handleUnlike = async () => {
+  try {
+    const fetch = await axiosInstance.post(`/unfollow`, {
+      currentUserE: user?.email,
+      userToUnfollowE: profileData[0].userEmail
+  });
+  let res = await fetch.data;
+  } catch (error) {
+    
+  }
+}
+
+// Check if Likes/Unliked
+const checkifLiked = async () => {
+  try {
+    let fetch = await axiosInstance.get(`/isAlreadyFollowed/${profileData[0].userEmail}/${user?.email}`);
+    let res = fetch.data;
+    setIsLoading(false)
+
+  } catch (error) {
+    if(error?.response?.data?.isAlreadyFollowing){
+           setIsFollowed(true);
+           setIsLoading(false);
+    }
+    else {
+      setIsFollowed(false);
+           setIsLoading(false);
+    }
+  }
+}
+
+
+useEffect(() => {
+//   checkIfFollowed()
+} )
+
+
+
     useEffect(() => {
         getFeedPostedData();
     } ,[]) 
 
-    console.log(feedPostedData[0] , 'kaisi jrh')
 
   return (
     <Card>
@@ -52,7 +118,7 @@ function FeedCard({feedData}) {
        <LowerRow>
         <div>
            <section>
-           <AiOutlineHeart size={30}/>
+           <AiOutlineHeart size={30} onClick={handleLike}/>
            <br />
            <span>{feedData?.feedLikesArray}</span>
            </section>

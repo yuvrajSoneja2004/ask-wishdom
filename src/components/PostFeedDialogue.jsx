@@ -80,8 +80,9 @@ getUserProfileData(user?.email);
             feedIMG: feed,
             feedAuthorName: getCurrentUserProfileData[0]?.userProfileName,
             feedAuthorProfilePic: getCurrentUserProfileData[0]?.userProfilePic,
-            feedCaption: caption ,
-            feedAuthorProfileID: getCurrentUserProfileData[0]?.userID
+            feedCaption: caption.length === 0 ? "I Love Ask-Wishdom! 😁" : caption,
+            feedAuthorProfileID: getCurrentUserProfileData[0]?.userID,
+            feedAuthorEmail: user?.email
         });
 
         let res = await fetch.data;
