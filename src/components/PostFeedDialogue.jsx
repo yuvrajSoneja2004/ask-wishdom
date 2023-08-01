@@ -8,13 +8,14 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import styled from '@emotion/styled';
 import {VscFileMedia} from 'react-icons/vsc'
-import {AiOutlineEye , AiOutlineEdit} from 'react-icons/ai'
+import {AiOutlineEye , AiOutlineEdit, AiOutlineUpload} from 'react-icons/ai'
 import imageCompression from 'browser-image-compression'
 import { axiosInstance } from '../utils/axiosInstance';
 import { v4 } from 'uuid';
 import { useGlobal } from '../context/global';
 import { useAuth0 } from '@auth0/auth0-react';
 import { ToastContainer, toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 
 
@@ -122,9 +123,9 @@ console.log(feed , "this is feed")
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Slide in alert dialog
-      </Button>
+      <PostFeedLink variant="outlined" onClick={handleClickOpen}>
+      <AiOutlineUpload size={25} fill='#000'/><p>Post Feed</p>
+      </PostFeedLink>
       <Dialog
         open={open}
         TransitionComponent={Transition}
@@ -176,6 +177,19 @@ theme="light"
   );
         }
 
+
+
+        const PostFeedLink = styled(Link)`
+        color: #000;
+        font-weight: bold;
+        display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    padding: 15px 8px;
+    width: 100%;
+        
+        `
 
 const Cen = styled.div`
 text-align: center;

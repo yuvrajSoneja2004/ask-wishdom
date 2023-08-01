@@ -9,6 +9,7 @@ import { axiosInstance } from '../utils/axiosInstance'
 import axios from 'axios'
 import { useAuth0 } from '@auth0/auth0-react'
 import { v4 } from 'uuid'
+import InfiniteScroll from 'react-infinite-scroll-component'
 
 function QuestionsList() {
     const { defaultQuestions, getDefaultQuestions } = useGlobal()
@@ -46,6 +47,9 @@ function QuestionsList() {
 
 
     return (
+        <InfiniteScroll  
+        dataLength={defaultQuestions?.length}
+        >
         <QuestionsGrid>
             {
                 defaultQuestions?.length === 0 ? <NoDefaultQuestions />:(
@@ -55,6 +59,7 @@ function QuestionsList() {
                 )
             }
         </QuestionsGrid>
+        </InfiniteScroll>
     )
 }
 
