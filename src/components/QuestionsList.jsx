@@ -47,9 +47,7 @@ function QuestionsList() {
 
 
     return (
-        <InfiniteScroll  
-        dataLength={defaultQuestions?.length}
-        >
+       
         <QuestionsGrid>
             {
                 defaultQuestions?.length === 0 ? <NoDefaultQuestions />:(
@@ -59,7 +57,6 @@ function QuestionsList() {
                 )
             }
         </QuestionsGrid>
-        </InfiniteScroll>
     )
 }
 

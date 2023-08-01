@@ -105,6 +105,7 @@ const Whole = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    height: 100vh;
 
     img {
         width: 200px;

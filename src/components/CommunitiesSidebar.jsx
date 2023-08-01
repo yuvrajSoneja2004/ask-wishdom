@@ -142,6 +142,8 @@ const RouteLink  = styled(Link)`
     text-decoration: none;
     padding: 15px 8px;
     width: 100%;
+    border-radius: 5px;
+    transition: all.3s;
 
     div {
         width: 40px;
@@ -159,7 +161,7 @@ const RouteLink  = styled(Link)`
     }
 
     &&:hover {
-        background-color: green;
+        background-color: #d8d8d8;
     }
 
 

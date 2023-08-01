@@ -7,6 +7,8 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useGlobal } from '../context/global';
 import { axiosInstance } from '../utils/axiosInstance';
 import FeedLoading from '../components/FeedLoading';
+import { Link } from 'react-router-dom';
+import Loader from '../components/Loader';
 
 
 
@@ -18,6 +20,8 @@ function Feed() {
     
     const [allFeeds , setAllFeeds] = useState([]);
     const [isLoading , setIsLoading] = useState(false);
+    const [isLoadingSuggested , setIsLoadingSuggested] = useState(false);
+    const [suggestedProfiles , setSuggestedProfiles] = useState([]);
     
     
     
@@ -37,9 +41,24 @@ function Feed() {
             console.log("Error at the time of fetching the list of feeds. Error from client side" , error)
         }
     }
+
+    const getSuggestedOnes = async () => {
+        setIsLoadingSuggested(true);
+        try {
+            const fetchData = await axiosInstance.get(`/suggestedForYou/${getCurrentUserProfileData[0]?.userID === null ? "" : getCurrentUserProfileData[0]?.userID}`);
+            const res = await fetchData.data;
+            setSuggestedProfiles(res);
+            setIsLoadingSuggested(false);
+
+            
+        } catch (error) {
+            console.log("error at the time of GET suggested one from client" , error)
+        }
+    }
     
     useEffect(() => {
         getFeeds();
+        getSuggestedOnes();
     } , [])
 
 
@@ -55,8 +74,17 @@ function Feed() {
     }
  </FeedSection> : <FeedLoading />
    }
+   {/* Will do it later  */}
     <AlsoFollowBar>
-        <h1>You may also follow</h1>
+        <h5>Suggested for you</h5>
+        {/* Profiles */}
+       {
+       !isLoadingSuggested ? suggestedProfiles?.map((profile ,i) => {
+            return  <LinkDiv key={i} to={`/getProfile/${profile?.userID}`}>
+            <div><img src={profile?.userProfilePic} alt="" /></div><p>{profile?.userProfileName}</p>
+         </LinkDiv>
+        }) : <Loader />
+       }
     </AlsoFollowBar>
    </Divider>
   )
@@ -67,6 +95,7 @@ function Feed() {
 const Divider = styled.div`
     display: grid;
     grid-template-columns: 73% auto;
+    /* grid-template-columns:  auto; */
     @media screen and (max-width: 747px){
     grid-template-columns: auto;
 }
@@ -74,17 +103,66 @@ const Divider = styled.div`
 
 
 const FeedSection = styled.div`
-border: 2px solid green;
 padding: 0 70px;
 @media screen and (max-width: 516px){
     padding: 0 20px;
 }
 `
 const AlsoFollowBar = styled.div`
-border: 2px solid red;
+padding: 20px 15px;
+
+h5 {
+    font-size: 15px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+}
+
+
+
+
+div div img {
+    height: 100%;
+        width: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+}
+
+
+
+
 @media screen and (max-width: 747px){
     display: none;
 }
 
+`
+
+
+const LinkDiv = styled(Link)`
+display: flex;
+margin: 25px 0;
+align-items: center;
+gap: 10px;
+color: #000;
+text-decoration: none;
+font-weight: bold;
+
+&&:hover {
+    color: #000;
+}
+div {
+    
+    width: 40px;
+    height: 40px;
+    border: 3px solid #B13634;
+    border-radius: 50%;
+
+}
+div img {
+    height: 100%;
+        width: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+}
 `
 export default Feed

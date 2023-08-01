@@ -188,6 +188,11 @@ theme="light"
     text-decoration: none;
     padding: 15px 8px;
     width: 100%;
+
+    &&:hover {
+        background-color: #d8d8d8;
+        color: #000;
+    }
         
         `
 
