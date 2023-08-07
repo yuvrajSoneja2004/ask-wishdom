@@ -30,8 +30,10 @@ function App() {
   return (
     <div>
       {/* <NavigationBar /> */}
-      <Balance>
-      <CommunitiesSidebar />
+      <Balance isAuth={isAuthenticated}>
+     {
+      isAuthenticated ?  <CommunitiesSidebar /> : null
+     }
 
       <Routes>
         <Route path='/' element={!isAuthenticated && !isLoading ? <Register /> : <Home />} />
@@ -61,7 +63,8 @@ function App() {
 
 const Balance = styled.div`
   display: grid;
-  grid-template-columns: 300px auto;
+  grid-template-columns: ${props => props.isAuth ? "300px auto" : "auto"};
+  /* grid-template-columns: 300px auto; */
   @media screen and (max-width:1018px){
     grid-template-columns: auto ;
   }

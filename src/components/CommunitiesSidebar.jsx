@@ -24,7 +24,7 @@ function CommunitiesSidebar() {
     const [userCommunities , setUserCommunities] = useState([]);
     const [isLoadingSidebar , setIsLoadingSidebar] = useState(true);
 
-    let { isLoading  , user} = useAuth0();
+    let { isLoading  , user, logout} = useAuth0();
     let {  getUserProfileData , getCurrentUserProfileData } = useGlobal();
     
 
@@ -59,7 +59,7 @@ function CommunitiesSidebar() {
       <div>
         
       <Whole>
-        <Logo src={SiteIcon}></Logo>
+        <Logo src={SiteIcon} onClick={() => {logout()}}></Logo>
         <MenuItems>
         <RouteLink to={'/feed'}><AiFillHome size={ICON_SIZE} fill='#000'/><p>Home</p></RouteLink>
         <RouteLink to={'/'}><AiOutlineCompass size={ICON_SIZE} fill='#000'/><p>Explore Questions</p></RouteLink>

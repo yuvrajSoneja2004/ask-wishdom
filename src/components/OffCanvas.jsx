@@ -167,7 +167,7 @@ useEffect(() => {
         </Offcanvas.Header>
         <Offcanvas.Body>
           <Whole>
-            <div><img src={data?.userProfilePic} alt="" /></div>
+            <ImgCont><img src={data?.userProfilePic} alt="" /></ImgCont>
             <h1>{data?.userProfileName}</h1>
             <div style={{textAlign: 'center'}}>
       
@@ -508,6 +508,20 @@ function OffCanvasToggle({data}) {
 }
 
 
+
+const ImgCont = styled.div`
+
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+`
 
 const Cen = styled.div`
   display: flex;

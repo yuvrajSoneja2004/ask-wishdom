@@ -16,6 +16,7 @@ import OffCanvasToggle from '../components/OffCanvas';
 import QuestionsAsked from '../components/Typeofposts/QuestionsAsked';
 import JoinedCommunities from '../components/Typeofposts/JoinedCommunities';
 import { useParams } from 'react-router-dom';
+import PostsComponent from '../components/Typeofposts/PostsComponent';
 
 // Type of posts components imports
 
@@ -35,6 +36,7 @@ function SingleProfilePage() {
   const [finalBgPic, setFinalBGpic] = useState("")
   const [bgMusic, setBgMusic] = useState("")
   const [isFollowed, setIsFollowed] = useState(false);
+  const [isFollowLoaded , setIsFollowLoaded] = useState(false);
 
   const {userID} = useParams()
 
@@ -95,6 +97,7 @@ const checkIfFollowed = async () => {
     let fetch = await axiosInstance.get(`/isAlreadyFollowed/${profileData[0].userEmail}/${user?.email}`);
     let res = fetch.data;
     setIsLoading(false)
+    
 
   } catch (error) {
     if(error?.response?.data?.isAlreadyFollowing){
@@ -105,6 +108,9 @@ const checkIfFollowed = async () => {
       setIsFollowed(false);
            setIsLoading(false);
     }
+  }
+  finally {
+    setIsFollowLoaded(true)
   }
 }
 
@@ -125,11 +131,15 @@ useEffect(() => {
   return (
     !isLoading ? (
       <MAX style={{backgroundImage: `url(${profileData[0]?.userProfileBG})` , backgroundPosition: 'center',backgroundSize:'cover', backgroundRepeat: 'no-repeat'}}>
+       
     
-<Whole>
+{
+  isFollowLoaded ? <Whole>
   <Audio path={profileData[0]?.userProfileBGMusic}/>  
   
-    <ProfileIMG style={{background: `url(${profileData[0]?.userProfilePic})`, backgroundRepeat: 'no-repeat', backgroundPosition: 'center', backgroundSize: 'contain'}}></ProfileIMG>
+    <ProfileIMG style={{ backgroundRepeat: 'no-repeat', backgroundPosition: 'center', backgroundSize: 'contain'}}>
+      <img src={profileData[0]?.userProfilePic} alt="" />
+    </ProfileIMG>
     <UssrName>{profileData[0]?.userProfileName}</UssrName>
     
     <ProfileStats>
@@ -151,7 +161,7 @@ useEffect(() => {
       
       {/* Follow btn here  */}
       {
-    !isFollowed ?  <FollowBtn onClick={handleFollow}>FOLLOW</FollowBtn> : <FollowBtn onClick={handleUnfollow}>UNFOLLOW</FollowBtn>
+    !isFollowed ?  isFollowLoaded ? <FollowBtn onClick={handleFollow}>FOLLOW</FollowBtn> : "Loading..." : isFollowLoaded ?  <FollowBtn onClick={handleUnfollow}>UNFOLLOW</FollowBtn> : "Loading..."
    }
  
     </CustomizeHeading>
@@ -167,10 +177,11 @@ useEffect(() => {
     <PostsContectArea>
       {/* Change type of content data here */}
         {
-         typeOfPosts === 0 ? <h1>Posts component</h1> : typeOfPosts === 1 ? <QuestionsAsked userEmailData={profileData[0]?.userEmail}/> : typeOfPosts === 2 ? <JoinedCommunities  userEmailData={profileData[0]?.userEmail}/> : "nope" 
+         typeOfPosts === 0 ? <PostsComponent  userEmailData={profileData[0]?.userEmail}/>: typeOfPosts === 1 ? <QuestionsAsked userEmailData={profileData[0]?.userEmail}/> : typeOfPosts === 2 ? <JoinedCommunities  userEmailData={profileData[0]?.userEmail}/> : "nope" 
         }
     </PostsContectArea>
-</Whole>
+</Whole> : "Laoding"
+}
 
     </MAX>
     ) : "Loading..."
@@ -270,7 +281,7 @@ display: flex;
 justify-content: center;
 align-items: center;
 flex-direction: column;
-border: 5px solid pink !important;
+/* border: 5px solid pink !important; */
 /* transform: translateY(-125px); */
 
 
@@ -282,8 +293,15 @@ const ProfileIMG = styled.div`
     margin-top: 30px;
     border-radius: 50%;
     border: 5px solid #B13634;
-    padding: 10px;
+    /* padding: 10px; */
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
 `
 
 const ProfileStats = styled.div`

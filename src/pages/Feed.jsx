@@ -1,7 +1,6 @@
 import styled from '@emotion/styled'
 import React , {useEffect, useState} from 'react'
 import FeedCard from '../components/FeedCard'
-import { ReactCrop } from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useGlobal } from '../context/global';
@@ -9,6 +8,7 @@ import { axiosInstance } from '../utils/axiosInstance';
 import FeedLoading from '../components/FeedLoading';
 import { Link } from 'react-router-dom';
 import Loader from '../components/Loader';
+import NoFeedsGIF from '../assets/no-feeds.gif'
 
 
 
@@ -23,11 +23,6 @@ function Feed() {
     const [isLoadingSuggested , setIsLoadingSuggested] = useState(false);
     const [suggestedProfiles , setSuggestedProfiles] = useState([]);
     
-    
-    
-    // useEffect(() => {
-    // getUserProfileData(user?.email);
-    // } , [user?.email]);
     
     const getFeeds = async () => {
         setIsLoading(true)
@@ -60,6 +55,13 @@ function Feed() {
         getFeeds();
         getSuggestedOnes();
     } , [])
+
+    if(allFeeds.length === 0){
+        return <NoFeeds>
+            <img src={NoFeedsGIF} alt="" />
+            <h1>No Feeds Uploaded</h1>
+        </NoFeeds>
+    }
 
 
     // feedAuthorName
@@ -135,6 +137,18 @@ div div img {
     display: none;
 }
 
+`
+
+const NoFeeds = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+
+    h1 {
+        font-weight: bolder;
+    }
 `
 
 

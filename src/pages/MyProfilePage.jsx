@@ -60,7 +60,9 @@ function MyProfilePage() {
 <Whole>
   <Audio path={profileData[0]?.userProfileBGMusic}/>  
   
-    <ProfileIMG style={{background: `url(${profileData[0]?.userProfilePic})`, backgroundRepeat: 'no-repeat', backgroundPosition: 'center', backgroundSize: 'contain'}}></ProfileIMG>
+    <ProfileIMG style={{ backgroundRepeat: 'no-repeat', backgroundPosition: 'center', backgroundSize: 'contain'}}>
+    <img src={profileData[0]?.userProfilePic} alt="" />
+    </ProfileIMG>
     <UssrName>{profileData[0]?.userProfileName}</UssrName>
     
     <ProfileStats>
@@ -193,10 +195,16 @@ const ProfileIMG = styled.div`
     margin-top: 30px;
     border-radius: 50%;
     border: 5px solid #B13634;
-    padding: 10px;
+    /* padding: 10px; */
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-`
 
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+`
 const ProfileStats = styled.div`
   div {
     text-align: center;

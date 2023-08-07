@@ -39,9 +39,12 @@ const Smily = styled(SentimentVerySatisfiedIcon)`
 
 const Grid = styled.div`
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     place-items: center;
-    gap: 100px;
+    /* border: 6px solid blue; */
+    
+
+    row-gap: 100px;
     @media screen and (max-width: 1217px){
         grid-template-columns: 1fr 1fr;
     }
@@ -51,6 +54,7 @@ const Grid = styled.div`
 `
 const Whole = styled.div`
     padding: 80px;
+    /* border: 8px solid pink; */
     @media screen and (max-width: 421px){
             padding: 30px;
         }
