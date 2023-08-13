@@ -22,6 +22,7 @@ function Feed() {
     const [isLoading , setIsLoading] = useState(false);
     const [isLoadingSuggested , setIsLoadingSuggested] = useState(false);
     const [suggestedProfiles , setSuggestedProfiles] = useState([]);
+    const [isFeedEmpty , setIsFeedEmpty] = useState(false);
     
     
     const getFeeds = async () => {
@@ -54,6 +55,7 @@ function Feed() {
     useEffect(() => {
         getFeeds();
         getSuggestedOnes();
+
     } , [])
 
     if(allFeeds.length === 0){

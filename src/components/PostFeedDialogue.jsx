@@ -148,7 +148,7 @@ console.log(feed , "this is feed")
             </SelectFilePart> : (
                 <SecondFilePart>
                     <h4> <AiOutlineEye size={20}/> Post image Preview</h4>
-                    <div style={{background: `url(${feed})`, backgroundPosition: 'center' , backgroundSize:'cover' , backgroundRepeat: 'no-repeat'}}></div>
+                    <div><img  src={feed} alt='ll' /></div>
                     <h4 style={{marginTop: '10px'}}> <AiOutlineEdit size={20}/> Caption</h4>
                     <textarea name="" id="" cols="30" rows="10" value={caption} onChange={(e) => setCaption(e.target.value)}></textarea>
 
@@ -214,9 +214,15 @@ h4 {
     margin-bottom: 13px;
 }
 
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
 div {
     width: 450px;
     height: 450px;
+    background-color: #000;
    
 }
 
