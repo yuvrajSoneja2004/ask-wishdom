@@ -71,6 +71,7 @@ export const GlobalProvider = ({ children }) => {
         let fetch = await axiosInstance.get(`getSpecificProfileData/${CURRENT_USER_EMAIL}`);
         let res = await fetch.data;
         setCurrentUserProfileData(res);
+        return res;
     } catch (error) {
         console.log("userProfileCLientError", error);
     }
