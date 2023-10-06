@@ -16,8 +16,10 @@ function FeedCard({feedData}) {
 
     const [feedPostedData , setFeedPostedData]  = useState([]);
     const [isLoading , setIsLoading]  = useState(false);
+    const [handleRender , setHandleRender] = useState(0);
+    
 
-    const {user} = useAuth0()
+    const { user } = useAuth0()
 
 
 
@@ -43,71 +45,49 @@ function FeedCard({feedData}) {
 // Handle Like Btn
 const handleLike = async () => {
     try {
-
-        const fetch = await axiosInstance.post(`/likeFeed`, {
+        const { data } =  await axiosInstance.post(`/likeFeed`, {
             currentUserE: user?.email,
             userToLike: feedData?._id
         });
-        let res = await fetch.data;
-        console.log('Liked this post successfully!')
 
-    } catch (error) {
-      // MEANS already following
-        console.log(`whwhwhwhwhwhwhwhwhwwh` , error)
-        if(error?.response?.data?.isAlreadyFollowing){
-
+        if(data){
+            setHandleRender((prev) => prev + 1);
         }
 
+    } catch (error) {
+        console.log(`whwhwhwhwhwhwhwhwhwwh` , error)
+
     }
 }
 
-// Handle Unlike Btn
 const handleUnlike = async () => {
-  try {
-    const fetch = await axiosInstance.post(`/unfollow`, {
-      currentUserE: user?.email,
-      userToUnfollowE: profileData[0].userEmail
-  });
-  let res = await fetch.data;
-  } catch (error) {
-    
-  }
+    try {
+        const resDislike =  await axiosInstance.post(`/dislikeFeed`, {
+            currentUserE: user?.email,
+            userToUnlike: feedData?._id
+        });
+
+
+        if(resDislike){
+            console.log("Dislike man")
+            setHandleRender((prev) => prev + 1);
+        }
+    } catch (error) {
+        console.log("ERROR" , error)
+    }
 }
 
-// Check if Likes/Unliked
-const checkifLiked = async () => {
-  try {
-    let fetch = await axiosInstance.get(`/isAlreadyFollowed/${profileData[0].userEmail}/${user?.email}`);
-    let res = fetch.data;
-    setIsLoading(false)
-
-  } catch (error) {
-    if(error?.response?.data?.isAlreadyFollowing){
-           setIsFollowed(true);
-           setIsLoading(false);
-    }
-    else {
-      setIsFollowed(false);
-           setIsLoading(false);
-    }
-  }
-}
-
-
-useEffect(() => {
-//   checkIfFollowed()
-} )
 
 
 
     useEffect(() => {
         getFeedPostedData();
-    } ,[]) 
+    } ,[handleRender]) 
 
 
 
     let [ feedLikesArray ] =  feedPostedData;
-    console.log(feedLikesArray , 'the img compoennt');
+    // console.log(feedLikesArray , 'the img compoennt');
 
 
   return (
@@ -127,7 +107,7 @@ useEffect(() => {
        <LowerRow>
         <div>
            <section>
-           <AiOutlineHeart size={30} onClick={handleLike}/>
+           { feedLikesArray?.feedLikesArray.includes(user?.email) ? <AiFillHeart  size={30} onClick={handleUnlike}/> : <AiOutlineHeart size={30} onClick={handleLike}/> }
            <br />
            <span>{feedLikesArray?.feedLikesArray?.length}</span>
            </section>
