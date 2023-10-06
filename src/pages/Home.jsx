@@ -16,7 +16,6 @@ function Home() {
    useEffect(() => {
     getUserProfileData(user?.email);
    } , [user?.email]);
-console.log(getCurrentUserProfileData)
     
 
     return (

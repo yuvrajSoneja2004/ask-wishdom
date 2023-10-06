@@ -40,16 +40,16 @@ function FeedCard({feedData}) {
 
 
 
-    // Handling Like and Dislike
 // Handle Like Btn
 const handleLike = async () => {
     try {
 
         const fetch = await axiosInstance.post(`/likeFeed`, {
             currentUserE: user?.email,
-            userToLike: feedData?.feedAuthorEmail
+            userToLike: feedData?._id
         });
         let res = await fetch.data;
+        console.log('Liked this post successfully!')
 
     } catch (error) {
       // MEANS already following
@@ -105,6 +105,11 @@ useEffect(() => {
     } ,[]) 
 
 
+
+    let [ feedLikesArray ] =  feedPostedData;
+    console.log(feedLikesArray , 'the img compoennt');
+
+
   return (
     <Card>
         {/* upper row details */}
@@ -114,7 +119,7 @@ useEffect(() => {
         
         </ProfilePic>
         <span>{feedData?.feedAuthorName}</span>
-        <label>• 2h</label>
+        <label>• 99h</label>
        </div>
        {/* the uploaded media details */}
        <UploadedMedia>{isLoading ? <span className="feed-loader"></span> : <img src={feedPostedData[0]?.feedIMG} alt="haha" />}</UploadedMedia>
@@ -124,14 +129,15 @@ useEffect(() => {
            <section>
            <AiOutlineHeart size={30} onClick={handleLike}/>
            <br />
-           <span>{feedData?.feedLikesArray}</span>
+           <span>{feedLikesArray?.feedLikesArray?.length}</span>
            </section>
         </div>
         <div>
            <section>
            <BiBookmark size={30} />
            <br />
-           <span>{feedData?.feedLikesArray}</span>
+           <span>{feedData?.feedLikesArray?.length}</span>
+           <h2>{feedData?.feedLikesArray?.length}</h2>
            </section>
         </div>
         

@@ -12,7 +12,7 @@ import { v4 } from 'uuid'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
 function QuestionsList() {
-    const { defaultQuestions, getDefaultQuestions } = useGlobal()
+    const { defaultQuestions, getDefaultQuestions, setCurrentUserData } = useGlobal()
     const [userCheckData, setuserCheckData] = useState([]);
 
     const {user} = useAuth0();
@@ -32,8 +32,8 @@ function QuestionsList() {
 
         }) : ""
        let res = await fetch.data;
-       setuserCheckData(res);
-       console.log(res)
+       setCurrentUserData(res);
+       setuserCheckData(res)
        } catch (error) {
         console.log(" error man man" , error);
        }

@@ -13,6 +13,8 @@ import {HiOutlineUserGroup} from 'react-icons/hi'
 import { useGlobal } from '../context/global';
 import UserIcon from '../assets/user.png';
 import AlertDialogSlide from './PostFeedDialogue';
+import { Offcanvas } from 'react-bootstrap';
+import Notifications from './Notifications';
 
 
 
@@ -32,6 +34,7 @@ function CommunitiesSidebar() {
    useEffect(() => {
     getUserProfileData(user?.email);
    } , [user?.email]);
+   console.log(getCurrentUserProfileData)
 
 //     const getUserCommunities = async () => {
 //         try {
@@ -50,6 +53,10 @@ function CommunitiesSidebar() {
 
 //     getUserCommunities();
 // } , [])
+const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
 
 
@@ -65,6 +72,10 @@ function CommunitiesSidebar() {
         <RouteLink to={'/'}><AiOutlineCompass size={ICON_SIZE} fill='#000'/><p>Explore Questions</p></RouteLink>
         <RouteLink to={'/ask'}><AiOutlineQuestionCircle size={ICON_SIZE} fill='#000'/><p>Ask Question</p></RouteLink>
         <AlertDialogSlide />
+    
+        <RouteLink  onClick={handleShow}><AiOutlineQuestionCircle size={ICON_SIZE} fill='#000'/><p>Notifications</p></RouteLink>
+
+        <Notifications show={show} handleClose={handleClose}/>
         <RouteLink to={'/communities'}><HiOutlineUserGroup size={ICON_SIZE} fill='#000' /><p>Communities</p></RouteLink>
         <RouteLink to={`/myProfile/:userEmail`}><div><img src={ getCurrentUserProfileData === null ? UserIcon : getCurrentUserProfileData[0]?.userProfilePic || UserIcon} alt="" /></div><p>Profile</p></RouteLink>
         </MenuItems>

@@ -40,7 +40,7 @@ export const GlobalProvider = ({ children }) => {
             dispatch({ type: "SET_DEFAULT_QUESTIONS", payload: res })
 
         } catch (error) {
-            dispatch({ type: "SET_DEFAULT_ERROR" })
+            dispatch({ type: "SET_DEFAULT_ERROR" });
         }
     }
 
@@ -76,14 +76,15 @@ export const GlobalProvider = ({ children }) => {
     }
    }
    
+   const [currentUserData , setCurrentUserData] = useState([]);
 
     useEffect(() => {
         getDefaultQuestions();
-      
+        console.log(getCurrentUserProfileData , 'aaah aah aaalalalalal')
     }, [])
 
 
-    return <GlobalContext.Provider value={{ ...state, getDefaultQuestions, communityValidation, dispatch, getCommunities , getCurrentUserProfileData  , getUserProfileData}}>{children}</GlobalContext.Provider>
+    return <GlobalContext.Provider value={{ ...state, getDefaultQuestions, communityValidation, dispatch, getCommunities , getCurrentUserProfileData  , getUserProfileData, setCurrentUserData}}>{children}</GlobalContext.Provider>
 }
 
 
