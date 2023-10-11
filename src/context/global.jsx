@@ -4,6 +4,7 @@ import { reducer } from "./reducer";
 import { axiosInstance } from "../utils/axiosInstance";
 import { useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import socket_io_client from 'socket.io-client';
 
 
 
@@ -15,7 +16,7 @@ const GlobalContext = createContext();
 
 export const GlobalProvider = ({ children }) => {
 
-    let {user} = useAuth0();
+
 
     let initialState = {
         defaultQuestions: [],
@@ -29,6 +30,7 @@ export const GlobalProvider = ({ children }) => {
 
     const [state, dispatch] = useReducer(reducer, initialState)
     const [getCurrentUserProfileData , setCurrentUserProfileData] = useState(null);
+    const [socket , setSocket] = useState(undefined)
 
     // calling API to get defaultQuestions
 
@@ -78,14 +80,29 @@ export const GlobalProvider = ({ children }) => {
    }
    
    const [currentUserData , setCurrentUserData] = useState([]);
+   const [isNotificationsAllowed , setIsNotificationsAllowed] = useState(undefined)
 
     useEffect(() => {
+
+        Notification.requestPermission().then((res) => {
+            if(res == 'granted'){
+                setIsNotificationsAllowed(true)
+            } else {
+                setIsNotificationsAllowed(false)
+            }
+        }).catch((err) => {
+            alert(err)
+        })
+
+
         getDefaultQuestions();
-        console.log(getCurrentUserProfileData , 'aaah aah aaalalalalal')
+        // Socket Connection
+    const socket = socket_io_client.connect("http://localhost:9000/", {transports: ['websocket', 'polling', 'flashsocket']});
+    setSocket(socket)
     }, [])
 
 
-    return <GlobalContext.Provider value={{ ...state, getDefaultQuestions, communityValidation, dispatch, getCommunities , getCurrentUserProfileData  , getUserProfileData, setCurrentUserData}}>{children}</GlobalContext.Provider>
+    return <GlobalContext.Provider value={{ ...state, getDefaultQuestions, communityValidation, dispatch, getCommunities , getCurrentUserProfileData  , getUserProfileData, setCurrentUserData, socket , isNotificationsAllowed}}>{children}</GlobalContext.Provider>
 }
 
 

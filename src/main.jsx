@@ -10,7 +10,6 @@ import 'react-image-crop/dist/ReactCrop.css'
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
     <GlobalProvider>
       <BrowserRouter>
         <Auth0Provider
@@ -25,6 +24,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
       </BrowserRouter>
     </GlobalProvider>
-  </React.StrictMode>
 
 )

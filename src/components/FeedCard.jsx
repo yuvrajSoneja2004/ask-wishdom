@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react';
 import "./Loader.css";
+import { io } from "socket.io-client"
 
 // Icon Imports 
 import {AiFillHeart , AiOutlineHeart ,} from 'react-icons/ai';
@@ -8,10 +9,15 @@ import {BiBookmark} from 'react-icons/bi'
 import { axiosInstance } from '../utils/axiosInstance';
 import { Link } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
+import { useGlobal } from '../context/global';
+
+
 
 
 
 function FeedCard({feedData}) {
+
+        const {socket , getUserProfileData, getCurrentUserProfileData} = useGlobal()
 
 
     const [feedPostedData , setFeedPostedData]  = useState([]);
@@ -28,7 +34,6 @@ function FeedCard({feedData}) {
         try {
             const fetchData = await axiosInstance.get(`/feedPostedData/${feedData?.feedID}`);
             const res = await fetchData.data;
-            console.log(res , "khariat dekho man :(")
             setFeedPostedData(res);
            
         } catch (error) {
@@ -40,7 +45,19 @@ function FeedCard({feedData}) {
 
     }
 
+    const userData = getCurrentUserProfileData && getCurrentUserProfileData[0];
+    const feedImg = feedPostedData && feedPostedData[0]
+    const finalImg = feedImg && feedImg.feedIMG
 
+    let userDetailsToBePushed = {
+        user_name: userData && userData.userProfileName,
+        user_profile_pic: userData && userData.userProfilePic,
+        user_id: userData && userData._id,
+        the_post: finalImg
+    }
+
+
+    console.log('alla hoo' , feedPostedData)
 
 // Handle Like Btn
 const handleLike = async () => {
@@ -51,6 +68,12 @@ const handleLike = async () => {
         });
 
         if(data){
+            socket?.emit("request_user_notifications" , {
+                user_that_liked: userDetailsToBePushed,
+                user_that_got_liked_id:feedData,
+
+                        })
+    
             setHandleRender((prev) => prev + 1);
         }
 
@@ -84,12 +107,18 @@ const handleUnlike = async () => {
         getFeedPostedData();
     } ,[handleRender]) 
 
+   
+    useEffect(() => {
 
+        const isRecieved =  getUserProfileData(user?.email);
+     
+         }, []);
+     
+     
+         console.log(feedPostedData , 'waaah')
 
     let [ feedLikesArray ] =  feedPostedData;
     // console.log(feedLikesArray , 'the img compoennt');
-
-
   return (
     <Card>
         {/* upper row details */}
