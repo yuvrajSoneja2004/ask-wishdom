@@ -10,6 +10,7 @@ import { axiosInstance } from '../utils/axiosInstance';
 import { Link } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useGlobal } from '../context/global';
+import TimeAgo from '../utils/TimeAgo';
 
 
 
@@ -57,7 +58,6 @@ function FeedCard({feedData}) {
     }
 
 
-    console.log('alla hoo' , feedPostedData)
 
 // Handle Like Btn
 const handleLike = async () => {
@@ -92,7 +92,6 @@ const handleUnlike = async () => {
 
 
         if(resDislike){
-            console.log("Dislike man")
             setHandleRender((prev) => prev + 1);
         }
     } catch (error) {
@@ -115,10 +114,9 @@ const handleUnlike = async () => {
          }, []);
      
      
-         console.log(feedPostedData , 'waaah')
 
     let [ feedLikesArray ] =  feedPostedData;
-    // console.log(feedLikesArray , 'the img compoennt');
+
   return (
     <Card>
         {/* upper row details */}
@@ -128,7 +126,7 @@ const handleUnlike = async () => {
         
         </ProfilePic>
         <span>{feedData?.feedAuthorName}</span>
-        <label>• 99h</label>
+       <TimeAgo  createdAt={feedData?.createdAt} />
        </div>
        {/* the uploaded media details */}
        <UploadedMedia>{isLoading ? <span className="feed-loader"></span> : <img src={feedPostedData[0]?.feedIMG} alt="haha" />}</UploadedMedia>
@@ -146,7 +144,6 @@ const handleUnlike = async () => {
            <BiBookmark size={30} />
            <br />
            <span>{feedData?.feedLikesArray?.length}</span>
-           <h2>{feedData?.feedLikesArray?.length}</h2>
            </section>
         </div>
         

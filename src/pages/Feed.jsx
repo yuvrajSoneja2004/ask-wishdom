@@ -22,7 +22,7 @@ function Feed() {
     const [isLoading , setIsLoading] = useState(false);
     const [isLoadingSuggested , setIsLoadingSuggested] = useState(false);
     const [suggestedProfiles , setSuggestedProfiles] = useState([]);
-    const [isFeedEmpty , setIsFeedEmpty] = useState(false);
+    const [isPageLoaded , setIsPageLoaded] = useState(false);
     
     
     const getFeeds = async () => {
@@ -33,8 +33,10 @@ function Feed() {
             console.log(res , "Teri aurrrr :(")
             setAllFeeds(res);
             setIsLoading(false)
+            setIsPageLoaded(true)
         } catch (error) {
             console.log("Error at the time of fetching the list of feeds. Error from client side" , error)
+            setIsPageLoaded(true)
         }
     }
 
@@ -58,7 +60,7 @@ function Feed() {
 
     } , [])
 
-    if(allFeeds.length === 0){
+    if(allFeeds.length === 0 && isPageLoaded){
         return <NoFeeds>
             <img src={NoFeedsGIF} alt="" />
             <h1>No Feeds Uploaded</h1>

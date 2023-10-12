@@ -1,18 +1,12 @@
 import styled from '@emotion/styled';
 import React, { useEffect, useState } from 'react';
-import { RedBtn } from '../utils/RedBtn';
 import { axiosInstance } from '../utils/axiosInstance';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Button } from "@mui/material";
-import {AiOutlinePicture , AiOutlineCamera} from 'react-icons/ai'
-import {MdPictureInPicture , MdOutlineCampaign} from 'react-icons/md'
 import {MdGridView} from 'react-icons/md'
 import {BsQuestionCircle} from 'react-icons/bs'
 import {FiUserCheck} from 'react-icons/fi'
-import {BiGroup} from 'react-icons/bi'
-import imageCompression from 'browser-image-compression'
 import Audio from '../components/Audio';
-import OffCanvasToggle from '../components/OffCanvas';
 import QuestionsAsked from '../components/Typeofposts/QuestionsAsked';
 import JoinedCommunities from '../components/Typeofposts/JoinedCommunities';
 import { useParams } from 'react-router-dom';
@@ -27,26 +21,21 @@ function SingleProfilePage() {
 
    // * REQUIRED STATE DECLARATIONS
   const [profileData, setprofileData] = useState([]);
-  const [isLoading , setIsLoading] = useState(true);
-  // Profile Pic States
-  const [profilePic, setprofilePic] = useState("")
-  const [finalProfileImg , setFinalProfileImg] = useState("");
-  // Background Pic States
-  const [bgPic, setbgPic] = useState("")
-  const [finalBgPic, setFinalBGpic] = useState("")
-  const [bgMusic, setBgMusic] = useState("")
+  const [isLoading , setIsLoading] = useState(false);
   const [isFollowed, setIsFollowed] = useState(false);
   const [isFollowLoaded , setIsFollowLoaded] = useState(false);
+  const [handleReload , setHandleReload] = useState(0);
 
-  const {userID} = useParams()
+  const { userID } = useParams()
 
 
 
   // Type of post view handling
   const [typeOfPosts , setTypeOfPosts] = useState(0)
-  const {user} = useAuth0();
+  const { user } = useAuth0();
 
   const getProfileData = async () => {
+    setIsLoading(true);
     try {
       const fetch = await axiosInstance.get(`/getProfileData/${userID}`);
       let res = await fetch.data;
@@ -71,10 +60,6 @@ function SingleProfilePage() {
     } catch (error) {
       // MEANS already following
 
-        if(error.response.data.isAlreadyFollowing){
-
-        }
-
     }
 }
 
@@ -96,17 +81,17 @@ const checkIfFollowed = async () => {
   try {
     let fetch = await axiosInstance.get(`/isAlreadyFollowed/${profileData[0].userEmail}/${user?.email}`);
     let res = fetch.data;
-    setIsLoading(false)
+    // setIsLoading(false)
     
 
   } catch (error) {
     if(error?.response?.data?.isAlreadyFollowing){
            setIsFollowed(true);
-           setIsLoading(false);
+          //  setIsLoading(false);
     }
     else {
       setIsFollowed(false);
-           setIsLoading(false);
+          //  setIsLoading(false);
     }
   }
   finally {
@@ -127,7 +112,10 @@ useEffect(() => {
 
   useEffect(() => {
       getProfileData();
-  } , [profileData])
+  } , [handleReload])
+
+
+  // if(!isLoading) return <h1>Loading....Bitch Wair man</h1>
   return (
     !isLoading ? (
       <MAX style={{backgroundImage: `url(${profileData[0]?.userProfileBG})` , backgroundPosition: 'center',backgroundSize:'cover', backgroundRepeat: 'no-repeat'}}>

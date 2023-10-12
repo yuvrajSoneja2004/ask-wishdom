@@ -44,7 +44,6 @@ function Notifications({ show, handleClose }) {
     const userData = getCurrentUserProfileData && getCurrentUserProfileData[0];
 const userNotifications = userData && userData.userNotifications;
 
-  console.log(userNotifications, 'this not one');
   return (
     <Offcanvas show={show} onHide={handleClose}>
       <Offcanvas.Header closeButton>

@@ -26,14 +26,6 @@ function MyProfilePage() {
    // * REQUIRED STATE DECLARATIONS
   const [profileData, setprofileData] = useState([]);
   const [isLoading , setIsLoading] = useState(true);
-  // Profile Pic States
-  const [profilePic, setprofilePic] = useState("")
-  const [finalProfileImg , setFinalProfileImg] = useState("");
-  // Background Pic States
-  const [bgPic, setbgPic] = useState("")
-  const [finalBgPic, setFinalBGpic] = useState("")
-  const [bgMusic, setBgMusic] = useState("")
-
 
   // Type of post view handling
   const [typeOfPosts , setTypeOfPosts] = useState(0)

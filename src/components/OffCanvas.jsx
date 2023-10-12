@@ -19,7 +19,6 @@ import './Loader.css'
 
 function OffCanvasExample({ data , name, ...props }) {
   const [show, setShow] = useState(false);
-  const [aboveData , setAboveData] = useState();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);

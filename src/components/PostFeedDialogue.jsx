@@ -83,7 +83,7 @@ getUserProfileData(user?.email);
             feedAuthorProfilePic: getCurrentUserProfileData[0]?.userProfilePic,
             feedCaption: caption.length === 0 ? "I Love Ask-Wishdom! 😁" : caption,
             feedAuthorProfileID: getCurrentUserProfileData[0]?.userID,
-            feedAuthorEmail: user?.email
+            feedAuthorEmail: user?.email,
         });
 
         let res = await fetch.data;
