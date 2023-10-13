@@ -6,9 +6,10 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useGlobal } from '../context/global';
 import { axiosInstance } from '../utils/axiosInstance';
 import FeedLoading from '../components/FeedLoading';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Loader from '../components/Loader';
 import NoFeedsGIF from '../assets/no-feeds.gif'
+import { AnimatePresence, motion } from 'framer-motion';
 
 
 
@@ -17,6 +18,7 @@ function Feed() {
 
     let { user } = useAuth0();
     let { getUserProfileData , getCurrentUserProfileData } = useGlobal();
+    const navigate = useNavigate()
     
     const [allFeeds , setAllFeeds] = useState([]);
     const [isLoading , setIsLoading] = useState(false);
@@ -71,26 +73,36 @@ function Feed() {
     // feedAuthorName
   return (
    <Divider>
+    <AnimatePresence>
    {
     !isLoading ?  <FeedSection>  
     {
      allFeeds.map((feed , i) => {
-         return  <FeedCard  key={i} feedData={feed}/>
+         return  <FeedCard  key={i} feedData={feed} index={i}/>
      })
     }
  </FeedSection> : <FeedLoading />
    }
    {/* Will do it later  */}
+   </AnimatePresence>
     <AlsoFollowBar>
         <h5>Suggested for you</h5>
         {/* Profiles */}
+        <AnimatePresence>
        {
        !isLoadingSuggested ? suggestedProfiles?.map((profile ,i) => {
-            return  <LinkDiv key={i} to={`/getProfile/${profile?.userID}`}>
+            return  <LinkDiv key={i}
+            onClick={() => {navigate(`/getProfile/${profile?.userID}`)}}
+            initial={{ opacity: 0 , x:20 }}
+            animate={{ opacity: 1 ,x: 0 }}
+            exit={{ opacity: 0 , y: 20 }}
+            transition={{ duration: .24, delay: i * .24 }}
+            >
             <div><img src={profile?.userProfilePic} alt="" /></div><p>{profile?.userProfileName}</p>
          </LinkDiv>
         }) : <Loader />
        }
+       </AnimatePresence>
     </AlsoFollowBar>
    </Divider>
   )
@@ -98,7 +110,7 @@ function Feed() {
 
 
 
-const Divider = styled.div`
+const Divider = styled(motion.div)`
     display: grid;
     grid-template-columns: 73% auto;
     /* grid-template-columns:  auto; */
@@ -156,11 +168,12 @@ const NoFeeds = styled.div`
 `
 
 
-const LinkDiv = styled(Link)`
+const LinkDiv = styled(motion.div)`
 display: flex;
 margin: 25px 0;
 align-items: center;
 gap: 10px;
+cursor: pointer;
 color: #000;
 text-decoration: none;
 font-weight: bold;

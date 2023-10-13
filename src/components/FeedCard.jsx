@@ -5,30 +5,29 @@ import { io } from "socket.io-client"
 
 // Icon Imports 
 import {AiFillHeart , AiOutlineHeart ,} from 'react-icons/ai';
-import {BiBookmark} from 'react-icons/bi'
+import {BiBookmark, BiLoader} from 'react-icons/bi'
 import { axiosInstance } from '../utils/axiosInstance';
 import { Link } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useGlobal } from '../context/global';
 import TimeAgo from '../utils/TimeAgo';
+import { motion } from 'framer-motion';
+import { Spinner } from 'react-bootstrap';
 
 
 
 
 
-function FeedCard({feedData}) {
+function FeedCard({feedData , index}) {
 
-        const {socket , getUserProfileData, getCurrentUserProfileData} = useGlobal()
-
-
+     const {socket , getUserProfileData, getCurrentUserProfileData} = useGlobal()
     const [feedPostedData , setFeedPostedData]  = useState([]);
     const [isLoading , setIsLoading]  = useState(false);
     const [handleRender , setHandleRender] = useState(0);
-    
-
+    const [isLikeLoading , setIsLikeLoading] = useState(false);
     const { user } = useAuth0()
 
-
+    const animateDuration = .23;
 
     const getFeedPostedData = async () => {
         setIsLoading(true)
@@ -61,6 +60,7 @@ function FeedCard({feedData}) {
 
 // Handle Like Btn
 const handleLike = async () => {
+    setIsLikeLoading(true)
     try {
         const { data } =  await axiosInstance.post(`/likeFeed`, {
             currentUserE: user?.email,
@@ -68,6 +68,7 @@ const handleLike = async () => {
         });
 
         if(data){
+            setIsLikeLoading(false)
             socket?.emit("request_user_notifications" , {
                 user_that_liked: userDetailsToBePushed,
                 user_that_got_liked_id:feedData,
@@ -81,9 +82,13 @@ const handleLike = async () => {
         console.log(`whwhwhwhwhwhwhwhwhwwh` , error)
 
     }
+    finally {
+        setIsLikeLoading(false)
+    }
 }
 
 const handleUnlike = async () => {
+    setIsLikeLoading(true)
     try {
         const resDislike =  await axiosInstance.post(`/dislikeFeed`, {
             currentUserE: user?.email,
@@ -92,10 +97,14 @@ const handleUnlike = async () => {
 
 
         if(resDislike){
+            setIsLikeLoading(false)
             setHandleRender((prev) => prev + 1);
         }
     } catch (error) {
         console.log("ERROR" , error)
+    }
+    finally {
+        setIsLikeLoading(false)
     }
 }
 
@@ -118,7 +127,12 @@ const handleUnlike = async () => {
     let [ feedLikesArray ] =  feedPostedData;
 
   return (
-    <Card>
+    <Card 
+    initial={{ opacity: 0 , y:-20 }}
+    animate={{ opacity: 1 , y: 0 }}
+    exit={{ opacity: 0 , y: 20 }}
+    transition={{ duration: animateDuration, delay: index * animateDuration }}
+    >
         {/* upper row details */}
        <div>
        <ProfilePic to={`/getProfile/${feedData?.feedAuthorProfileID}`}><img src={feedData?.feedAuthorProfilePic} alt="lol" />
@@ -134,9 +148,27 @@ const handleUnlike = async () => {
        <LowerRow>
         <div>
            <section>
-           { feedLikesArray?.feedLikesArray.includes(user?.email) ? <AiFillHeart  size={30} onClick={handleUnlike}/> : <AiOutlineHeart size={30} onClick={handleLike}/> }
-           <br />
+           { feedLikesArray?.feedLikesArray.includes(user?.email) ? 
+           <motion.div  whileHover={{
+            scale: 1.1,
+            transition: { duration: .1 },
+          }}
+          whileTap={{ scale: 0.9 }}>
+            <AiFillHeart  size={30} onClick={handleUnlike}/>
            <span>{feedLikesArray?.feedLikesArray?.length}</span>
+           </motion.div>  : isLikeLoading ? <motion.span initial={{scale: 0}} animate={{scale: 1.1}}   exit={{scale: 0}}>
+           <Spinner size='sm' />
+           </motion.span>  :
+           <motion.div whileHover={{
+            scale: 1.1,
+            transition: { duration: .1 },
+          }}
+          whileTap={{ scale: 0.9 }}>
+            <AiOutlineHeart size={30} onClick={handleLike}/>
+           <span>{feedLikesArray?.feedLikesArray?.length}</span>
+           </motion.div>
+             }
+           <br />
            </section>
         </div>
         <div>
@@ -208,7 +240,7 @@ const UploadedMedia = styled.div`
 
 `
 
-const Card = styled.div`
+const Card = styled(motion.div)`
 padding: 10px 0;
 div {
     display: flex;

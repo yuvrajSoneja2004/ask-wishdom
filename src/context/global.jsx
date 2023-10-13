@@ -42,7 +42,7 @@ export const GlobalProvider = ({ children }) => {
             dispatch({ type: "SET_DEFAULT_QUESTIONS", payload: res })
 
         } catch (error) {
-            dispatch({ type: "SET_DEFAULT_ERROR" });
+            dispatch({ type: "SET_DEFAULT_ERROR"  , payload: error});
         }
     }
 

@@ -12,6 +12,7 @@ import G7 from '../assets/feeds_loading_gifs/7.gif';
 import G8 from '../assets/feeds_loading_gifs/8.gif';
 import G9 from '../assets/feeds_loading_gifs/9.gif';
 import G10 from '../assets/feeds_loading_gifs/10.gif';
+import { motion } from 'framer-motion';
 
 
 function FeedLoading() {
@@ -90,7 +91,7 @@ useEffect(() => {
 
 
   return (
-    <Whole>
+    <Whole initial={{y: 100}} animate={{y:0}} transition={{ type: 'spring' , duration: .5 , bounce: .25 , stiffness: 50 }}>
         <img src={randomFact?.gif} alt="" />
         <h4>{randomFact?.type} FUN FACT</h4>
         <h1>{randomFact?.fact}</h1>
@@ -100,7 +101,7 @@ useEffect(() => {
 }
 
 
-const Whole = styled.div`
+const Whole = styled(motion.div)`
     display: flex;
     justify-content: center;
     align-items: center;

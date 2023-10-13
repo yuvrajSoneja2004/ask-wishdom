@@ -13,7 +13,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { AnimatePresence } from 'framer-motion'
 
 function QuestionsList() {
-    const { defaultQuestions, getDefaultQuestions, setCurrentUserData } = useGlobal()
+    const { defaultQuestions, getDefaultQuestions, setCurrentUserData , isError } = useGlobal()
     const [userCheckData, setuserCheckData] = useState([]);
 
     const {user} = useAuth0();
@@ -46,6 +46,7 @@ function QuestionsList() {
         console.log(userCheckData);
     }, [])
 
+    console.log("this is the global isError state value" , isError)
 
     return (
        

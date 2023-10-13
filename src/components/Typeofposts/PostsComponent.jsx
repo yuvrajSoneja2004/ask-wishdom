@@ -43,7 +43,6 @@ function PostsComponent({userEmailData}) {
 
   return (
     <Whole>
-hell yeh
 {
      userFeeds.map((feed , i) => {
          return  <FeedCard  key={i} feedData={feed}/>
@@ -54,6 +53,6 @@ hell yeh
 }
 
 
-const Whole = styled.div``
-
+const Whole = styled.div`
+`
 export default PostsComponent

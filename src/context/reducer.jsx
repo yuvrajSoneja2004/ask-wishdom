@@ -27,5 +27,11 @@ export const reducer = (state, action) => {
                 allCommunitiesLoading: false
             }
 
+        case "SET_DEFAULT_ERROR":
+            return {
+                ...state,
+                isError: action.payload
+            }
+
     }
 }
