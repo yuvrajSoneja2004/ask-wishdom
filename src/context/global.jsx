@@ -30,7 +30,7 @@ export const GlobalProvider = ({ children }) => {
 
     const [state, dispatch] = useReducer(reducer, initialState)
     const [getCurrentUserProfileData , setCurrentUserProfileData] = useState(null);
-    const [socket , setSocket] = useState(undefined)
+    const [socket , setSocket] = useState(undefined);
 
     // calling API to get defaultQuestions
 
@@ -98,8 +98,18 @@ export const GlobalProvider = ({ children }) => {
         getDefaultQuestions();
         // Socket Connection
     const socket = socket_io_client.connect("http://localhost:9000/", {transports: ['websocket', 'polling', 'flashsocket']});
-    setSocket(socket)
+    setSocket(socket);
+    
     }, [])
+
+    useEffect(() => {
+        if (getCurrentUserProfileData) {
+            const userData = getCurrentUserProfileData[0];
+            socket?.emit("initial_event", userData);
+        }
+    } ,[ getCurrentUserProfileData])
+
+     
 
 
     return <GlobalContext.Provider value={{ ...state, getDefaultQuestions, communityValidation, dispatch, getCommunities , getCurrentUserProfileData  , getUserProfileData, setCurrentUserData, socket , isNotificationsAllowed}}>{children}</GlobalContext.Provider>

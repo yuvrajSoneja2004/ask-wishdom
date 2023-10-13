@@ -1,15 +1,20 @@
 import styled from '@emotion/styled'
-import { Button, Typography } from '@mui/material'
 import React from 'react'
 import { RedBtn } from '../utils/RedBtn'
 import { Link } from 'react-router-dom'
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
+import { AnimatePresence, motion } from 'framer-motion';
 
-function QuestionCard({ data }) {
+function QuestionCard({ data , index }) {
+    const animateDuration = .2;
     return (
-        <Whole>
+            <Whole
+            initial={{ opacity: 0 , y:-20 }}
+            animate={{ opacity: 1 , y: 0 }}
+            exit={{ opacity: 0 , y: 20 }}
+            transition={{ duration: animateDuration, delay: index * animateDuration }}>
             <Card>
                 <Left>
                     <AskedUser>
@@ -62,7 +67,7 @@ const WhiteBtn = styled.button`
 `
 
 
-const Whole = styled.div`
+const Whole = styled(motion.div)`
     width: 100%;
     box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
 `

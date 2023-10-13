@@ -1,5 +1,6 @@
 import React from 'react'
 import './Loader.css'
+import { motion } from 'framer-motion'
 function Loader() {
 
     let loaderDiv = {
@@ -9,10 +10,12 @@ function Loader() {
         justifyContent: 'center',
         alignItems: 'center'
     }
+
+    // 
     return (
-        <div style={loaderDiv}>
+        <motion.div style={loaderDiv} initial={{scale: 0}} animate={{scale: 1}} transition={{duration: .2}} >
             <span className="loader"></span>
-        </div>
+        </motion.div>
     )
 }
 

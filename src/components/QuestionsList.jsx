@@ -10,6 +10,7 @@ import axios from 'axios'
 import { useAuth0 } from '@auth0/auth0-react'
 import { v4 } from 'uuid'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import { AnimatePresence } from 'framer-motion'
 
 function QuestionsList() {
     const { defaultQuestions, getDefaultQuestions, setCurrentUserData } = useGlobal()
@@ -49,13 +50,15 @@ function QuestionsList() {
     return (
        
         <QuestionsGrid>
+            <AnimatePresence>
             {
                 defaultQuestions?.length === 0 ? <NoDefaultQuestions />:(
                     defaultQuestions?.map((question, i) => {
-                        return <QuestionCard data={question} key={i} />
+                        return <QuestionCard data={question} key={i} index={i} />
                     })
                 )
             }
+            </AnimatePresence>
         </QuestionsGrid>
     )
 }
