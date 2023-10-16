@@ -8,7 +8,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import Loader from './Loader';
 import AssuredWorkloadIcon from '@mui/icons-material/AssuredWorkload';
 import SiteIcon from '../assets/sitelogo.png';
-import { AiFillHome, AiOutlineCompass, AiOutlineGroup, AiOutlineQuestionCircle, AiOutlineUpload, AiOutlineUser } from 'react-icons/ai';
+import { AiFillHome, AiOutlineCompass, AiOutlineGroup, AiOutlineHome, AiOutlineQuestionCircle, AiOutlineSearch, AiOutlineTeam, AiOutlineUpload, AiOutlineUser } from 'react-icons/ai';
 import {HiOutlineUserGroup} from 'react-icons/hi'
 import { useGlobal } from '../context/global';
 import UserIcon from '../assets/user.png';
@@ -68,15 +68,16 @@ const [show, setShow] = useState(false);
       <Whole>
         <Logo src={SiteIcon} onClick={() => {logout()}}></Logo>
         <MenuItems>
-        <RouteLink to={'/feed'}><AiFillHome size={ICON_SIZE} fill='#000'/><p>Home</p></RouteLink>
+        <RouteLink to={'/feed'}><AiOutlineHome size={ICON_SIZE} fill='#000'/><p>Home</p></RouteLink>
         <RouteLink to={'/'}><AiOutlineCompass size={ICON_SIZE} fill='#000'/><p>Explore Questions</p></RouteLink>
         <RouteLink to={'/ask'}><AiOutlineQuestionCircle size={ICON_SIZE} fill='#000'/><p>Ask Question</p></RouteLink>
-        <AlertDialogSlide />
+        <RouteLink to={'/ask'}><AiOutlineSearch size={ICON_SIZE} fill='#000'/><p>Search</p></RouteLink>
+        <AlertDialogSlide isInMobile={false}/>
     
         <RouteLink  onClick={handleShow}><AiOutlineQuestionCircle size={ICON_SIZE} fill='#000'/><p>Notifications</p></RouteLink>
 
         <Notifications show={show} handleClose={handleClose}/>
-        <RouteLink to={'/communities'}><HiOutlineUserGroup size={ICON_SIZE} fill='#000' /><p>Communities</p></RouteLink>
+        <RouteLink to={'/communities'}><AiOutlineTeam size={ICON_SIZE} fill='#000' /><p>Communities</p></RouteLink>
         <RouteLink to={`/myProfile/:userEmail`}><div><img src={ getCurrentUserProfileData === null ? UserIcon : getCurrentUserProfileData[0]?.userProfilePic || UserIcon} alt="" /></div><p>Profile</p></RouteLink>
         </MenuItems>
       </Whole>
@@ -86,47 +87,6 @@ const [show, setShow] = useState(false);
 }
 
 
-{/* <Whole>
-<Link to='/createCommunity' style={{ textDecoration: 'none' }}>
-    <CreateCommunityBtn>
-        <IconAdd />
-        <p>Create Community</p>
-    </CreateCommunityBtn>
-</Link>
-{
-isLoading ? <Loader /> : (
-    <SingleCommunityRows>
-    <strong> <AssuredWorkloadIcon />  Your Communities</strong> <br />
-    {/* Will map the communities here  */}
-    // <UserCommunities>
-    {/* {
-        userCommunities.map((com) => {
-            return   <div>
-                <img src={com?.profilePicture} alt="lol"  width={45}/>
-                 <ComLink to={`/singleCommunityPage/${com?._id}`}>{com?.name}</ComLink>
-                </div>
-           
-        })
-//     } */}
-    
-//        {
-//         userCommunities.length === 0 ? "No Created Communities" : userCommunities.map((com) => {
-//             return <div>
-//             <img src={com?.profilePicture} alt="lol"  width={45}/>
-//              <ComLink to={`/singleCommunityPage/${com?._id}`}>{com?.name}</ComLink>
-//             </div>
-//         })
-//        }
-        
-    
-
-//      </UserCommunities>
-    
-// </SingleCommunityRows>
-// )
-// }
-
-// </Whole> */}
 
 const Logo = styled.img`
     width: 100px;
@@ -136,8 +96,8 @@ const MenuItems = styled.div`
 
 display: flex;
 flex-direction: column;
-margin-top: 60px;
-gap: 10px;
+margin-top: 30px;
+gap: 3px;
 width: 100%;
 
 

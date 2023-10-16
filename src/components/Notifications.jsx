@@ -3,7 +3,7 @@ import { Offcanvas } from 'react-bootstrap';
 import { useGlobal } from '../context/global';
 import { useAuth0 } from '@auth0/auth0-react';
 import styled from '@emotion/styled';
-function Notifications({ show, handleClose }) {
+function Notifications({ show, handleClose , handleDataFromChild }) {
 
   const { getUserProfileData, getCurrentUserProfileData , socket , isNotificationsAllowed} = useGlobal();
   const { user } = useAuth0();
@@ -17,12 +17,17 @@ function Notifications({ show, handleClose }) {
 
     }, []);
 
+    const sendDataToParentHandler = () => {
+      handleDataFromChild(notificationsList.length)
+  }
+
 
     useEffect(() => {
-        socket.on('show_notification', (data) => {
+        socket?.on('show_notification', (data) => {
           console.log(data , 'this is the socket data');
           setNotificationsList((prev) => [...prev , data] )
           setCurrentNotification(data);
+          sendDataToParentHandler()
         })
     } , [])
 
@@ -39,7 +44,9 @@ function Notifications({ show, handleClose }) {
     } , [notificationsList])
 
 
-
+    // useEffect(() => {
+    //   sendDataToParentHandler()
+    // }, [notificationsList, handleDataFromChild]);
 
     const userData = getCurrentUserProfileData && getCurrentUserProfileData[0];
 const userNotifications = userData && userData.userNotifications;
@@ -47,7 +54,7 @@ const userNotifications = userData && userData.userNotifications;
   return (
     <Offcanvas show={show} onHide={handleClose}>
       <Offcanvas.Header closeButton>
-        <Offcanvas.Title>Offcanvas</Offcanvas.Title>
+        <Offcanvas.Title>Notifications</Offcanvas.Title>
       </Offcanvas.Header>
       <Offcanvas.Body>
         <NotificationsWrapper>

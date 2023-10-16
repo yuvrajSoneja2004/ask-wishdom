@@ -26,7 +26,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function AlertDialogSlide() {
+export default function AlertDialogSlide({isInMobile}) {
   const [open, setOpen] = React.useState(false);
   const [isFileSelected, setIsFileSelected] = React.useState(false);
   const [feed , setFeed] = React.useState(null);
@@ -123,8 +123,8 @@ console.log(feed , "this is feed")
 
   return (
     <div>
-      <PostFeedLink variant="outlined" onClick={handleClickOpen}>
-      <AiOutlineUpload size={25} fill='#000'/><p>Post Feed</p>
+      <PostFeedLink variant="outlined" onClick={handleClickOpen} isOnMobile={isInMobile}>
+      <AiOutlineUpload size={25} fill='#000'/>{!isInMobile ? <p>Post Feed</p> : null}
       </PostFeedLink>
       <Dialog
         open={open}
@@ -186,7 +186,8 @@ theme="light"
     align-items: center;
     gap: 10px;
     text-decoration: none;
-    padding: 15px 8px;
+    // Sussy Imposter
+    padding: ${props => (!props.isOnMobile ? '15px 8px' : "0px" )};
     width: 100%;
 
     &&:hover {

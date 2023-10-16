@@ -10,13 +10,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import Loader from '../components/Loader';
 import NoFeedsGIF from '../assets/no-feeds.gif'
 import { AnimatePresence, motion } from 'framer-motion';
+import { AiOutlineSearch } from 'react-icons/ai';
 
 
 
 
 function Feed() {
 
-    let { user } = useAuth0();
     let { getUserProfileData , getCurrentUserProfileData } = useGlobal();
     const navigate = useNavigate()
     
@@ -73,6 +73,13 @@ function Feed() {
     // feedAuthorName
   return (
    <Divider>
+    <div className="searchBar">
+        <div>
+        <AiOutlineSearch  style={{margin: '0 8px 0 4px'}} size={20} fill='#848484'/>
+
+        <input type="text" placeholder='Search'/>
+        </div>
+    </div>
     <AnimatePresence>
    {
     !isLoading ?  <FeedSection>  
@@ -113,10 +120,48 @@ function Feed() {
 const Divider = styled(motion.div)`
     display: grid;
     grid-template-columns: 73% auto;
+    .searchBar {
+        text-align: center;
+        width: 100%;
+        padding: 13px;
+        display: none;
+
+
+        div {
+            /* outline: 2px solid; */
+            background-color: #EFEFEF;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            height: 33px;
+            border-radius: 7px;
+            padding: 7px 0 7px 7px;
+
+        }
+        
+        input {
+            border-radius: 7px;
+            border: none;
+            background-color: transparent;
+            width: 100%;
+            outline: none;
+            font-size: 14px;
+
+        }
+    }
     /* grid-template-columns:  auto; */
     @media screen and (max-width: 747px){
     grid-template-columns: auto;
 }
+
+    @media screen and (max-width: 1017px){
+         .searchBar {
+            display: block;
+            div {
+                flex-direction: column;
+            }
+         }   
+        }
 `
 
 
@@ -124,6 +169,7 @@ const FeedSection = styled.div`
 padding: 0 70px;
 @media screen and (max-width: 516px){
     padding: 0 20px;
+    // Here Man
 }
 `
 const AlsoFollowBar = styled.div`
