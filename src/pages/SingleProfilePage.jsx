@@ -96,6 +96,7 @@ function SingleProfilePage() {
   useEffect(() => {
     getProfileData();
   }, [handleReload, userID]);
+  document.title = `${profileData[0]?.userProfileName} • Ask-Wishdom`;
 
   // if(!isLoading) return <h1>Loading....Bitch Wair man</h1>
   return !isLoading ? (
