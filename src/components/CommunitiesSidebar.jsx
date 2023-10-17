@@ -8,13 +8,14 @@ import { useAuth0 } from '@auth0/auth0-react';
 import Loader from './Loader';
 import AssuredWorkloadIcon from '@mui/icons-material/AssuredWorkload';
 import SiteIcon from '../assets/sitelogo.png';
-import { AiFillHome, AiOutlineCompass, AiOutlineGroup, AiOutlineHome, AiOutlineQuestionCircle, AiOutlineSearch, AiOutlineTeam, AiOutlineUpload, AiOutlineUser } from 'react-icons/ai';
+import { AiFillHome, AiOutlineBell, AiOutlineCompass, AiOutlineGroup, AiOutlineHome, AiOutlineQuestionCircle, AiOutlineSearch, AiOutlineTeam, AiOutlineUpload, AiOutlineUser } from 'react-icons/ai';
 import {HiOutlineUserGroup} from 'react-icons/hi'
 import { useGlobal } from '../context/global';
 import UserIcon from '../assets/user.png';
 import AlertDialogSlide from './PostFeedDialogue';
 import { Offcanvas } from 'react-bootstrap';
 import Notifications from './Notifications';
+import SearchOffCanvas from './Search';
 
 
 
@@ -71,10 +72,9 @@ const [show, setShow] = useState(false);
         <RouteLink to={'/feed'}><AiOutlineHome size={ICON_SIZE} fill='#000'/><p>Home</p></RouteLink>
         <RouteLink to={'/'}><AiOutlineCompass size={ICON_SIZE} fill='#000'/><p>Explore Questions</p></RouteLink>
         <RouteLink to={'/ask'}><AiOutlineQuestionCircle size={ICON_SIZE} fill='#000'/><p>Ask Question</p></RouteLink>
-        <RouteLink to={'/ask'}><AiOutlineSearch size={ICON_SIZE} fill='#000'/><p>Search</p></RouteLink>
+        <SearchOffCanvas />
         <AlertDialogSlide isInMobile={false}/>
-    
-        <RouteLink  onClick={handleShow}><AiOutlineQuestionCircle size={ICON_SIZE} fill='#000'/><p>Notifications</p></RouteLink>
+        <RouteLink  onClick={handleShow}><AiOutlineBell size={ICON_SIZE} fill='#000'/><p>Notifications</p></RouteLink>
 
         <Notifications show={show} handleClose={handleClose}/>
         <RouteLink to={'/communities'}><AiOutlineTeam size={ICON_SIZE} fill='#000' /><p>Communities</p></RouteLink>
