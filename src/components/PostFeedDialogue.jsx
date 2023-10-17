@@ -1,67 +1,55 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Slide from '@mui/material/Slide';
-import styled from '@emotion/styled';
-import {VscFileMedia} from 'react-icons/vsc'
-import {AiOutlineEye , AiOutlineEdit, AiOutlineUpload} from 'react-icons/ai'
-import imageCompression from 'browser-image-compression'
-import { axiosInstance } from '../utils/axiosInstance';
-import { v4 } from 'uuid';
-import { useGlobal } from '../context/global';
-import { useAuth0 } from '@auth0/auth0-react';
-import { ToastContainer, toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
-
-
-
-
-
+import * as React from "react";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Slide from "@mui/material/Slide";
+import styled from "@emotion/styled";
+import { VscFileMedia } from "react-icons/vsc";
+import { AiOutlineEye, AiOutlineEdit, AiOutlineUpload } from "react-icons/ai";
+import imageCompression from "browser-image-compression";
+import { axiosInstance } from "../utils/axiosInstance";
+import { v4 } from "uuid";
+import { useGlobal } from "../context/global";
+import { useAuth0 } from "@auth0/auth0-react";
+import { ToastContainer, toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function AlertDialogSlide({isInMobile}) {
+export default function AlertDialogSlide({ isInMobile }) {
   const [open, setOpen] = React.useState(false);
   const [isFileSelected, setIsFileSelected] = React.useState(false);
-  const [feed , setFeed] = React.useState(null);
-  const [caption , setCaption] = React.useState("");
-  let {  user} = useAuth0();
-let {  getUserProfileData , getCurrentUserProfileData } = useGlobal();
+  const [feed, setFeed] = React.useState(null);
+  const [caption, setCaption] = React.useState("");
+  let { user } = useAuth0();
+  let { getUserProfileData, getCurrentUserProfileData } = useGlobal();
 
+  React.useEffect(() => {
+    getUserProfileData(user?.email);
+  }, [user?.email]);
 
-
-React.useEffect(() => {
-getUserProfileData(user?.email);
-} , [user?.email]);
-
-
-  // Handling seleted file 
+  // Handling seleted file
   const handleSelectedFile = async (e) => {
-    setIsFileSelected(true)
-        const file = e.target.files[0];
-        const options = {
-          maxSizeMB: .1,
-          maxWidthOrHeight: 1920,
-          useWebWorker: true,
-      }
-     
-      let compression = await imageCompression(file, options)
-      const reader = new FileReader();
-      reader.onload = (event) => {
-          setFeed(event.target.result);
-      };
-      reader.readAsDataURL(compression);
-    
-    
-      };
-    
-  
+    setIsFileSelected(true);
+    const file = e.target.files[0];
+    const options = {
+      maxSizeMB: 0.1,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true,
+    };
+
+    let compression = await imageCompression(file, options);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setFeed(event.target.result);
+    };
+    reader.readAsDataURL(compression);
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -71,37 +59,36 @@ getUserProfileData(user?.email);
     setOpen(false);
   };
 
-
   // POSTing feed data to db
 
   const postFeedData = async () => {
     try {
-        const fetch  = await axiosInstance.post("/postFeed" , {
-            feedID : v4(),
-            feedIMG: feed,
-            feedAuthorName: getCurrentUserProfileData[0]?.userProfileName,
-            feedAuthorProfilePic: getCurrentUserProfileData[0]?.userProfilePic,
-            feedCaption: caption.length === 0 ? "I Love Ask-Wishdom! 😁" : caption,
-            feedAuthorProfileID: getCurrentUserProfileData[0]?.userID,
-            feedAuthorEmail: user?.email,
-        });
+      const fetch = await axiosInstance.post("/postFeed", {
+        feedID: v4(),
+        feedIMG: feed,
+        feedAuthorName: getCurrentUserProfileData[0]?.userProfileName,
+        feedAuthorProfilePic: getCurrentUserProfileData[0]?.userProfilePic,
+        feedCaption: caption.length === 0 ? "I Love Ask-Wishdom! 😁" : caption,
+        feedAuthorProfileID: getCurrentUserProfileData[0]?.userID,
+        feedAuthorEmail: user?.email,
+      });
 
-        let res = await fetch.data;
-        if(res){
-          toast.success('Posted Sucessfully 🤩', {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            });
-            setOpen(false);
-        }
+      let res = await fetch.data;
+      if (res) {
+        toast.success("Posted Sucessfully 🤩", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        setOpen(false);
+      }
     } catch (error) {
-      toast.error('Failed to Post 😣', {
+      toast.error("Failed to Post 😣", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -110,21 +97,24 @@ getUserProfileData(user?.email);
         draggable: true,
         progress: undefined,
         theme: "light",
-        });
-        setOpen(true);
+      });
+      setOpen(true);
     }
-    }
-  
-
+  };
 
   React.useEffect(() => {
-console.log(feed , "this is feed")
-  } , []) 
+    console.log(feed, "this is feed");
+  }, []);
 
   return (
     <div>
-      <PostFeedLink variant="outlined" onClick={handleClickOpen} isOnMobile={isInMobile}>
-      <AiOutlineUpload size={25} fill='#000'/>{!isInMobile ? <p>Post Feed</p> : null}
+      <PostFeedLink
+        variant="outlined"
+        onClick={handleClickOpen}
+        isOnMobile={isInMobile}
+      >
+        <AiOutlineUpload size={25} fill="#000" />
+        {!isInMobile ? <p>Post Feed</p> : null}
       </PostFeedLink>
       <Dialog
         open={open}
@@ -133,79 +123,107 @@ console.log(feed , "this is feed")
         onClose={handleClose}
         aria-describedby="alert-dialog-slide-description"
       >
-       <Cen>
-       <DialogTitle style={{fontSize: '17px' , fontWeight: 'bold' , borderBottom: '1px solid black'}}>Create new post</DialogTitle>
-       </Cen>
+        <Cen>
+          <DialogTitle
+            style={{
+              fontSize: "17px",
+              fontWeight: "bold",
+              borderBottom: "1px solid black",
+            }}
+          >
+            Create new post
+          </DialogTitle>
+        </Cen>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
-          {
-            !isFileSelected ?   <SelectFilePart><VscFileMedia size={90} fill='#000'/>
-            <h1>Select Picture to Upload</h1>
-            <input type="file"  id="feedUpload"  accept="image/*" name='fileUpload' hidden onChange={handleSelectedFile}/>
-           <label htmlFor="feedUpload">
-          <div>Select from Computer</div>
-           </label>
-            </SelectFilePart> : (
-                <SecondFilePart>
-                    <h4> <AiOutlineEye size={20}/> Post image Preview</h4>
-                    <div><img  src={feed} alt='ll' /></div>
-                    <h4 style={{marginTop: '10px'}}> <AiOutlineEdit size={20}/> Caption</h4>
-                    <textarea name="" id="" cols="30" rows="10" value={caption} onChange={(e) => setCaption(e.target.value)}></textarea>
+            {!isFileSelected ? (
+              <SelectFilePart>
+                <VscFileMedia size={90} fill="#000" />
+                <h1>Select Picture to Upload</h1>
+                <input
+                  type="file"
+                  id="feedUpload"
+                  accept="image/*"
+                  name="fileUpload"
+                  hidden
+                  onChange={handleSelectedFile}
+                />
+                <label
+                  htmlFor="feedUpload"
+                  style={{ border: "4px solid blue" }}
+                >
+                  <div>Select from Computer</div>
+                </label>
+              </SelectFilePart>
+            ) : (
+              <SecondFilePart>
+                <h4>
+                  {" "}
+                  <AiOutlineEye size={20} /> Post image Preview
+                </h4>
+                <div>
+                  <img src={feed} alt="ll" />
+                </div>
+                <h4 style={{ marginTop: "10px" }}>
+                  {" "}
+                  <AiOutlineEdit size={20} /> Caption
+                </h4>
+                <textarea
+                  name=""
+                  id=""
+                  cols="30"
+                  rows="10"
+                  value={caption}
+                  onChange={(e) => setCaption(e.target.value)}
+                ></textarea>
 
-                    <button onClick={postFeedData}>POST</button>
-                </SecondFilePart>
-            )
-          }
+                <button onClick={postFeedData}>POST</button>
+              </SecondFilePart>
+            )}
           </DialogContentText>
-         
         </DialogContent>
-        
       </Dialog>
       <ToastContainer
-position="top-right"
-autoClose={5000}
-hideProgressBar={false}
-newestOnTop={false}
-closeOnClick
-rtl={false}
-pauseOnFocusLoss
-draggable
-pauseOnHover
-theme="light"
-/>
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
-        }
+}
 
+const PostFeedLink = styled(Link)`
+  color: #000;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  // Sussy Imposter
+  padding: ${(props) => (!props.isOnMobile ? "15px 8px" : "0px")};
+  width: 100%;
 
-
-        const PostFeedLink = styled(Link)`
-        color: #000;
-        font-weight: bold;
-        display: flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
-    // Sussy Imposter
-    padding: ${props => (!props.isOnMobile ? '15px 8px' : "0px" )};
-    width: 100%;
-
-    &&:hover {
-        background-color: #d8d8d8;
-        color: #000;
-    }
-        
-        `
+  &&:hover {
+    background-color: #d8d8d8;
+    color: #000;
+  }
+`;
 
 const Cen = styled.div`
-text-align: center;
-`
-
+  text-align: center;
+`;
 
 const SecondFilePart = styled.div`
-text-align: center;
+  text-align: center;
 
-h4 {
+  h4 {
     font-size: 17px;
     font-weight: bolder;
     color: #000;
@@ -213,39 +231,37 @@ h4 {
     align-items: center;
     gap: 6px;
     margin-bottom: 13px;
-}
+  }
 
-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-div {
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  div {
     width: 450px;
     height: 450px;
     background-color: #000;
-   
-}
+  }
 
-textarea {
+  textarea {
     width: 100%;
-}
-`
+  }
+`;
 const SelectFilePart = styled.div`
-padding: 40px;
-h1 {
+  padding: 40px;
+  h1 {
     font-size: 30px;
     margin: 30px 0;
     font-weight: bolder;
-}
+  }
 
-label div {
-font-size: 16px;
-background-color: #B13634;
-color: #fff;
-padding: 8px 30px;
-border-radius: 5px;
-
-}
-text-align: center;
-`
+  label div {
+    font-size: 16px;
+    background-color: #b13634;
+    color: #fff;
+    padding: 8px 30px;
+    border-radius: 5px;
+  }
+  text-align: center;
+`;

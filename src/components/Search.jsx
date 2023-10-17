@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { AiOutlineSearch, AiOutlineUpload } from "react-icons/ai";
@@ -8,22 +8,29 @@ import { axiosInstance } from "../utils/axiosInstance";
 import SearchResRow from "./SearchResRow";
 import { ProgressBar } from "react-loader-spinner";
 import { debounce } from "lodash";
+import { useGlobal } from "../context/global";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function SearchOffCanvas() {
   const [show, setShow] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
   const [recentHistory, setRecentHistory] = useState([]);
   const [searchResult, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [currentUserID, setCurrentUserID] = useState(undefined);
+  const [handleRender, setHandleRender] = useState(0);
+
+  const { getUserProfileData, getCurrentUserProfileData } = useGlobal();
+  const { user } = useAuth0();
 
   const handleSearch = async () => {
     setIsLoading(true);
     try {
       const { data } = await axiosInstance.get(`/search/${searchInput}`);
       setSearchResults(data);
+
       console.log("hnn re ", data);
     } catch (error) {
       console.log(error);
@@ -37,6 +44,45 @@ function SearchOffCanvas() {
     debounceSearch(value);
   };
   const debounceSearch = debounce(handleSearch, 3000);
+
+  useEffect(() => {
+    const isRecieved = getUserProfileData(user?.email);
+  }, []);
+
+  // UserID
+  const userData = getCurrentUserProfileData && getCurrentUserProfileData[0];
+  const userID = userData && userData.userID;
+
+  const handeHistory = async (searched_user) => {
+    try {
+      const { data } = await axiosInstance.post("/postHistory", {
+        current_user_id: userID,
+        history_value: searched_user,
+      });
+      if (data) {
+        console.log(data);
+        setHandleRender((prev) => prev + 1);
+      }
+    } catch (error) {
+      console.log("error at the time of handleHistory line 58", error);
+    }
+  };
+
+  const getHistory = async () => {
+    try {
+      const { data } = await axiosInstance.get(`/history/${userID}`);
+      console.log(data, "this is the fucking history");
+      // To Avoid error if any value found
+      // let finalData = data && data[0];
+      setRecentHistory(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getHistory();
+  }, [handleRender]);
   return (
     <>
       <PostFeedLink variant="outlined" onClick={handleShow}>
@@ -65,8 +111,9 @@ function SearchOffCanvas() {
               {recentHistory.length === 0 ? (
                 <strong>No Recent Searches</strong>
               ) : (
-                recentHistory.map((profile) => {
-                  return <p>here</p>;
+                recentHistory[0]?.userHistory?.map((res) => {
+                  console.log(profile);
+                  return <p>fuck</p>;
                 })
               )}
             </div>
@@ -79,6 +126,7 @@ function SearchOffCanvas() {
                     setShow(false);
                     setSearchInput("");
                     setSearchResults([]);
+                    handeHistory(res);
                   }}
                 >
                   <SearchResRow data={res} />
