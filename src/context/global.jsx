@@ -4,120 +4,130 @@ import { reducer } from "./reducer";
 import { axiosInstance } from "../utils/axiosInstance";
 import { useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import socket_io_client from 'socket.io-client';
-
-
-
+import socket_io_client from "socket.io-client";
 
 const GlobalContext = createContext();
 
-
-
-
 export const GlobalProvider = ({ children }) => {
+  let initialState = {
+    defaultQuestions: [],
+    isError: [],
+    isLoading: false,
+    communtiyValidationData: {},
+    allCommunities: [],
+    allCommunitiesLoading: true,
+  };
 
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const [getCurrentUserProfileData, setCurrentUserProfileData] = useState(null);
+  const [socket, setSocket] = useState(undefined);
 
+  // calling API to get defaultQuestions
 
-    let initialState = {
-        defaultQuestions: [],
-        isError: false,
-        isLoading: false,
-        communtiyValidationData: {},
-        allCommunities: [],
-        allCommunitiesLoading: true
-    }
-
-
-    const [state, dispatch] = useReducer(reducer, initialState)
-    const [getCurrentUserProfileData , setCurrentUserProfileData] = useState(null);
-    const [socket , setSocket] = useState(undefined);
-
-    // calling API to get defaultQuestions
-
-    const getDefaultQuestions = async () => {
-        dispatch({ type: "API_LOADING" })
-        try {
-            let fetch = await axiosInstance.get("/getDefaultQuestions");
-            let res = await fetch.data;
-            dispatch({ type: "SET_DEFAULT_QUESTIONS", payload: res })
-
-        } catch (error) {
-            dispatch({ type: "SET_DEFAULT_ERROR"  , payload: error});
-        }
-    }
-
-    const communityValidation = async (input) => {
-        dispatch({ type: "API_LOADING" });
-        try {
-            let fetch = await axiosInstance.get(`/validateCommunityName/${input}`)
-            let res = fetch.data;
-            dispatch({ type: "SET_COMMUNITY_VALIDATION", payload: res })
-        } catch (error) {
-            console.log(`community name validation error from client side : cause `, error)
-        }
-    }
-
-    // fetch communities
-    const getCommunities = async () => {
-        try {
-            let fetch = await axiosInstance.get("/getCommunities");
-            let res = await fetch.data;
-            dispatch({ type: "GET_COMMUNITIES", payload: res })
-        } catch (error) {
-            console.log("WHY", error)
-        }
-    }
-    // UserProfile Data
-   const getUserProfileData = async (CURRENT_USER_EMAIL) => {
+  const getDefaultQuestions = async () => {
+    dispatch({ type: "API_LOADING" });
     try {
-        let fetch = await axiosInstance.get(`getSpecificProfileData/${CURRENT_USER_EMAIL}`);
-        let res = await fetch.data;
-        setCurrentUserProfileData(res);
-        return res;
+      let fetch = await axiosInstance.get("/getDefaultQuestions");
+      let res = await fetch.data;
+      dispatch({ type: "SET_DEFAULT_QUESTIONS", payload: res });
     } catch (error) {
-        console.log("userProfileCLientError", error);
+      dispatch({ type: "SET_DEFAULT_ERROR", payload: error });
     }
-   }
-   
-   const [currentUserData , setCurrentUserData] = useState([]);
-   const [isNotificationsAllowed , setIsNotificationsAllowed] = useState(undefined)
+  };
 
-    useEffect(() => {
+  const communityValidation = async (input) => {
+    dispatch({ type: "API_LOADING" });
+    try {
+      let fetch = await axiosInstance.get(`/validateCommunityName/${input}`);
+      let res = fetch.data;
+      dispatch({ type: "SET_COMMUNITY_VALIDATION", payload: res });
+    } catch (error) {
+      console.log(
+        `community name validation error from client side : cause `,
+        error
+      );
+    }
+  };
 
-        Notification.requestPermission().then((res) => {
-            if(res == 'granted'){
-                setIsNotificationsAllowed(true)
-            } else {
-                setIsNotificationsAllowed(false)
-            }
-        }).catch((err) => {
-            alert(err)
-        })
+  // fetch communities
+  const getCommunities = async () => {
+    try {
+      let fetch = await axiosInstance.get("/getCommunities");
+      let res = await fetch.data;
+      dispatch({ type: "GET_COMMUNITIES", payload: res });
+    } catch (error) {
+      console.log("WHY", error);
+    }
+  };
+  // UserProfile Data
+  const getUserProfileData = async (CURRENT_USER_EMAIL) => {
+    try {
+      let fetch = await axiosInstance.get(
+        `getSpecificProfileData/${CURRENT_USER_EMAIL}`
+      );
+      let res = await fetch.data;
+      setCurrentUserProfileData(res);
+      return res;
+    } catch (error) {
+      console.log("userProfileCLientError", error);
+      if (error.code == "ERR_NETWORK") {
+        dispatch({ type: "SET_DEFAULT_ERROR", payload: error.message });
+      }
+    }
+  };
 
+  const [currentUserData, setCurrentUserData] = useState([]);
+  const [isNotificationsAllowed, setIsNotificationsAllowed] =
+    useState(undefined);
 
-        getDefaultQuestions();
-        // Socket Connection
-    const socket = socket_io_client.connect("http://localhost:9000/", {transports: ['websocket', 'polling', 'flashsocket']});
-    setSocket(socket);
-    
-    }, [])
-
-    useEffect(() => {
-        if (getCurrentUserProfileData) {
-            const userData = getCurrentUserProfileData[0];
-            socket?.emit("initial_event", userData);
+  useEffect(() => {
+    Notification.requestPermission()
+      .then((res) => {
+        if (res == "granted") {
+          setIsNotificationsAllowed(true);
+        } else {
+          setIsNotificationsAllowed(false);
         }
-    } ,[ getCurrentUserProfileData])
+      })
+      .catch((err) => {
+        alert(err);
+      });
 
-     
+    getDefaultQuestions();
+    // Socket Connection
+    const socket = socket_io_client.connect("http://localhost:9000/", {
+      transports: ["websocket", "polling", "flashsocket"],
+    });
+    setSocket(socket);
+  }, []);
 
+  useEffect(() => {
+    if (getCurrentUserProfileData) {
+      const userData = getCurrentUserProfileData[0];
+      socket?.emit("initial_event", userData);
+    }
+  }, [getCurrentUserProfileData]);
 
-    return <GlobalContext.Provider value={{ ...state, getDefaultQuestions, communityValidation, dispatch, getCommunities , getCurrentUserProfileData  , getUserProfileData, setCurrentUserData, socket , isNotificationsAllowed}}>{children}</GlobalContext.Provider>
-}
-
-
-
+  return (
+    <GlobalContext.Provider
+      value={{
+        ...state,
+        getDefaultQuestions,
+        communityValidation,
+        dispatch,
+        getCommunities,
+        getCurrentUserProfileData,
+        getUserProfileData,
+        setCurrentUserData,
+        socket,
+        isNotificationsAllowed,
+      }}
+    >
+      {children}
+    </GlobalContext.Provider>
+  );
+};
 
 export const useGlobal = () => {
-    return useContext(GlobalContext)
-} 
+  return useContext(GlobalContext);
+};

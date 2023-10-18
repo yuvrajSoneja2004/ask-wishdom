@@ -71,10 +71,18 @@ function SearchOffCanvas() {
   const getHistory = async () => {
     try {
       const { data } = await axiosInstance.get(`/history/${userID}`);
-      console.log(data, "this is the fucking history");
       // To Avoid error if any value found
       // let finalData = data && data[0];
-      setRecentHistory(data);
+      let [histroyDat] = data;
+      console.log(
+        histroyDat === undefined ? "Loading..." : histroyDat?.userHistory,
+        "this is the fucking history"
+      );
+
+      setRecentHistory(
+        histroyDat === undefined ? "Loading..." : histroyDat?.userHistory
+      );
+      // console.log("This is godamn recent history");
     } catch (error) {
       console.log(error);
     }
@@ -82,7 +90,7 @@ function SearchOffCanvas() {
 
   useEffect(() => {
     getHistory();
-  }, [handleRender]);
+  });
   return (
     <>
       <PostFeedLink variant="outlined" onClick={handleShow}>
@@ -105,15 +113,17 @@ function SearchOffCanvas() {
             onChange={handleInputChange}
           />
           <hr />
-          <p>Recent</p>
+          {!searchResult.length > 0 ? <p>Recent</p> : null}
           {searchResult.length === 0 ? (
             <div className="recentHistory">
               {recentHistory.length === 0 ? (
                 <strong>No Recent Searches</strong>
+              ) : recentHistory === "Loading..." ? (
+                "Loading..."
               ) : (
-                recentHistory[0]?.userHistory?.map((res) => {
-                  console.log(profile);
-                  return <p>fuck</p>;
+                recentHistory?.map((his) => {
+                  if (his === null || typeof his === "string") return null;
+                  return <SearchResRow data={his} />;
                 })
               )}
             </div>
@@ -179,10 +189,17 @@ const Whole = styled(Offcanvas.Body)`
   }
 
   .recentHistory {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    /* display: grid; */
+    /* place-items: center; */
+    /* grid-template-columns: 1fr; */
+    /* justify-content: start; */
+    /* align-items: start; */
+    /* gap: 10px; */
     min-height: 390px;
+  }
+
+  p {
+    padding: 0 0 10px 0;
   }
 `;
 
