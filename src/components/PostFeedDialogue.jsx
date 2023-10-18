@@ -28,6 +28,13 @@ export default function AlertDialogSlide({ isInMobile }) {
   const [caption, setCaption] = React.useState("");
   let { user } = useAuth0();
   let { getUserProfileData, getCurrentUserProfileData } = useGlobal();
+  // Create a ref to the input element
+  const fileInputRef = React.useRef(null);
+
+  // Function to trigger the file input click
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+  };
 
   React.useEffect(() => {
     getUserProfileData(user?.email);
@@ -146,14 +153,12 @@ export default function AlertDialogSlide({ isInMobile }) {
                   accept="image/*"
                   name="fileUpload"
                   hidden
+                  ref={fileInputRef}
                   onChange={handleSelectedFile}
                 />
-                <label
-                  htmlFor="feedUpload"
-                  style={{ border: "4px solid blue" }}
-                >
-                  <div>Select from Computer</div>
-                </label>
+                <div style={{ zIndex: "-1" }} onClick={handleButtonClick}>
+                  Select from Computer
+                </div>
               </SelectFilePart>
             ) : (
               <SecondFilePart>

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-function TimeAgo({ createdAt }) {
-  const [timeAgo, setTimeAgo] = useState('');
+function TimeAgo({ createdAt, tagStyles, endWord }) {
+  const [timeAgo, setTimeAgo] = useState("");
 
   useEffect(() => {
     const calculateTimeAgo = () => {
@@ -34,7 +34,13 @@ function TimeAgo({ createdAt }) {
     return () => clearInterval(intervalId);
   }, [createdAt]);
 
-  return <label>{timeAgo}</label>;
+  return (
+    <label style={{ ...tagStyles }}>
+      {timeAgo}
+
+      {`${" "}${endWord === undefined ? "" : endWord}`}
+    </label>
+  );
 }
 
 export default TimeAgo;
