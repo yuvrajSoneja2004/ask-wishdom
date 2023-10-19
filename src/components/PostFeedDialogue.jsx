@@ -109,9 +109,7 @@ export default function AlertDialogSlide({ isInMobile }) {
     }
   };
 
-  React.useEffect(() => {
-    console.log(feed, "this is feed");
-  }, []);
+  React.useEffect(() => {}, []);
 
   return (
     <div>

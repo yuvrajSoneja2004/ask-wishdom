@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import Modal from "react-bootstrap/Modal";
 import TimeAgo from "../utils/TimeAgo";
+import { axiosInstance } from "../utils/axiosInstance";
 import {
   AiOutlineComment,
   AiOutlineHeart,
@@ -11,21 +12,65 @@ import {
 import { BiBookmark } from "react-icons/bi";
 import EmojiPicker from "emoji-picker-react";
 import { useEffect, useState } from "react";
+import CommentRow from "./CommentRow";
 
 function SinglePostModel(props) {
   const {
-    postData: { feedImg, profilePic, authorName, caption, createdAt },
+    postData: {
+      feedImg,
+      profilePic,
+      authorName,
+      caption,
+      createdAt,
+      feedID,
+      currentUserPic,
+      name,
+      profileID,
+      commentsArray,
+    },
   } = props;
 
   const [isEmojiPickerVisible, setEmojiPickerVisibility] = useState(false);
   const [commentInput, setCommentInput] = useState("");
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [replayState, setReplayState] = useState("");
+  let replyArr = [];
 
   const feedImgDynamicStyles = {
     background: `url(${feedImg})`,
     backgroundPosition: "center",
     backgroundSize: "contain",
     backgroundRepeat: "no-repeat",
+  };
+
+  const postComment = async () => {
+    // Data related to comment that will be sent to the server
+    const comment_data = {
+      feedID: feedID,
+      commentInfo: {
+        type: commentInput[0] === "@" ? "Reply" : "Comment",
+        text: commentInput,
+        createdAt: new Date(),
+        profilePic: currentUserPic,
+        name: name,
+        profileID: profileID,
+        replies: [],
+      },
+    };
+    try {
+      if (commentInput.length === 0) {
+        alert("Please enter something to comment");
+      } else {
+        const { data } = await axiosInstance.post("/postComment", comment_data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleFromCommentRow = (data) => {
+    setReplayState(data);
+    setCommentInput(data);
   };
 
   useEffect(() => {
@@ -75,32 +120,37 @@ function SinglePostModel(props) {
             </ProfileDetails>
             {/* Comments  */}
             <CommentsSection>
-              <h1>LOL</h1>
-              <h1>LOL</h1>
-              <h1>LOL</h1>
-              <h1>LOL</h1>
-              <h1>LOL</h1>
-              <h1>LOL</h1>
-              <h1>LOL</h1>
-              <h1>LOL</h1>
-              <h1>LOL</h1>
-              <h1>LOL</h1>
-              <h1>LOL</h1>
-              <h1>LOL</h1>
-              <h1>LOL</h1>
-              <h1>LOL</h1>
-              <h1>LOL</h1>
-              <h1>LOL</h1>
-              <h1>LOL</h1>
-              <h1>LOL</h1>
-              <h1>LOL</h1>
-              <h1>LOL</h1>
+              {commentsArray?.map((comment, i) => {
+                replyArr = [];
+                if (comment?.type === "Reply") {
+                  let replayRef = `${
+                    comment?.text?.split("@")[1].split(" ")[0]
+                  }`;
+                  if (`${replayRef} ` === `${comment?.name} `) {
+                    console.log("Yes man it is true");
+                    if (comment?.type === "Comment") {
+                      replyArr.push(comment);
+                    }
+                  }
+                }
+                return (
+                  <span>
+                    <CommentRow
+                      commentInfo={comment}
+                      dataToParent={handleFromCommentRow}
+                      replayArr={replyArr}
+                    />
+                  </span>
+                );
+              })}
             </CommentsSection>
             {/* Likes section  */}
             <LikesSection>
               <div id="icons">
                 <AiOutlineHeart size={27} fill="#000" className="icons" />
-                <AiOutlineComment size={27} fill="#000" className="icons" />
+                <label htmlFor="comment">
+                  <AiOutlineComment size={27} fill="#000" className="icons" />
+                </label>
                 <AiOutlineShareAlt size={27} fill="#000" className="icons" />
               </div>
               <BiBookmark
@@ -112,19 +162,6 @@ function SinglePostModel(props) {
             </LikesSection>
             {/* Input Section */}
             <InputArea>
-              {/* <div>
-                <button
-                  onClick={() =>
-                    setEmojiPickerVisibility(!isEmojiPickerVisible)
-                  }
-                >
-                  {isEmojiPickerVisible
-                    ? "Close Emoji Picker"
-                    : "Open Emoji Picker"}
-                </button>
-
-                {isEmojiPickerVisible && <EmojiPicker />}
-              </div> */}
               <AiOutlineSmile
                 size={27}
                 fill="#000"
@@ -145,11 +182,12 @@ function SinglePostModel(props) {
                 type="text"
                 value={commentInput}
                 placeholder="Add a Comment..."
+                id="comment"
                 onChange={(e) => {
                   setCommentInput(e.target.value);
                 }}
               />
-              <span>Post</span>
+              <span onClick={postComment}>Post</span>
             </InputArea>
           </div>
         </Whole>
@@ -222,9 +260,12 @@ const ProfileDetails = styled.div`
 const CommentsSection = styled.div`
   border-top: 1px solid #e1e1e1;
   border-bottom: 1px solid #e1e1e1;
-
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
   height: 300px; /* Set the desired height for the comments section */
   overflow-y: scroll;
+
   padding: 10px;
 `;
 

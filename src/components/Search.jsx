@@ -74,10 +74,6 @@ function SearchOffCanvas() {
       // To Avoid error if any value found
       // let finalData = data && data[0];
       let [histroyDat] = data;
-      console.log(
-        histroyDat === undefined ? "Loading..." : histroyDat?.userHistory,
-        "this is the fucking history"
-      );
 
       setRecentHistory(
         histroyDat === undefined ? "Loading..." : histroyDat?.userHistory

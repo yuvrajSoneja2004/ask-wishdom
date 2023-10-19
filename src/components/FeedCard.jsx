@@ -46,6 +46,7 @@ function FeedCard({ feedData, index }) {
 
   const userData = getCurrentUserProfileData && getCurrentUserProfileData[0];
   const feedImg = feedPostedData && feedPostedData[0];
+  const feedComments = feedImg && feedImg.feedComments;
   const finalImg = feedImg && feedImg.feedIMG;
 
   let userDetailsToBePushed = {
@@ -123,11 +124,16 @@ function FeedCard({ feedData, index }) {
           setShowModel(false);
         }}
         postData={{
+          feedID: feedData?.feedID,
           authorName: feedData?.feedAuthorName,
           profilePic: feedData?.feedAuthorProfilePic,
           feedImg: feedPostedData[0]?.feedIMG,
           caption: feedData?.feedCaption,
           createdAt: feedData?.createdAt,
+          currentUserPic: userData && userData.userProfilePic,
+          name: userDetailsToBePushed.user_name,
+          profileID: userDetailsToBePushed.user_id,
+          commentsArray: feedComments,
         }}
       />
       {/* upper row details */}
