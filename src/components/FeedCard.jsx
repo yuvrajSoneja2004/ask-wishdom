@@ -45,6 +45,7 @@ function FeedCard({ feedData, index }) {
   };
 
   const userData = getCurrentUserProfileData && getCurrentUserProfileData[0];
+  const userSecondID = userData && userData.userID;
   const feedImg = feedPostedData && feedPostedData[0];
   const feedComments = feedImg && feedImg.feedComments;
   const finalImg = feedImg && feedImg.feedIMG;
@@ -100,6 +101,10 @@ function FeedCard({ feedData, index }) {
     }
   };
 
+  const handleCommentsRender = (data) => {
+    setHandleRender((prev) => prev + 1);
+  };
+
   useEffect(() => {
     getFeedPostedData();
   }, [handleRender]);
@@ -116,7 +121,6 @@ function FeedCard({ feedData, index }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: animateDuration, delay: index * animateDuration }}
-      onClick={() => setShowModel(true)}
     >
       <SinglePostModel
         show={showModel}
@@ -124,6 +128,7 @@ function FeedCard({ feedData, index }) {
           setShowModel(false);
         }}
         postData={{
+          reRenderer: setHandleRender,
           feedID: feedData?.feedID,
           authorName: feedData?.feedAuthorName,
           profilePic: feedData?.feedAuthorProfilePic,
@@ -132,7 +137,7 @@ function FeedCard({ feedData, index }) {
           createdAt: feedData?.createdAt,
           currentUserPic: userData && userData.userProfilePic,
           name: userDetailsToBePushed.user_name,
-          profileID: userDetailsToBePushed.user_id,
+          profileID: userSecondID,
           commentsArray: feedComments,
         }}
       />
@@ -145,7 +150,7 @@ function FeedCard({ feedData, index }) {
         <TimeAgo createdAt={feedData?.createdAt} />
       </div>
       {/* the uploaded media details */}
-      <UploadedMedia>
+      <UploadedMedia onClick={() => setShowModel(true)}>
         {isLoading ? (
           <span className="feed-loader"></span>
         ) : (

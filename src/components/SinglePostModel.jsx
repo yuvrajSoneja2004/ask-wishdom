@@ -13,6 +13,8 @@ import { BiBookmark } from "react-icons/bi";
 import EmojiPicker from "emoji-picker-react";
 import { useEffect, useState } from "react";
 import CommentRow from "./CommentRow";
+import { ToastContainer, toast } from "react-toastify";
+import ScrollToBottom from "react-scroll-to-bottom";
 
 function SinglePostModel(props) {
   const {
@@ -27,14 +29,15 @@ function SinglePostModel(props) {
       name,
       profileID,
       commentsArray,
+      currentUserDetails,
+      reRenderer,
     },
   } = props;
 
   const [isEmojiPickerVisible, setEmojiPickerVisibility] = useState(false);
   const [commentInput, setCommentInput] = useState("");
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-  const [replayState, setReplayState] = useState("");
-  let replyArr = [];
+  const [handleRefetch, setHandleRefetch] = useState(0);
 
   const feedImgDynamicStyles = {
     background: `url(${feedImg})`,
@@ -48,7 +51,6 @@ function SinglePostModel(props) {
     const comment_data = {
       feedID: feedID,
       commentInfo: {
-        type: commentInput[0] === "@" ? "Reply" : "Comment",
         text: commentInput,
         createdAt: new Date(),
         profilePic: currentUserPic,
@@ -62,6 +64,20 @@ function SinglePostModel(props) {
         alert("Please enter something to comment");
       } else {
         const { data } = await axiosInstance.post("/postComment", comment_data);
+        console.log(data, "sucees res");
+        if (data.res) {
+          toast.success("Posted Sucessfully 🤩", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+          reRenderer((prev) => prev + 1);
+        }
       }
     } catch (error) {
       console.log(error);
@@ -69,8 +85,7 @@ function SinglePostModel(props) {
   };
 
   const handleFromCommentRow = (data) => {
-    setReplayState(data);
-    setCommentInput(data);
+    setHandleRefetch((prev) => prev + 1);
   };
 
   useEffect(() => {
@@ -92,11 +107,7 @@ function SinglePostModel(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      {/* <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          Modal heading
-        </Modal.Title>
-      </Modal.Header> */}
+      <ToastContainer />
       <Modal.Body>
         <Whole>
           <div id="feedImgDiv" style={feedImgDynamicStyles}></div>
@@ -120,29 +131,18 @@ function SinglePostModel(props) {
             </ProfileDetails>
             {/* Comments  */}
             <CommentsSection>
-              {commentsArray?.map((comment, i) => {
-                replyArr = [];
-                if (comment?.type === "Reply") {
-                  let replayRef = `${
-                    comment?.text?.split("@")[1].split(" ")[0]
-                  }`;
-                  if (`${replayRef} ` === `${comment?.name} `) {
-                    console.log("Yes man it is true");
-                    if (comment?.type === "Comment") {
-                      replyArr.push(comment);
-                    }
-                  }
-                }
-                return (
-                  <span>
-                    <CommentRow
-                      commentInfo={comment}
-                      dataToParent={handleFromCommentRow}
-                      replayArr={replyArr}
-                    />
-                  </span>
-                );
-              })}
+              <ScrollToBottom>
+                {commentsArray?.map((comment, i) => {
+                  return (
+                    <span>
+                      <CommentRow
+                        commentInfo={comment}
+                        dataToParent={handleFromCommentRow}
+                      />
+                    </span>
+                  );
+                })}
+              </ScrollToBottom>
             </CommentsSection>
             {/* Likes section  */}
             <LikesSection>

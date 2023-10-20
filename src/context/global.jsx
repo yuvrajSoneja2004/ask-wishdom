@@ -18,12 +18,12 @@ export const GlobalProvider = ({ children }) => {
     allCommunitiesLoading: true,
   };
 
+  const { user } = useAuth0();
   const [state, dispatch] = useReducer(reducer, initialState);
   const [getCurrentUserProfileData, setCurrentUserProfileData] = useState(null);
   const [socket, setSocket] = useState(undefined);
 
   // calling API to get defaultQuestions
-
   const getDefaultQuestions = async () => {
     dispatch({ type: "API_LOADING" });
     try {

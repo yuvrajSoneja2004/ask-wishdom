@@ -9,17 +9,17 @@ import { GlobalProvider } from "./context/global";
 import "react-image-crop/dist/ReactCrop.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <GlobalProvider>
-    <BrowserRouter>
-      <Auth0Provider
-        domain="dev-v8jrao5e6b41otbz.us.auth0.com"
-        clientId="JPbPmvNPqS3gykqAo1NTa1AmCueMqIK9"
-        authorizationParams={{
-          redirect_uri: window.location.origin,
-        }}
-      >
+  <Auth0Provider
+    domain="dev-v8jrao5e6b41otbz.us.auth0.com"
+    clientId="JPbPmvNPqS3gykqAo1NTa1AmCueMqIK9"
+    authorizationParams={{
+      redirect_uri: window.location.origin,
+    }}
+  >
+    <GlobalProvider>
+      <BrowserRouter>
         <App />
-      </Auth0Provider>
-    </BrowserRouter>
-  </GlobalProvider>
+      </BrowserRouter>
+    </GlobalProvider>
+  </Auth0Provider>
 );

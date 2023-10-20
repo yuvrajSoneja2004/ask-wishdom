@@ -4,17 +4,19 @@ import { AiOutlineHeart } from "react-icons/ai";
 import TimeAgo from "../utils/TimeAgo";
 import { Link } from "react-router-dom";
 
-function CommentRow({ commentInfo, dataToParent, replayArr }) {
-  const { text, createdAt, profilePic, name, profileID, replies, type } =
-    commentInfo;
+function CommentRow({ commentInfo, dataToParent }) {
+  const {
+    text,
+    createdAt,
+    profilePic,
+    name,
+    profileID,
+    replies,
+    type,
+    currentUserData,
+  } = commentInfo;
 
-  const [first, setfirst] = useState([]);
-
-  useEffect(() => {
-    setfirst((prev) => [...prev, replayArr]);
-  }, []);
-
-  console.log(first, "de row");
+  console.log(currentUserData, "DUCK");
   return (
     <Whole>
       <div id="info">
@@ -32,25 +34,15 @@ function CommentRow({ commentInfo, dataToParent, replayArr }) {
               <TimeAgo createdAt={createdAt} />
             </span>
             <strong>{"3"} likes</strong>
-            <strong
-              onClick={() => {
-                dataToParent(`@${name} `);
-              }}
-            >
-              reply
-            </strong>
           </div>
-          <Replies>
-            {replayArr?.map((fuc) => {
-              return <p>{"ll"}</p>;
-            })}
-          </Replies>
         </div>
       </div>
       <AiOutlineHeart size={15} />
     </Whole>
   );
 }
+
+const ReplyBx = styled.div``;
 
 const Whole = styled.div`
   display: flex;
