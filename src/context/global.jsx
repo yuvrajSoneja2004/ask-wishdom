@@ -16,6 +16,7 @@ export const GlobalProvider = ({ children }) => {
     communtiyValidationData: {},
     allCommunities: [],
     allCommunitiesLoading: true,
+    userCurrentProfileData: {},
   };
 
   const { user } = useAuth0();
@@ -60,13 +61,14 @@ export const GlobalProvider = ({ children }) => {
     }
   };
   // UserProfile Data
-  const getUserProfileData = async (CURRENT_USER_EMAIL) => {
+  const getUserProfileData = async () => {
     try {
       let fetch = await axiosInstance.get(
-        `getSpecificProfileData/${CURRENT_USER_EMAIL}`
+        `getSpecificProfileData/${user?.email}`
       );
       let res = await fetch.data;
-      setCurrentUserProfileData(res);
+      dispatch({ type: "CURRENT_USER_PROFILE_DATA", payload: res });
+      console.log("Dispatched User Data", res);
       return res;
     } catch (error) {
       console.log("userProfileCLientError", error);

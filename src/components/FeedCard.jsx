@@ -1,8 +1,6 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
 import "./Loader.css";
-import { io } from "socket.io-client";
-
 // Icon Imports
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { BiBookmark, BiLoader } from "react-icons/bi";
@@ -16,7 +14,7 @@ import { Spinner } from "react-bootstrap";
 import SinglePostModel from "./SinglePostModel";
 
 function FeedCard({ feedData, index }) {
-  const { socket, getUserProfileData, getCurrentUserProfileData } = useGlobal();
+  const { socket, userCurrentProfileData } = useGlobal();
   const [feedPostedData, setFeedPostedData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [handleRender, setHandleRender] = useState(0);
@@ -25,6 +23,7 @@ function FeedCard({ feedData, index }) {
   const { user } = useAuth0();
 
   const animateDuration = 0.23;
+  const userProfileInfo = userCurrentProfileData && userCurrentProfileData[0];
 
   const getFeedPostedData = async () => {
     setIsLoading(true);
@@ -44,16 +43,15 @@ function FeedCard({ feedData, index }) {
     }
   };
 
-  const userData = getCurrentUserProfileData && getCurrentUserProfileData[0];
-  const userSecondID = userData && userData.userID;
+  const userSecondID = userProfileInfo && userProfileInfo.userID;
   const feedImg = feedPostedData && feedPostedData[0];
   const feedComments = feedImg && feedImg.feedComments;
   const finalImg = feedImg && feedImg.feedIMG;
 
   let userDetailsToBePushed = {
-    user_name: userData && userData.userProfileName,
-    user_profile_pic: userData && userData.userProfilePic,
-    user_id: userData && userData._id,
+    user_name: userProfileInfo?.userProfileName,
+    user_profile_pic: userProfileInfo?.userProfilePic,
+    user_id: userProfileInfo?._id,
     the_post: finalImg,
   };
 
@@ -109,10 +107,6 @@ function FeedCard({ feedData, index }) {
     getFeedPostedData();
   }, [handleRender]);
 
-  useEffect(() => {
-    const isRecieved = getUserProfileData(user?.email);
-  }, []);
-
   let [feedLikesArray] = feedPostedData;
 
   return (
@@ -135,7 +129,7 @@ function FeedCard({ feedData, index }) {
           feedImg: feedPostedData[0]?.feedIMG,
           caption: feedData?.feedCaption,
           createdAt: feedData?.createdAt,
-          currentUserPic: userData && userData.userProfilePic,
+          currentUserPic: userProfileInfo?.userProfilePic,
           name: userDetailsToBePushed.user_name,
           profileID: userSecondID,
           commentsArray: feedComments,

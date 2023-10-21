@@ -27,7 +27,7 @@ export default function AlertDialogSlide({ isInMobile }) {
   const [feed, setFeed] = React.useState(null);
   const [caption, setCaption] = React.useState("");
   let { user } = useAuth0();
-  let { getUserProfileData, getCurrentUserProfileData } = useGlobal();
+  let { userCurrentProfileData } = useGlobal();
   // Create a ref to the input element
   const fileInputRef = React.useRef(null);
 
@@ -35,10 +35,6 @@ export default function AlertDialogSlide({ isInMobile }) {
   const handleButtonClick = () => {
     fileInputRef.current.click();
   };
-
-  React.useEffect(() => {
-    getUserProfileData(user?.email);
-  }, [user?.email]);
 
   // Handling seleted file
   const handleSelectedFile = async (e) => {
@@ -66,6 +62,8 @@ export default function AlertDialogSlide({ isInMobile }) {
     setOpen(false);
   };
 
+  const userData = userCurrentProfileData && userCurrentProfileData[0];
+
   // POSTing feed data to db
 
   const postFeedData = async () => {
@@ -73,10 +71,10 @@ export default function AlertDialogSlide({ isInMobile }) {
       const fetch = await axiosInstance.post("/postFeed", {
         feedID: v4(),
         feedIMG: feed,
-        feedAuthorName: getCurrentUserProfileData[0]?.userProfileName,
-        feedAuthorProfilePic: getCurrentUserProfileData[0]?.userProfilePic,
+        feedAuthorName: userData?.userProfileName,
+        feedAuthorProfilePic: userData?.userProfilePic,
         feedCaption: caption.length === 0 ? "I Love Ask-Wishdom! 😁" : caption,
-        feedAuthorProfileID: getCurrentUserProfileData[0]?.userID,
+        feedAuthorProfileID: userData.userID,
         feedAuthorEmail: user?.email,
       });
 
@@ -108,8 +106,6 @@ export default function AlertDialogSlide({ isInMobile }) {
       setOpen(true);
     }
   };
-
-  React.useEffect(() => {}, []);
 
   return (
     <div>

@@ -30,5 +30,11 @@ export const reducer = (state, action) => {
         ...state,
         isError: action.payload,
       };
+
+    case "CURRENT_USER_PROFILE_DATA":
+      return {
+        ...state,
+        userCurrentProfileData: action.payload,
+      };
   }
 };

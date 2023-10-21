@@ -9,7 +9,6 @@ import SearchResRow from "./SearchResRow";
 import { ProgressBar } from "react-loader-spinner";
 import { debounce } from "lodash";
 import { useGlobal } from "../context/global";
-import { useAuth0 } from "@auth0/auth0-react";
 
 function SearchOffCanvas() {
   const [show, setShow] = useState(false);
@@ -19,11 +18,9 @@ function SearchOffCanvas() {
   const [recentHistory, setRecentHistory] = useState([]);
   const [searchResult, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [currentUserID, setCurrentUserID] = useState(undefined);
   const [handleRender, setHandleRender] = useState(0);
 
-  const { getUserProfileData, getCurrentUserProfileData } = useGlobal();
-  const { user } = useAuth0();
+  let { userCurrentProfileData } = useGlobal();
 
   const handleSearch = async () => {
     setIsLoading(true);
@@ -45,14 +42,11 @@ function SearchOffCanvas() {
   };
   const debounceSearch = debounce(handleSearch, 3000);
 
-  useEffect(() => {
-    const isRecieved = getUserProfileData(user?.email);
-  }, []);
-
   // UserID
-  const userData = getCurrentUserProfileData && getCurrentUserProfileData[0];
+  const userData = userCurrentProfileData && userCurrentProfileData[0];
   const userID = userData && userData.userID;
 
+  console.log(userID, "this is the sussy imposter");
   const handeHistory = async (searched_user) => {
     try {
       const { data } = await axiosInstance.post("/postHistory", {
@@ -74,6 +68,7 @@ function SearchOffCanvas() {
       // To Avoid error if any value found
       // let finalData = data && data[0];
       let [histroyDat] = data;
+      console.log(data, "sussybaka");
 
       setRecentHistory(
         histroyDat === undefined ? "Loading..." : histroyDat?.userHistory

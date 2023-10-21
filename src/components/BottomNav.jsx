@@ -23,21 +23,18 @@ function BottomNav() {
   const [notificationsCount, setNotificationsCount] = useState(0);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  let { getUserProfileData, getCurrentUserProfileData } = useGlobal();
+  let { userCurrentProfileData } = useGlobal();
   const ICON_SIZE = 25;
-  const { user } = useAuth0();
-
   const handleDataFromChild = (childData) => {
     setNotificationsCount(childData);
   };
 
-  useEffect(() => {
-    getUserProfileData(user?.email);
-  }, [user?.email]);
+  // const userNot = getCurrentUserProfileData && getCurrentUserProfileData[0];
+  // const notificationsCountConst = userNot && userNot.userNotifications;
+  console.log("bottom dv man na ", userCurrentProfileData);
 
-  console.log("bottom dv man na ", getCurrentUserProfileData);
-  const userNot = getCurrentUserProfileData && getCurrentUserProfileData[0];
-  const notificationsCountConst = userNot && userNot.userNotifications;
+  const userProfileInfo = userCurrentProfileData && userCurrentProfileData[0];
+  const userNotifications = userProfileInfo?.userNotifications;
 
   return (
     // Will use Map Method
@@ -70,7 +67,7 @@ function BottomNav() {
       <Bx>
         <Bubble>
           <span className="notificationsCounter">
-            {notificationsCountConst?.length}
+            {userNotifications?.length}
           </span>
           <AiOutlineBell onClick={handleShow} size={ICON_SIZE} fill="#000" />
           <Notifications
@@ -85,9 +82,9 @@ function BottomNav() {
           <div className="userProfile">
             <img
               src={
-                getCurrentUserProfileData === null
+                userProfileInfo === undefined || null
                   ? UserIcon
-                  : getCurrentUserProfileData[0]?.userProfilePic || UserIcon
+                  : userProfileInfo?.userProfilePic || UserIcon
               }
               alt=""
             />
