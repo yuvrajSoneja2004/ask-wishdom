@@ -74,7 +74,7 @@ export default function AlertDialogSlide({ isInMobile }) {
         feedAuthorName: userData?.userProfileName,
         feedAuthorProfilePic: userData?.userProfilePic,
         feedCaption: caption.length === 0 ? "I Love Ask-Wishdom! 😁" : caption,
-        feedAuthorProfileID: userData.userID,
+        feedAuthorProfileID: userData?.userID,
         feedAuthorEmail: user?.email,
       });
 

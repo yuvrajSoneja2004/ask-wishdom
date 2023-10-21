@@ -23,6 +23,7 @@ export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [getCurrentUserProfileData, setCurrentUserProfileData] = useState(null);
   const [socket, setSocket] = useState(undefined);
+  const [handleFeedLikeRenderer, setHandleFeedLikeRenderer] = useState(0);
 
   // calling API to get defaultQuestions
   const getDefaultQuestions = async () => {
@@ -78,6 +79,49 @@ export const GlobalProvider = ({ children }) => {
     }
   };
 
+  // Handle Like Btn
+  const handleLike = async (userToLike_id, userDetailsToBePushed, feedData) => {
+    try {
+      const { data } = await axiosInstance.post(`/likeFeed`, {
+        currentUserE: user?.email,
+        userToLike: userToLike_id,
+      });
+
+      if (data) {
+        setHandleFeedLikeRenderer((prev) => prev + 1);
+        console.log("Man global wala working");
+        socket?.emit("request_user_notifications", {
+          user_that_liked: userDetailsToBePushed,
+          user_that_got_liked_id: feedData,
+        });
+      }
+    } catch (error) {
+      console.log(`whwhwhwhwhwhwhwhwhwwh`, error);
+      setHandleFeedLikeRenderer((prev) => prev + 1);
+    } finally {
+    }
+  };
+  // Handle Dislike
+  const handleUnlike = async (userToUnlike_id) => {
+    try {
+      const resDislike = await axiosInstance.post(`/dislikeFeed`, {
+        currentUserE: user?.email,
+        userToUnlike: userToUnlike_id,
+      });
+
+      if (resDislike) {
+        setHandleFeedLikeRenderer((prev) => prev + 1);
+        console.log("Man global wala working");
+        // setHandleRender((prev) => prev + 1);
+      }
+    } catch (error) {
+      setHandleFeedLikeRenderer((prev) => prev + 1);
+      console.log("ERROR", error);
+    } finally {
+      // setIsLikeLoading(false);
+    }
+  };
+
   const [currentUserData, setCurrentUserData] = useState([]);
   const [isNotificationsAllowed, setIsNotificationsAllowed] =
     useState(undefined);
@@ -110,6 +154,10 @@ export const GlobalProvider = ({ children }) => {
     }
   }, [getCurrentUserProfileData]);
 
+  useEffect(() => {
+    getUserProfileData(user?.email);
+  }, [user?.email]);
+
   return (
     <GlobalContext.Provider
       value={{
@@ -123,6 +171,10 @@ export const GlobalProvider = ({ children }) => {
         setCurrentUserData,
         socket,
         isNotificationsAllowed,
+        handleLike,
+        handleUnlike,
+        handleFeedLikeRenderer,
+        setHandleFeedLikeRenderer,
       }}
     >
       {children}

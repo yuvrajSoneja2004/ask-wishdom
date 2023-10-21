@@ -14,7 +14,13 @@ import { Spinner } from "react-bootstrap";
 import SinglePostModel from "./SinglePostModel";
 
 function FeedCard({ feedData, index }) {
-  const { socket, userCurrentProfileData } = useGlobal();
+  const {
+    socket,
+    userCurrentProfileData,
+    handleLike,
+    handleUnlike,
+    handleFeedLikeRenderer,
+  } = useGlobal();
   const [feedPostedData, setFeedPostedData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [handleRender, setHandleRender] = useState(0);
@@ -56,48 +62,49 @@ function FeedCard({ feedData, index }) {
   };
 
   // Handle Like Btn
-  const handleLike = async () => {
-    setIsLikeLoading(true);
-    try {
-      const { data } = await axiosInstance.post(`/likeFeed`, {
-        currentUserE: user?.email,
-        userToLike: feedData?._id,
-      });
 
-      if (data) {
-        setIsLikeLoading(false);
-        socket?.emit("request_user_notifications", {
-          user_that_liked: userDetailsToBePushed,
-          user_that_got_liked_id: feedData,
-        });
+  // const handleLike = async () => {
+  //   setIsLikeLoading(true);
+  //   try {
+  //     const { data } = await axiosInstance.post(`/likeFeed`, {
+  //       currentUserE: user?.email,
+  //       userToLike: feedData?._id,
+  //     });
 
-        setHandleRender((prev) => prev + 1);
-      }
-    } catch (error) {
-      console.log(`whwhwhwhwhwhwhwhwhwwh`, error);
-    } finally {
-      setIsLikeLoading(false);
-    }
-  };
+  //     if (data) {
+  //       setIsLikeLoading(false);
+  //       socket?.emit("request_user_notifications", {
+  //         user_that_liked: userDetailsToBePushed,
+  //         user_that_got_liked_id: feedData,
+  //       });
 
-  const handleUnlike = async () => {
-    setIsLikeLoading(true);
-    try {
-      const resDislike = await axiosInstance.post(`/dislikeFeed`, {
-        currentUserE: user?.email,
-        userToUnlike: feedData?._id,
-      });
+  //       setHandleRender((prev) => prev + 1);
+  //     }
+  //   } catch (error) {
+  //     console.log(`whwhwhwhwhwhwhwhwhwwh`, error);
+  //   } finally {
+  //     setIsLikeLoading(false);
+  //   }
+  // };
 
-      if (resDislike) {
-        setIsLikeLoading(false);
-        setHandleRender((prev) => prev + 1);
-      }
-    } catch (error) {
-      console.log("ERROR", error);
-    } finally {
-      setIsLikeLoading(false);
-    }
-  };
+  // const handleUnlike = async () => {
+  //   setIsLikeLoading(true);
+  //   try {
+  //     const resDislike = await axiosInstance.post(`/dislikeFeed`, {
+  //       currentUserE: user?.email,
+  //       userToUnlike: feedData?._id,
+  //     });
+
+  //     if (resDislike) {
+  //       setIsLikeLoading(false);
+  //       setHandleRender((prev) => prev + 1);
+  //     }
+  //   } catch (error) {
+  //     console.log("ERROR", error);
+  //   } finally {
+  //     setIsLikeLoading(false);
+  //   }
+  // };
 
   const handleCommentsRender = (data) => {
     setHandleRender((prev) => prev + 1);
@@ -105,7 +112,7 @@ function FeedCard({ feedData, index }) {
 
   useEffect(() => {
     getFeedPostedData();
-  }, [handleRender]);
+  }, [handleFeedLikeRenderer]);
 
   let [feedLikesArray] = feedPostedData;
 
@@ -133,6 +140,12 @@ function FeedCard({ feedData, index }) {
           name: userDetailsToBePushed.user_name,
           profileID: userSecondID,
           commentsArray: feedComments,
+          handleLikeUnlikeData: {
+            feed_id: feedData?._id,
+            feedData: feedData,
+            userDetailsToBePushed: userDetailsToBePushed,
+          },
+          feedLikesArray: feedLikesArray,
         }}
       />
       {/* upper row details */}
@@ -163,7 +176,16 @@ function FeedCard({ feedData, index }) {
                 }}
                 whileTap={{ scale: 0.9 }}
               >
-                <AiFillHeart size={30} onClick={handleUnlike} />
+                <AiFillHeart
+                  size={30}
+                  onClick={() => {
+                    handleUnlike(
+                      feedData?._id,
+                      userDetailsToBePushed,
+                      feedData
+                    );
+                  }}
+                />
                 <span>{feedLikesArray?.feedLikesArray?.length}</span>
               </motion.div>
             ) : isLikeLoading ? (
@@ -182,7 +204,12 @@ function FeedCard({ feedData, index }) {
                 }}
                 whileTap={{ scale: 0.9 }}
               >
-                <AiOutlineHeart size={30} onClick={handleLike} />
+                <AiOutlineHeart
+                  size={30}
+                  onClick={() => {
+                    handleLike(feedData?._id, userDetailsToBePushed, feedData);
+                  }}
+                />
                 <span>{feedLikesArray?.feedLikesArray?.length}</span>
               </motion.div>
             )}

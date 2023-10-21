@@ -3,6 +3,7 @@ import Modal from "react-bootstrap/Modal";
 import TimeAgo from "../utils/TimeAgo";
 import { axiosInstance } from "../utils/axiosInstance";
 import {
+  AiFillHeart,
   AiOutlineComment,
   AiOutlineHeart,
   AiOutlineShareAlt,
@@ -15,6 +16,8 @@ import { useEffect, useState } from "react";
 import CommentRow from "./CommentRow";
 import { ToastContainer, toast } from "react-toastify";
 import ScrollToBottom from "react-scroll-to-bottom";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useGlobal } from "../context/global";
 
 function SinglePostModel(props) {
   const {
@@ -31,13 +34,18 @@ function SinglePostModel(props) {
       commentsArray,
       currentUserDetails,
       reRenderer,
+      handleLikeUnlikeData: { feed_id, feedData, userDetailsToBePushed },
+      feedLikesArray,
     },
   } = props;
+
+  const { handleLike, handleUnlike, setHandleFeedLikeRenderer } = useGlobal();
 
   const [isEmojiPickerVisible, setEmojiPickerVisibility] = useState(false);
   const [commentInput, setCommentInput] = useState("");
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [handleRefetch, setHandleRefetch] = useState(0);
+  const { user } = useAuth0();
 
   const feedImgDynamicStyles = {
     background: `url(${feedImg})`,
@@ -66,6 +74,7 @@ function SinglePostModel(props) {
         const { data } = await axiosInstance.post("/postComment", comment_data);
         console.log(data, "sucees res");
         if (data.res) {
+          setHandleFeedLikeRenderer((prev) => prev + 1);
           toast.success("Posted Sucessfully 🤩", {
             position: "top-right",
             autoClose: 5000,
@@ -147,7 +156,24 @@ function SinglePostModel(props) {
             {/* Likes section  */}
             <LikesSection>
               <div id="icons">
-                <AiOutlineHeart size={27} fill="#000" className="icons" />
+                {feedLikesArray?.feedLikesArray.includes(user?.email) ? (
+                  <AiFillHeart
+                    size={27}
+                    fill="#000"
+                    className="icons"
+                    onClick={() => {
+                      handleLike(feed_id, userDetailsToBePushed, feedData);
+                    }}
+                  />
+                ) : (
+                  <AiOutlineHeart
+                    size={27}
+                    onClick={() => {
+                      handleUnlike(feed_id, userDetailsToBePushed, feedData);
+                    }}
+                  />
+                )}
+
                 <label htmlFor="comment">
                   <AiOutlineComment size={27} fill="#000" className="icons" />
                 </label>
