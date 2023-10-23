@@ -38,17 +38,14 @@ function QuestionsList() {
       setCurrentUserData(res);
       setuserCheckData(res);
     } catch (error) {
-      console.log(" error man man", error);
+      console.log(" error", error);
     }
   };
 
   useEffect(() => {
     getDefaultQuestions();
     checkUserExistance();
-    console.log(userCheckData);
   }, []);
-
-  console.log("this is the global isError state value", isError);
 
   return (
     <QuestionsGrid>

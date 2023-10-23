@@ -20,11 +20,11 @@ function FeedCard({ feedData, index }) {
     handleLike,
     handleUnlike,
     handleFeedLikeRenderer,
+    isLikeLoading,
   } = useGlobal();
   const [feedPostedData, setFeedPostedData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [handleRender, setHandleRender] = useState(0);
-  const [isLikeLoading, setIsLikeLoading] = useState(false);
   const [showModel, setShowModel] = useState(false);
   const { user } = useAuth0();
 
@@ -61,50 +61,6 @@ function FeedCard({ feedData, index }) {
     the_post: finalImg,
   };
 
-  // Handle Like Btn
-
-  // const handleLike = async () => {
-  //   setIsLikeLoading(true);
-  //   try {
-  //     const { data } = await axiosInstance.post(`/likeFeed`, {
-  //       currentUserE: user?.email,
-  //       userToLike: feedData?._id,
-  //     });
-
-  //     if (data) {
-  //       setIsLikeLoading(false);
-  //       socket?.emit("request_user_notifications", {
-  //         user_that_liked: userDetailsToBePushed,
-  //         user_that_got_liked_id: feedData,
-  //       });
-
-  //       setHandleRender((prev) => prev + 1);
-  //     }
-  //   } catch (error) {
-  //     console.log(`whwhwhwhwhwhwhwhwhwwh`, error);
-  //   } finally {
-  //     setIsLikeLoading(false);
-  //   }
-  // };
-
-  // const handleUnlike = async () => {
-  //   setIsLikeLoading(true);
-  //   try {
-  //     const resDislike = await axiosInstance.post(`/dislikeFeed`, {
-  //       currentUserE: user?.email,
-  //       userToUnlike: feedData?._id,
-  //     });
-
-  //     if (resDislike) {
-  //       setIsLikeLoading(false);
-  //       setHandleRender((prev) => prev + 1);
-  //     }
-  //   } catch (error) {
-  //     console.log("ERROR", error);
-  //   } finally {
-  //     setIsLikeLoading(false);
-  //   }
-  // };
 
   const handleCommentsRender = (data) => {
     setHandleRender((prev) => prev + 1);

@@ -72,7 +72,6 @@ function SinglePostModel(props) {
         alert("Please enter something to comment");
       } else {
         const { data } = await axiosInstance.post("/postComment", comment_data);
-        console.log(data, "sucees res");
         if (data.res) {
           setHandleFeedLikeRenderer((prev) => prev + 1);
           toast.success("Posted Sucessfully 🤩", {
@@ -100,7 +99,6 @@ function SinglePostModel(props) {
   useEffect(() => {
     const handleResize = () => {
       setScreenWidth(window.innerWidth);
-      console.log(screenWidth);
     };
 
     window.addEventListener("resize", handleResize);

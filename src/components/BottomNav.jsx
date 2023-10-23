@@ -29,9 +29,6 @@ function BottomNav() {
     setNotificationsCount(childData);
   };
 
-  // const userNot = getCurrentUserProfileData && getCurrentUserProfileData[0];
-  // const notificationsCountConst = userNot && userNot.userNotifications;
-  console.log("bottom dv man na ", userCurrentProfileData);
 
   const userProfileInfo = userCurrentProfileData && userCurrentProfileData[0];
   const userNotifications = userProfileInfo?.userNotifications;
@@ -67,7 +64,7 @@ function BottomNav() {
       <Bx>
         <Bubble>
           <span className="notificationsCounter">
-            {userNotifications?.length}
+            {userNotifications?.length > 99 ? "99+" : userNotifications?.length}
           </span>
           <AiOutlineBell onClick={handleShow} size={ICON_SIZE} fill="#000" />
           <Notifications

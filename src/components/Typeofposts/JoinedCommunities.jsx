@@ -16,11 +16,10 @@ useEffect(() => {
         try {
             let fetch = await axiosInstance.get(`/getusercommunities/${userEmailData}`);
             let fetchRes = await fetch.data;
-            console.log(fetchRes , "Tu kaate mujhe :(")
             setUserCommunities(fetchRes);
             setIsLoading(false);
         } catch (error) {
-            console.log("DA cause" + error);
+            console.log("error cause" + error);
         }
     }
 

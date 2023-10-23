@@ -21,7 +21,6 @@ function PostsComponent({ userEmailData }) {
         `/getUserFeeds/${userEmailData}`
       );
       const res = await fetchData.data;
-      console.log(res, "Jo teri sang kaati raatain");
       setUserfeeds(res);
     } catch (error) {
       console.log(
@@ -39,7 +38,6 @@ function PostsComponent({ userEmailData }) {
   return (
     <Whole>
       {userFeeds.map((feed, i) => {
-        console.log(`${i}: `, feed);
         return (
           <div id="gridImg">
             <img src={feed?.feedIMG} alt={feed?.feedID} />

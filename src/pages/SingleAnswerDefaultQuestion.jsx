@@ -21,57 +21,49 @@ function SingleAnswerDefaultQuestion() {
 
 
     useEffect(() => {
-        if(!setTempAnswersData == undefined){
-                console.log("Workscmn")
-        }
-        const getSingleDefaultQuestion = async (QUESTION_ID) => {
-            try {
+      if (!setTempAnswersData == undefined) {
+      }
+      const getSingleDefaultQuestion = async (QUESTION_ID) => {
+        try {
+          const [res1, res2] = await Promise.all([
+            axiosInstance
+              .get(`/getSingleDefaultQuestion/${QUESTION_ID}`)
+              .then(function (response) {
+                setTempAnswersData(response.data[0].answers);
+              })
+              .catch(function (error) {
+                console.error(error);
+              }),
+          ]);
+        } catch (error) {}
+      };
 
-                const [res1, res2] = await Promise.all([
-                    axiosInstance.get(`/getSingleDefaultQuestion/${QUESTION_ID}`).then(function (response) {
-                        setTempAnswersData(response.data[0].answers);
-                    }).catch(function (error) {
-                        console.error(error);
-                    })
-                ])
-
-            } catch (error) {
-
-            }
-        }
-
-
-
-
-
-        getSingleDefaultQuestion(questionID);
-
-    }, [])
+      getSingleDefaultQuestion(questionID);
+    }, []);
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            let date = new Date();
-            let requ = await axiosInstance.put(`/addquestion/${questionID}`, {
-                answers: [
-                    ...tempAnswersData,
-                    {
-                        name: user.name,
-                        profile: user.picture,
-                        smallDescData: userSmallDesc,
-                        msg: answerValue,
-                        datePosted: date.toDateString()
-                    }]
-                
-            })
+      e.preventDefault();
+      try {
+        let date = new Date();
+        let requ = await axiosInstance.put(`/addquestion/${questionID}`, {
+          answers: [
+            ...tempAnswersData,
+            {
+              name: user.name,
+              profile: user.picture,
+              smallDescData: userSmallDesc,
+              msg: answerValue,
+              datePosted: date.toDateString(),
+            },
+          ],
+        });
 
-            let res = await requ.data;
-            console.log(res, "the response")
-            navigate(`/readDefaultQuestion/${questionID}`)
-        } catch (error) {
-            console.log("LOL error " + error)
-        }
-    }
+        let res = await requ.data;
+        navigate(`/readDefaultQuestion/${questionID}`);
+      } catch (error) {
+        console.log("LOL error " + error);
+      }
+    };
     return (
         tempAnswersData ? (
             <Whole onSubmit={handleSubmit}>

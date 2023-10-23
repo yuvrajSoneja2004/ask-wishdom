@@ -67,7 +67,7 @@ function CommunityAnswerSinglePage() {
                 setCategoryList(res);
 
             } catch (error) {
-                console.log("😁😁😁😁")
+                console.log("At community Answer Page");
             }
         }
         getRelatedQuestions(tempQuestionData?.category);

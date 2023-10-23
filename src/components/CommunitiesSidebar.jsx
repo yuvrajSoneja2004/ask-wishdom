@@ -38,10 +38,11 @@ function CommunitiesSidebar() {
   const handleShow = () => setShow(true);
 
   const userProfileInfo = userCurrentProfileData && userCurrentProfileData[0];
+  const userNotifications = userProfileInfo?.userNotifications;
 
   return (
     <>
-      <div>
+      <Holder>
         <Whole>
           <Logo
             src={SiteIcon}
@@ -62,9 +63,14 @@ function CommunitiesSidebar() {
               <AiOutlineQuestionCircle size={ICON_SIZE} fill="#000" />
               <p>Ask Question</p>
             </RouteLink>
-            <SearchOffCanvas />
+            <SearchOffCanvas isOnMobile={false} />
             <AlertDialogSlide isInMobile={false} />
             <RouteLink onClick={handleShow}>
+              <span className="notificationsCounter">
+                {userNotifications?.length > 99
+                  ? "99+"
+                  : userNotifications?.length}
+              </span>
               <AiOutlineBell size={ICON_SIZE} fill="#000" />
               <p>Notifications</p>
             </RouteLink>
@@ -89,10 +95,14 @@ function CommunitiesSidebar() {
             </RouteLink>
           </MenuItems>
         </Whole>
-      </div>
+      </Holder>
     </>
   );
 }
+
+const Holder = styled.div`
+  width: 400px;
+`;
 
 const Logo = styled.img`
   width: 100px;
@@ -115,6 +125,24 @@ const RouteLink = styled(Link)`
   width: 100%;
   border-radius: 5px;
   transition: all.3s;
+  position: relative;
+
+  .notificationsCounter {
+    font-size: 9px;
+    color: #000;
+    border-radius: 50%;
+    background-color: #b92b27;
+    height: 10px;
+    width: 10px;
+    display: flex;
+    justify-content: center;
+    padding: 7.5px;
+    align-items: center;
+    color: #fff;
+    position: absolute;
+    left: 20px;
+    top: 14px;
+  }
 
   div {
     width: 40px;

@@ -14,8 +14,7 @@ const getData = async () => {
         const fetch = await axiosInstance.get(`/typeofQuestionAsked/QuestionAsked/${userEmailData}`)
         let res = await fetch.data;
         setStoredData(res);
-        setIsLoading(false)
-        console.log(res , "billie jeans man")
+        setIsLoading(false);
     } catch (error) {
         console.log(error , "at QuestionAsked.jsx")
     }

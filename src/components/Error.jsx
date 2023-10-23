@@ -3,7 +3,6 @@ import React from "react";
 import ErrPic from "../assets/error.png";
 
 function Error({ code }) {
-  console.log(code, "the code");
   return (
     <Whole>
       <img src={ErrPic} alt="error-img" width={300} />

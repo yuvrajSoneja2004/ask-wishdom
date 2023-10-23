@@ -24,6 +24,7 @@ export const GlobalProvider = ({ children }) => {
   const [getCurrentUserProfileData, setCurrentUserProfileData] = useState(null);
   const [socket, setSocket] = useState(undefined);
   const [handleFeedLikeRenderer, setHandleFeedLikeRenderer] = useState(0);
+  const [isLikeLoading, setIsLikeLoading] = useState(false);
 
   // calling API to get defaultQuestions
   const getDefaultQuestions = async () => {
@@ -69,7 +70,6 @@ export const GlobalProvider = ({ children }) => {
       );
       let res = await fetch.data;
       dispatch({ type: "CURRENT_USER_PROFILE_DATA", payload: res });
-      console.log("Dispatched User Data", res);
       return res;
     } catch (error) {
       console.log("userProfileCLientError", error);
@@ -81,6 +81,7 @@ export const GlobalProvider = ({ children }) => {
 
   // Handle Like Btn
   const handleLike = async (userToLike_id, userDetailsToBePushed, feedData) => {
+    setIsLikeLoading(true);
     try {
       const { data } = await axiosInstance.post(`/likeFeed`, {
         currentUserE: user?.email,
@@ -89,7 +90,6 @@ export const GlobalProvider = ({ children }) => {
 
       if (data) {
         setHandleFeedLikeRenderer((prev) => prev + 1);
-        console.log("Man global wala working");
         socket?.emit("request_user_notifications", {
           user_that_liked: userDetailsToBePushed,
           user_that_got_liked_id: feedData,
@@ -99,6 +99,7 @@ export const GlobalProvider = ({ children }) => {
       console.log(`whwhwhwhwhwhwhwhwhwwh`, error);
       setHandleFeedLikeRenderer((prev) => prev + 1);
     } finally {
+      isLikeLoading(false);
     }
   };
   // Handle Dislike
@@ -111,7 +112,6 @@ export const GlobalProvider = ({ children }) => {
 
       if (resDislike) {
         setHandleFeedLikeRenderer((prev) => prev + 1);
-        console.log("Man global wala working");
         // setHandleRender((prev) => prev + 1);
       }
     } catch (error) {
@@ -175,13 +175,13 @@ export const GlobalProvider = ({ children }) => {
         handleUnlike,
         handleFeedLikeRenderer,
         setHandleFeedLikeRenderer,
+        isLikeLoading,
       }}
     >
       {children}
     </GlobalContext.Provider>
   );
 };
-
 export const useGlobal = () => {
   return useContext(GlobalContext);
 };

@@ -51,64 +51,55 @@ function OffCanvasExample({ data , name, ...props }) {
   const handleProfilePic = async (e) => {
     const profilePicUpdatedObj = {
       ...isFilesSelected,
-      profilePicSelected: 1
-    }
-    console.log("Insdie the picky")
+      profilePicSelected: 1,
+    };
     const file = e.target.files[0];
     const options = {
       maxSizeMB: 0.1,
       maxWidthOrHeight: 1920,
       useWebWorker: true,
-  }
- 
-  let compression = await imageCompression(file, options)
-if(compression){
-  profilePicUpdatedObj.profilePicSelected = 2;
+    };
 
-}
-  const reader = new FileReader();
-  reader.onload = (event) => {
+    let compression = await imageCompression(file, options);
+    if (compression) {
+      profilePicUpdatedObj.profilePicSelected = 2;
+    }
+    const reader = new FileReader();
+    reader.onload = (event) => {
       setprofilePic(event.target.result);
-  };
-  reader.readAsDataURL(compression);
+    };
+    reader.readAsDataURL(compression);
 
-  setprofilePic(compression);
-  setIsFilesSelected(profilePicUpdatedObj)
-
-
+    setprofilePic(compression);
+    setIsFilesSelected(profilePicUpdatedObj);
   };
 
-
-
-
-// 2. Profile Background Pic
-const handleBGPic = async (e) => {
-  const file = e.target.files[0];
+  // 2. Profile Background Pic
+  const handleBGPic = async (e) => {
+    const file = e.target.files[0];
     const reader = new FileReader();
     const backgroundPicObj = {
       ...isFilesSelected,
-    }
+    };
 
-      backgroundPicObj.backgroundPicSelected = 2;
-    
-    
+    backgroundPicObj.backgroundPicSelected = 2;
+
     reader.onloadend = () => {
       setbgPic(reader.result);
-      setIsFilesSelected(backgroundPicObj)
+      setIsFilesSelected(backgroundPicObj);
     };
 
     if (file) {
       reader.readAsDataURL(file);
     }
-
-};
-// 3. Profile Background Music
-const handleBGMusic = async (e) => {
-  const file = e.target.files[0];
+  };
+  // 3. Profile Background Music
+  const handleBGMusic = async (e) => {
+    const file = e.target.files[0];
     const reader = new FileReader();
     const backgroundMusicObj = {
       ...isFilesSelected,
-    }
+    };
 
     backgroundMusicObj.backgroundAudioSelected = 2;
 
@@ -120,24 +111,19 @@ const handleBGMusic = async (e) => {
     if (file) {
       reader.readAsDataURL(file);
     }
+  };
 
-};
-
-const checkUserName = async () => {
-  setIsLoading(true);
-  try {
-    let fetch = await axiosInstance.get(`/validateUsername/${userNameInput}`)
-            let res = await fetch.data;
-            setCheckRes(res);
-            setIsLoading(false)
-            console.log(res , 'username check')
-            
-
-           
-  } catch (error) {
-    console.log(error , "😃");
-  }
-}
+  const checkUserName = async () => {
+    setIsLoading(true);
+    try {
+      let fetch = await axiosInstance.get(`/validateUsername/${userNameInput}`);
+      let res = await fetch.data;
+      setCheckRes(res);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error, "😃");
+    }
+  };
 
 useEffect(() => {
   if(userNameInput.length != 0){

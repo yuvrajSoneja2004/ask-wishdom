@@ -96,9 +96,12 @@ function SingleProfilePage() {
   useEffect(() => {
     getProfileData();
   }, [handleReload, userID]);
-  document.title = `${profileData[0]?.userProfileName} • Ask-Wishdom`;
+  document.title = `${
+    profileData[0]?.userProfileName === undefined
+      ? "Loading..."
+      : profileData[0]?.userProfileName
+  } • Ask-Wishdom`;
 
-  // if(!isLoading) return <h1>Loading....Bitch Wair man</h1>
   return !isLoading ? (
     <MAX
       style={{
@@ -276,6 +279,7 @@ const CustomizeHeading = styled.div`
 const MAX = styled.div`
   min-height: 100vh;
   padding: 0 100px;
+  width: 100%;
 `;
 
 const Whole = styled.div`
@@ -283,8 +287,9 @@ const Whole = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  /* border: 5px solid pink !important; */
-  /* transform: translateY(-125px); */
+  * {
+    outline: 2px solid red;
+  }
 `;
 
 const ProfileIMG = styled.div`

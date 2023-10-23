@@ -15,21 +15,11 @@ function Notifications({ show, handleClose, handleDataFromChild }) {
 
   useEffect(() => {
     socket?.on("show_notification", (data) => {
-      console.log(data, "this is the socket data");
       setNotificationsList((prev) => [...prev, data]);
       setCurrentNotification(data);
       sendDataToParentHandler();
     });
   }, []);
-
-  useEffect(() => {
-    if (isNotificationsAllowed) {
-      new Notification("Ask-Wishdom", {
-        body: `${currentNotification?.user_name} Liked your post`,
-        icon: currentNotification?.user_profile_pic,
-      });
-    }
-  }, [notificationsList]);
 
   const userData = userCurrentProfileData && userCurrentProfileData[0];
   const userNotifications = userData && userData.userNotifications;
@@ -41,22 +31,28 @@ function Notifications({ show, handleClose, handleDataFromChild }) {
       </Offcanvas.Header>
       <Offcanvas.Body>
         <NotificationsWrapper>
-          {[...new Set(userNotifications)]?.map((msg, i) => {
-            return (
-              <NotificationRow key={i}>
-                <img
-                  src={msg?.user_profile_pic}
-                  alt="lol"
-                  height={60}
-                  width={60}
-                />
-                <p>
-                  <strong>{msg?.user_name}</strong> liked your post.
-                </p>
-                {/* <img src={msg?.the_post} alt="" height={100} width={100} /> */}
-              </NotificationRow>
-            );
-          })}
+          {userNotifications?.length === 0 ? (
+            <div id="noNotifications">
+              <strong>You have no notifications</strong>
+            </div>
+          ) : (
+            [...new Set(userNotifications)]?.map((msg, i) => {
+              return (
+                <NotificationRow key={i}>
+                  <img
+                    src={msg?.user_profile_pic}
+                    alt="lol"
+                    height={60}
+                    width={60}
+                  />
+                  <p>
+                    <strong>{msg?.user_name}</strong> liked your post.
+                  </p>
+                  {/* <img src={msg?.the_post} alt="" height={100} width={100} /> */}
+                </NotificationRow>
+              );
+            })
+          )}
         </NotificationsWrapper>
       </Offcanvas.Body>
     </Offcanvas>
@@ -78,6 +74,12 @@ const NotificationsWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  #noNotifications {
+    display: grid;
+    place-items: center;
+    height: 200px;
+  }
 `;
 
 export default Notifications;

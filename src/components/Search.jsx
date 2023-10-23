@@ -10,7 +10,7 @@ import { ProgressBar } from "react-loader-spinner";
 import { debounce } from "lodash";
 import { useGlobal } from "../context/global";
 
-function SearchOffCanvas() {
+function SearchOffCanvas({ isOnMobile }) {
   const [show, setShow] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const handleClose = () => setShow(false);
@@ -27,8 +27,6 @@ function SearchOffCanvas() {
     try {
       const { data } = await axiosInstance.get(`/search/${searchInput}`);
       setSearchResults(data);
-
-      console.log("hnn re ", data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -46,7 +44,6 @@ function SearchOffCanvas() {
   const userData = userCurrentProfileData && userCurrentProfileData[0];
   const userID = userData && userData.userID;
 
-  console.log(userID, "this is the sussy imposter");
   const handeHistory = async (searched_user) => {
     try {
       const { data } = await axiosInstance.post("/postHistory", {
@@ -54,7 +51,6 @@ function SearchOffCanvas() {
         history_value: searched_user,
       });
       if (data) {
-        console.log(data);
         setHandleRender((prev) => prev + 1);
       }
     } catch (error) {
@@ -66,14 +62,11 @@ function SearchOffCanvas() {
     try {
       const { data } = await axiosInstance.get(`/history/${userID}`);
       // To Avoid error if any value found
-      // let finalData = data && data[0];
       let [histroyDat] = data;
-      console.log(data, "sussybaka");
 
       setRecentHistory(
         histroyDat === undefined ? "Loading..." : histroyDat?.userHistory
       );
-      // console.log("This is godamn recent history");
     } catch (error) {
       console.log(error);
     }
@@ -85,8 +78,23 @@ function SearchOffCanvas() {
   return (
     <>
       <PostFeedLink variant="outlined" onClick={handleShow}>
-        <AiOutlineSearch size={28} fill="#000" />
-        <p>Search</p>
+        {!isOnMobile ? (
+          <>
+            <AiOutlineSearch size={28} fill="#000" />
+            <p>Search</p>
+          </>
+        ) : (
+          <div className="searchBar">
+            <div>
+              <AiOutlineSearch
+                style={{ margin: "0 8px 0 4px" }}
+                size={20}
+                fill="#848484"
+              />
+              <input type="text" placeholder="Search" />
+            </div>
+          </div>
+        )}
       </PostFeedLink>
 
       <Offcanvas show={show} onHide={handleClose}>
@@ -165,6 +173,42 @@ const PostFeedLink = styled(Link)`
   &&:hover {
     background-color: #d8d8d8;
     color: #000;
+  }
+
+  .searchBar {
+    text-align: center;
+    width: 100%;
+    padding: 13px;
+    display: none;
+
+    div {
+      /* outline: 2px solid; */
+      background-color: #efefef;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      height: 33px;
+      border-radius: 7px;
+      padding: 7px 0 7px 7px;
+    }
+
+    input {
+      border-radius: 7px;
+      border: none;
+      background-color: transparent;
+      width: 100%;
+      outline: none;
+      font-size: 14px;
+      pointer-events: none;
+    }
+  }
+  @media screen and (max-width: 1017px) {
+    .searchBar {
+      display: block;
+      div {
+        flex-direction: column;
+      }
+    }
   }
 `;
 

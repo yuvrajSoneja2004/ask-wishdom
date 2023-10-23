@@ -89,8 +89,6 @@ function AskPage() {
         }
     }, [descValue])
 
-
-
     return (
         <Whole onSubmit={(e) => {
             e.preventDefault();
@@ -100,8 +98,6 @@ function AskPage() {
             <span style={errorThemeQuestion}>{questionValue.length}/50</span>
             <h3>Question asked by:</h3>
             <AskedBy>
-
-           
 
                {
                 !user ? "Loading..." : (
@@ -120,10 +116,8 @@ function AskPage() {
                 </>
                 ) 
                }
-               
             </AskedBy>
-            <AskAnonymously style={{marginBottom: '30px'}}>
-               
+            <AskAnonymously style={{marginBottom: '30px'}}>  
                     <input type="checkbox" name="" id="anon-checkbox" onClick={() => {
                         if(!isPrivate){
                             setIsPrivate(true);
@@ -146,7 +140,6 @@ function AskPage() {
                     <CategoryLink to={"/ask"} onClick={() => setTempCategory("doubts")}>  <HelpOutlineOutlinedIcon /> Doubts</CategoryLink>
                     <CategoryLink to={"/ask"} onClick={() => setTempCategory("others")}>  <AddReactionOutlinedIcon /> Others</CategoryLink>
                 </div>
-
             </AskCategory>
             <QuestionDesc placeholder='Write question description here.' required onChange={handleDesc} value={descValue}></QuestionDesc>
             <span style={errorThemeDesc}>{descValue.length}/350</span>
@@ -154,7 +147,6 @@ function AskPage() {
         </Whole>
     )
 }
-
 
 const AskAnonymously = styled.div`
 p {
@@ -208,8 +200,6 @@ align-items: center;
         justify-content: center;
         gap: 20px;
     }
-
-    
 }
 
 div {
@@ -223,7 +213,6 @@ h3 {
     display: inline;
 }
 `
-
 const CategoryDropdown = styled(Dropdown)
 const SmallUserDesc = styled.textarea`
     border: none;
@@ -239,7 +228,6 @@ const SubmitBtn = styled(RedBtn)`
         margin-bottom: 70px;
 }
 `
-
 const QuestionTitle = styled.textarea`
 border: none;
 font-size: 50px;
@@ -283,5 +271,4 @@ width: 100%;
     outline: none;
 }
 `
-
 export default AskPage

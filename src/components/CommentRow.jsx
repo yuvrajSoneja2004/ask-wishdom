@@ -16,7 +16,6 @@ function CommentRow({ commentInfo, dataToParent }) {
     currentUserData,
   } = commentInfo;
 
-  console.log(currentUserData, "DUCK");
   return (
     <Whole>
       <div id="info">
