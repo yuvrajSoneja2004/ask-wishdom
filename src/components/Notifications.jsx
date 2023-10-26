@@ -3,6 +3,7 @@ import { Offcanvas } from "react-bootstrap";
 import { useGlobal } from "../context/global";
 import { useAuth0 } from "@auth0/auth0-react";
 import styled from "@emotion/styled";
+
 function Notifications({ show, handleClose, handleDataFromChild }) {
   const { userCurrentProfileData, socket, isNotificationsAllowed } =
     useGlobal();
@@ -12,6 +13,25 @@ function Notifications({ show, handleClose, handleDataFromChild }) {
 
   const sendDataToParentHandler = () => {
     handleDataFromChild(notificationsList.length);
+
+    // Call the notification method here
+    showNotification();
+  };
+
+  // Function to show a notification
+  const showNotification = () => {
+    if ("Notification" in window) {
+      Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+          const notification = new Notification(
+            `hi , ${currentNotification?.userProfileName}`,
+            {
+              body: "This is a sample notification.",
+            }
+          );
+        }
+      });
+    }
   };
 
   useEffect(() => {
@@ -39,7 +59,6 @@ function Notifications({ show, handleClose, handleDataFromChild }) {
             </div>
           ) : (
             notificationsList?.map((msg, i) => {
-              console.log("aaaaaaa", msg?.userProfileName);
               return (
                 <NotificationRow key={i}>
                   <img
