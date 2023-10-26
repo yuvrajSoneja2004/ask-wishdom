@@ -4,7 +4,7 @@ let tempURL = "https://ask-wishdom-server.onrender.com/";
 // The axios Instance
 // 'https://ask-wishdom-server.onrender.com/'
 export const axiosInstance = axios.create({
-  baseURL: tempURL,
+  baseURL: " http://localhost:6969",
 });
 
 // http://localhost:6969

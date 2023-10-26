@@ -1,10 +1,13 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
-import { AiOutlineHeart } from "react-icons/ai";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import TimeAgo from "../utils/TimeAgo";
 import { Link } from "react-router-dom";
+import { axiosInstance } from "../utils/axiosInstance";
+import { useAuth0 } from "@auth0/auth0-react";
 
-function CommentRow({ commentInfo, dataToParent }) {
+function CommentRow({ commentInfo, dataToParent, feedID, allComments }) {
+  console.log("Honet", allComments);
   const {
     text,
     createdAt,
@@ -14,8 +17,26 @@ function CommentRow({ commentInfo, dataToParent }) {
     replies,
     type,
     currentUserData,
+    commentID,
   } = commentInfo;
 
+  const { user } = useAuth0();
+  console.log("User", user);
+
+  const handleCommentLike = async () => {
+    try {
+      const { data } = await axiosInstance.post("/likeComment", {
+        userThatLiked: user.email,
+        feedID: feedID,
+        commentID: commentID,
+      });
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log("this is the comments likes arr", likes);
   return (
     <Whole>
       <div id="info">
@@ -36,7 +57,11 @@ function CommentRow({ commentInfo, dataToParent }) {
           </div>
         </div>
       </div>
-      <AiOutlineHeart size={15} />
+      {allComments?.includes(user?.email) ? (
+        <AiFillHeart size={15} onClick={handleCommentLike} />
+      ) : (
+        <AiOutlineHeart size={15} onClick={handleCommentLike} />
+      )}
     </Whole>
   );
 }

@@ -172,103 +172,97 @@ span {
 
 `
 const CategoryLink = styled(NavLink)`
-    color: #000;
-    text-decoration: none;
-    border: 2px solid black;
-    padding: 8px 15px;
-    font-size: 14px;
-    border-radius: 20px;
-    font-weight: bolder;
-    @media screen and (max-width: 500px){
-        
-            font-size: 10px;
-        
-}
+  color: #000;
+  text-decoration: none;
+  border: 2px solid black;
+  padding: 8px 15px;
+  font-size: 14px;
+  border-radius: 20px;
+  font-weight: bolder;
+  @media screen and (max-width: 500px) {
+    font-size: 10px;
+  }
 
-    &&:active , &&:focus {
-        color: #b92b27 !important;
-        border: 2px solid #b92b27;
-    }
-`
+  &&:active,
+  &&:focus {
+    color: #b92b27 !important;
+    border: 2px solid #b92b27;
+  }
+`;
 const AskCategory = styled.div`
-display: flex;
-align-items: center;
-@media screen and (max-width: 874px){
+  display: flex;
+  align-items: center;
+  @media screen and (max-width: 874px) {
     flex-direction: column;
     justify-content: center;
     div {
-        justify-content: center;
-        gap: 20px;
+      justify-content: center;
+      gap: 20px;
     }
-}
-
-div {
+  }
+  div {
     margin-left: 10px;
     margin-top: -10px;
     display: flex;
     flex-wrap: wrap;
     column-gap: 6px;
-}
-h3 {
+  }
+  h3 {
     display: inline;
-}
-`
-const CategoryDropdown = styled(Dropdown)
+  }
+`;
+const CategoryDropdown = styled(Dropdown);
 const SmallUserDesc = styled.textarea`
-    border: none;
-    width: 100%;
-    margin-left: -10px;
-    &&:focus {
-        outline: none;
-    }
-`
+  border: none;
+  width: 100%;
+  margin-left: -10px;
+  &&:focus {
+    outline: none;
+  }
+`;
 const SubmitBtn = styled(RedBtn)`
-    margin-top: 70px;
-    @media screen and (max-width: 696px){
-        margin-bottom: 70px;
-}
-`
+  margin-top: 70px;
+  @media screen and (max-width: 696px) {
+  }
+`;
 const QuestionTitle = styled.textarea`
-border: none;
-font-size: 50px;
-width: 100%;
+  border: none;
+  font-size: 50px;
+  width: 100%;
 
-@media screen and (max-width: 674px){
+  @media screen and (max-width: 674px) {
     font-size: 40px;
-}
-@media screen and (max-width: 474px){
+  }
+  @media screen and (max-width: 474px) {
     font-size: 20px;
-}
-&&:focus {
+  }
+  &&:focus {
     border: none;
     outline: none;
-}
-`
+  }
+`;
 const AskedBy = styled.div`
-display: flex;
+  display: flex;
 
-div {
+  div {
     display: flex;
     flex-direction: column;
     margin-left: 10px;
-}
+  }
 
-margin-bottom: 100px;
-
-img {
+  margin-bottom: 100px;
+  img {
     width: 55px;
     border-radius: 50%;
-}
-
-`
+  }
+`;
 const QuestionDesc = styled.textarea`
-border: none;
-font-size: 20px;
-width: 100%;
-
-&&:focus {
+  border: none;
+  font-size: 20px;
+  width: 100%;
+  &&:focus {
     border: none;
     outline: none;
-}
-`
+  }
+`;
 export default AskPage

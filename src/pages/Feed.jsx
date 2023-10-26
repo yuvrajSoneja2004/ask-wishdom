@@ -14,7 +14,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 import SearchOffCanvas from "../components/Search";
 
 function Feed() {
-  let { userCurrentProfileData } = useGlobal();
+  let { userCurrentProfileData, setLoadingProgress } = useGlobal();
   const navigate = useNavigate();
 
   const [allFeeds, setAllFeeds] = useState([]);
@@ -26,6 +26,7 @@ function Feed() {
 
   const getFeeds = async () => {
     setIsLoading(true);
+    setLoadingProgress(34);
     try {
       const fetchData = await axiosInstance.get("/feeds");
       const res = await fetchData.data;
@@ -38,6 +39,8 @@ function Feed() {
         error
       );
       setIsPageLoaded(true);
+    } finally {
+      setLoadingProgress(100);
     }
   };
 

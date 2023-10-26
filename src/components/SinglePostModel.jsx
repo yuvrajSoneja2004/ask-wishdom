@@ -18,6 +18,7 @@ import { ToastContainer, toast } from "react-toastify";
 import ScrollToBottom from "react-scroll-to-bottom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useGlobal } from "../context/global";
+import { uniqueId } from "lodash";
 
 function SinglePostModel(props) {
   const {
@@ -59,12 +60,14 @@ function SinglePostModel(props) {
     const comment_data = {
       feedID: feedID,
       commentInfo: {
+        commentID: uniqueId(),
         text: commentInput,
         createdAt: new Date(),
         profilePic: currentUserPic,
         name: name,
         profileID: profileID,
         replies: [],
+        likes: [],
       },
     };
     try {
@@ -107,6 +110,7 @@ function SinglePostModel(props) {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+  console.log(commentsArray);
   return (
     <Modal
       {...props}
@@ -140,11 +144,14 @@ function SinglePostModel(props) {
             <CommentsSection>
               <ScrollToBottom>
                 {commentsArray?.map((comment, i) => {
+                  console.log(comment?.likes);
                   return (
-                    <span>
+                    <span key={i}>
                       <CommentRow
                         commentInfo={comment}
                         dataToParent={handleFromCommentRow}
+                        feedID={feedID}
+                        allComments={comment?.likes}
                       />
                     </span>
                   );

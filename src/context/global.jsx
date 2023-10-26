@@ -25,21 +25,26 @@ export const GlobalProvider = ({ children }) => {
   const [socket, setSocket] = useState(undefined);
   const [handleFeedLikeRenderer, setHandleFeedLikeRenderer] = useState(0);
   const [isLikeLoading, setIsLikeLoading] = useState(false);
+  const [loadingProgress, setLoadingProgress] = useState(0);
 
   // calling API to get defaultQuestions
   const getDefaultQuestions = async () => {
     dispatch({ type: "API_LOADING" });
+    setLoadingProgress(34);
     try {
       let fetch = await axiosInstance.get("/getDefaultQuestions");
       let res = await fetch.data;
       dispatch({ type: "SET_DEFAULT_QUESTIONS", payload: res });
     } catch (error) {
       dispatch({ type: "SET_DEFAULT_ERROR", payload: error });
+    } finally {
+      setLoadingProgress(100);
     }
   };
 
   const communityValidation = async (input) => {
     dispatch({ type: "API_LOADING" });
+
     try {
       let fetch = await axiosInstance.get(`/validateCommunityName/${input}`);
       let res = fetch.data;
@@ -54,16 +59,20 @@ export const GlobalProvider = ({ children }) => {
 
   // fetch communities
   const getCommunities = async () => {
+    setLoadingProgress(34);
     try {
       let fetch = await axiosInstance.get("/getCommunities");
       let res = await fetch.data;
       dispatch({ type: "GET_COMMUNITIES", payload: res });
     } catch (error) {
       console.log("WHY", error);
+    } finally {
+      setLoadingProgress(100);
     }
   };
   // UserProfile Data
   const getUserProfileData = async () => {
+    setLoadingProgress(34);
     try {
       let fetch = await axiosInstance.get(
         `getSpecificProfileData/${user?.email}`
@@ -76,6 +85,8 @@ export const GlobalProvider = ({ children }) => {
       if (error.code == "ERR_NETWORK") {
         dispatch({ type: "SET_DEFAULT_ERROR", payload: error.message });
       }
+    } finally {
+      setLoadingProgress(100);
     }
   };
 
@@ -176,6 +187,8 @@ export const GlobalProvider = ({ children }) => {
         handleFeedLikeRenderer,
         setHandleFeedLikeRenderer,
         isLikeLoading,
+        loadingProgress,
+        setLoadingProgress,
       }}
     >
       {children}

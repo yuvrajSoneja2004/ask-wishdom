@@ -22,12 +22,16 @@ import SingleProfilePage from "./pages/SingleProfilePage";
 import CommunitiesSidebar from "./components/CommunitiesSidebar";
 import styled from "@emotion/styled";
 import Feed from "./pages/Feed";
+import LoadingBar from "react-top-loading-bar";
+import { useGlobal } from "./context/global";
 function App() {
   let { isAuthenticated, isLoading } = useAuth0();
+  const { loadingProgress, setLoadingProgress } = useGlobal();
 
   return (
     <div>
       {/* <NavigationBar /> */}
+      <LoadingBar color="#B92B27" progress={loadingProgress} height={3} />
       <Balance isAuth={isAuthenticated}>
         {isAuthenticated ? <CommunitiesSidebar /> : null}
 
