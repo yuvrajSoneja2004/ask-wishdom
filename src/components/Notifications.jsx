@@ -6,6 +6,7 @@ import styled from "@emotion/styled";
 function Notifications({ show, handleClose, handleDataFromChild }) {
   const { userCurrentProfileData, socket, isNotificationsAllowed } =
     useGlobal();
+  // Trial Socket Notifications
   const [notificationsList, setNotificationsList] = useState([]);
   const [currentNotification, setCurrentNotification] = useState(null);
 
@@ -14,12 +15,13 @@ function Notifications({ show, handleClose, handleDataFromChild }) {
   };
 
   useEffect(() => {
-    socket?.on("show_notification", (data) => {
+    socket?.on("recieve_notification", (data) => {
+      console.log("Raone", data);
       setNotificationsList((prev) => [...prev, data]);
       setCurrentNotification(data);
       sendDataToParentHandler();
     });
-  }, []);
+  }, [socket]);
 
   const userData = userCurrentProfileData && userCurrentProfileData[0];
   const userNotifications = userData && userData.userNotifications;
@@ -31,24 +33,24 @@ function Notifications({ show, handleClose, handleDataFromChild }) {
       </Offcanvas.Header>
       <Offcanvas.Body>
         <NotificationsWrapper>
-          {userNotifications?.length === 0 ? (
+          {notificationsList?.length === 0 ? (
             <div id="noNotifications">
               <strong>You have no notifications</strong>
             </div>
           ) : (
-            [...new Set(userNotifications)]?.map((msg, i) => {
+            notificationsList?.map((msg, i) => {
+              console.log("aaaaaaa", msg?.userProfileName);
               return (
                 <NotificationRow key={i}>
                   <img
-                    src={msg?.user_profile_pic}
+                    src={msg?.userProfilePic}
                     alt="lol"
                     height={60}
                     width={60}
                   />
                   <p>
-                    <strong>{msg?.user_name}</strong> liked your post.
+                    <strong>{msg?.userProfileName}</strong> liked your post.
                   </p>
-                  {/* <img src={msg?.the_post} alt="" height={100} width={100} /> */}
                 </NotificationRow>
               );
             })

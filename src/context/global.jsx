@@ -99,6 +99,15 @@ export const GlobalProvider = ({ children }) => {
         userToLike: userToLike_id,
       });
 
+      console.log("chitti ", feedData?.feedAuthorName);
+
+      // Send Notification
+      socket?.emit("send_notifications", {
+        current_user:
+          state.userCurrentProfileData && state.userCurrentProfileData[0],
+        user_that_got_liked: feedData?.feedAuthorName,
+      });
+
       if (data) {
         setHandleFeedLikeRenderer((prev) => prev + 1);
         socket?.emit("request_user_notifications", {
@@ -159,15 +168,16 @@ export const GlobalProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (getCurrentUserProfileData) {
-      const userData = getCurrentUserProfileData[0];
-      socket?.emit("initial_event", userData);
-    }
-  }, [getCurrentUserProfileData]);
-
-  useEffect(() => {
     getUserProfileData(user?.email);
   }, [user?.email]);
+
+  useEffect(() => {
+    socket?.emit(
+      "add_online_user",
+      state.userCurrentProfileData && state.userCurrentProfileData[0]
+    );
+  }, [socket, state]);
+
 
   return (
     <GlobalContext.Provider

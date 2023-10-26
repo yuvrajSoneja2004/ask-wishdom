@@ -24,9 +24,10 @@ import styled from "@emotion/styled";
 import Feed from "./pages/Feed";
 import LoadingBar from "react-top-loading-bar";
 import { useGlobal } from "./context/global";
+import { useEffect } from "react";
 function App() {
   let { isAuthenticated, isLoading } = useAuth0();
-  const { loadingProgress, setLoadingProgress } = useGlobal();
+  const { loadingProgress, setLoadingProgress, socket } = useGlobal();
 
   return (
     <div>
