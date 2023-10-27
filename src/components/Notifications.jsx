@@ -19,6 +19,7 @@ function Notifications({ show, handleClose, handleDataFromChild }) {
   };
 
   // Function to show a notification
+  // Test
   const showNotification = () => {
     if ("Notification" in window) {
       Notification.requestPermission().then((permission) => {
