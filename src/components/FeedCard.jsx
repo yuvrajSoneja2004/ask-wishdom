@@ -144,14 +144,6 @@ function FeedCard({ feedData, index }) {
                 />
                 <span>{feedLikesArray?.feedLikesArray?.length}</span>
               </motion.div>
-            ) : isLikeLoading ? (
-              <motion.span
-                initial={{ scale: 0 }}
-                animate={{ scale: 1.1 }}
-                exit={{ scale: 0 }}
-              >
-                <Spinner size="sm" />
-              </motion.span>
             ) : (
               <motion.div
                 whileHover={{

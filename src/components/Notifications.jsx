@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Offcanvas } from "react-bootstrap";
 import { useGlobal } from "../context/global";
-import { useAuth0 } from "@auth0/auth0-react";
+import TimeAgo from "../utils/TimeAgo";
 import styled from "@emotion/styled";
 
 function Notifications({ show, handleClose, handleDataFromChild }) {

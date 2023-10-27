@@ -21,7 +21,7 @@ function CommentRow({ commentInfo, dataToParent, feedID, allComments }) {
   } = commentInfo;
 
   const { user } = useAuth0();
-  console.log("User", user);
+  console.log("User", commentInfo);
 
   const handleCommentLike = async () => {
     try {
@@ -36,7 +36,6 @@ function CommentRow({ commentInfo, dataToParent, feedID, allComments }) {
     }
   };
 
-  console.log("this is the comments likes arr", likes);
   return (
     <Whole>
       <div id="info">
@@ -53,7 +52,7 @@ function CommentRow({ commentInfo, dataToParent, feedID, allComments }) {
             <span>
               <TimeAgo createdAt={createdAt} />
             </span>
-            <strong>{"3"} likes</strong>
+            <strong>{commentInfo?.likes?.length} Likes</strong>
           </div>
         </div>
       </div>
@@ -66,7 +65,6 @@ function CommentRow({ commentInfo, dataToParent, feedID, allComments }) {
   );
 }
 
-const ReplyBx = styled.div``;
 
 const Whole = styled.div`
   display: flex;

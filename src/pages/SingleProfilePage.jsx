@@ -287,9 +287,6 @@ const Whole = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  * {
-    outline: 2px solid red;
-  }
 `;
 
 const ProfileIMG = styled.div`
