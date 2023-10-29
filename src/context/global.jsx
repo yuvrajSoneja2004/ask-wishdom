@@ -161,9 +161,12 @@ export const GlobalProvider = ({ children }) => {
 
     getDefaultQuestions();
     // Socket Connection
-    const socket = socket_io_client.connect("http://localhost:9000/", {
-      transports: ["websocket", "polling", "flashsocket"],
-    });
+    const socket = socket_io_client.connect(
+      "https://ask-wishdom-server.onrender.com/",
+      {
+        transports: ["websocket", "polling", "flashsocket"],
+      }
+    );
     setSocket(socket);
   }, []);
 
