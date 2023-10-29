@@ -5,8 +5,7 @@ import TimeAgo from "../utils/TimeAgo";
 import styled from "@emotion/styled";
 
 function Notifications({ show, handleClose, handleDataFromChild }) {
-  const { userCurrentProfileData, socket, isNotificationsAllowed } =
-    useGlobal();
+  const { socket } = useGlobal();
   // Trial Socket Notifications
   const [notificationsList, setNotificationsList] = useState([]);
   const [currentNotification, setCurrentNotification] = useState(null);
@@ -19,7 +18,6 @@ function Notifications({ show, handleClose, handleDataFromChild }) {
   };
 
   // Function to show a notification
-  // Test
   const showNotification = () => {
     if ("Notification" in window) {
       Notification.requestPermission().then((permission) => {
@@ -37,15 +35,11 @@ function Notifications({ show, handleClose, handleDataFromChild }) {
 
   useEffect(() => {
     socket?.on("recieve_notification", (data) => {
-      console.log("Raone", data);
       setNotificationsList((prev) => [...prev, data]);
       setCurrentNotification(data);
       sendDataToParentHandler();
     });
   }, [socket]);
-
-  const userData = userCurrentProfileData && userCurrentProfileData[0];
-  const userNotifications = userData && userData.userNotifications;
 
   return (
     <Offcanvas show={show} onHide={handleClose}>
